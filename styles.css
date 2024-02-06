@@ -1,0 +1,43 @@
+/* Modern form styling */
+.car-search-form {
+    max-width: 400px;
+    margin: 0 auto;
+    padding: 20px;
+    background-color: #f9f9f9;
+    border-radius: 8px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+}
+
+.car-search-form h1 {
+    text-align: center;
+    margin-bottom: 20px;
+}
+
+.car-search-form label {
+    display: block;
+    margin-bottom: 8px;
+}
+
+.car-search-form select {
+    width: 100%;
+    padding: 10px;
+    margin-bottom: 20px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    box-sizing: border-box;
+}
+
+.car-search-form input[type="submit"] {
+    width: 100%;
+    padding: 12px 0;
+    background-color: #007bff;
+    color: #fff;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    transition: background-color 0.3s;
+}
+
+.car-search-form input[type="submit"]:hover {
+    background-color: #0056b3;
+}
