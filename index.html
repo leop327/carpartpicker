@@ -1,47 +1,14 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Car Search</title>
-    <link rel="stylesheet" href="styles.css">
-</head>
-<body>
-    <div class="car-search-form">
-        <h1>Car Search</h1>
-        <form id="carSearchForm" method="GET" action="">
-            <label for="make">Make:</label>
-            <select name="make" id="make" required>
-                <option value="">Select Make</option>
-            </select><br>
-            <label for="model">Model:</label>
-            <select name="model" id="model" required disabled>
-                <option value="">Select Make first</option>
-            </select><br>
-            <label for="year">Year:</label>
-            <select name="year" id="year" required disabled>
-                <option value="">Select Model first</option>
-            </select><br>
-            <input type="submit" value="Search" disabled>
-        </form>
-    </div>
-
-    <script src="scripts.js"></script>
-</body>
-
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Car Part Picker</title>
-    <link rel="stylesheet" href="styles.css">
-</head>
-<body>
-    <header class="header">
-        <div class="logo">
-            <img src="logo.png" alt="Car Part Picker Logo">
-            <h1 class="brand">CarPartPicker</h1>
-        </div>
-    </header>
-    <!-- Other content goes here -->
-</body>
-</html>
+<div>
+  <label for="make">Make:</label>
+  <select id="make"></select>
+</div>
+<div>
+  <label for="model">Model:</label>
+  <select id="model"></select>
+</div>
+<div>
+  <label for="year">Year:</label>
+  <select id="year"></select>
+</div>
+<button id="find-parts">Find Parts</button>
+<div id="parts-list"></div>
