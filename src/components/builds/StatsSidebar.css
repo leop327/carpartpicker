@@ -1,0 +1,82 @@
+.stats-sidebar__sticky {
+  position: sticky;
+  top: 5rem;
+  border: 1px solid var(--line);
+  background: var(--surface);
+  padding: 1.15rem 1.2rem 1.35rem;
+  display: grid;
+  gap: 0.85rem;
+}
+
+.stats-sidebar__eyebrow {
+  margin: 0;
+  font-size: 0.72rem;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--accent);
+}
+
+.stats-sidebar h2 {
+  font-family: var(--font-display);
+  font-size: 1.25rem;
+  margin: 0;
+  letter-spacing: -0.02em;
+  line-height: 1.2;
+}
+
+.stats-sidebar__colour {
+  margin: 0;
+  color: var(--ink-muted);
+  font-size: 0.9rem;
+}
+
+.stats-sidebar__price {
+  display: flex;
+  justify-content: space-between;
+  align-items: baseline;
+  gap: 1rem;
+  padding-top: 0.75rem;
+  border-top: 1px solid var(--line);
+}
+
+.stats-sidebar__price span {
+  font-size: 0.85rem;
+  color: var(--ink-muted);
+}
+
+.stats-sidebar__price strong {
+  font-size: 1.35rem;
+  font-variant-numeric: tabular-nums;
+  letter-spacing: -0.02em;
+}
+
+.stats-sidebar__mods {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: grid;
+  gap: 0.45rem;
+}
+
+.stats-sidebar__mods li {
+  display: flex;
+  justify-content: space-between;
+  gap: 0.75rem;
+  font-size: 0.82rem;
+  color: var(--ink-muted);
+}
+
+.stats-sidebar__mods li span:last-child {
+  font-variant-numeric: tabular-nums;
+  font-weight: 600;
+  color: var(--ink);
+  white-space: nowrap;
+}
+
+.stats-sidebar__empty {
+  margin: 0;
+  font-size: 0.88rem;
+  color: var(--ink-muted);
+  line-height: 1.45;
+}

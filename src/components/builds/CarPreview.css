@@ -1,0 +1,92 @@
+.car-preview {
+  --paint: #6b6e73;
+  border: 1px solid var(--line);
+  background: linear-gradient(180deg, #2a2e34 0%, #15181c 70%);
+  overflow: hidden;
+  min-height: 220px;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-end;
+}
+
+.car-preview--compact {
+  min-height: 0;
+  width: 120px;
+  flex-shrink: 0;
+  border: none;
+  background: transparent;
+}
+
+.car-preview__stage {
+  position: relative;
+  flex: 1;
+  display: grid;
+  place-items: end center;
+  padding: 1.5rem 1rem 0.5rem;
+}
+
+.car-preview--compact .car-preview__stage {
+  padding: 0.25rem;
+}
+
+.car-preview__glow {
+  position: absolute;
+  inset: auto 10% 18% ;
+  height: 40%;
+  background: radial-gradient(ellipse at center, color-mix(in srgb, var(--paint) 45%, transparent), transparent 70%);
+  filter: blur(8px);
+}
+
+.car-preview__silhouette {
+  width: min(100%, 340px);
+  height: auto;
+  position: relative;
+  z-index: 1;
+  filter: drop-shadow(0 10px 16px rgb(0 0 0 / 0.45));
+}
+
+.car-preview--compact .car-preview__silhouette {
+  width: 100%;
+}
+
+.car-preview__body {
+  fill: var(--paint);
+  stroke: color-mix(in srgb, var(--paint) 70%, #000);
+  stroke-width: 1.5;
+}
+
+.car-preview__cabin {
+  fill: color-mix(in srgb, var(--paint) 35%, #1a2030);
+  opacity: 0.85;
+}
+
+.car-preview__wheel {
+  fill: #121417;
+  stroke: #3a3e45;
+  stroke-width: 2;
+}
+
+.car-preview__hub {
+  fill: #9aa0a8;
+}
+
+.car-preview__label {
+  display: grid;
+  gap: 0.15rem;
+  padding: 0.85rem 1.1rem 1.1rem;
+  background: color-mix(in srgb, #0e1013 78%, transparent);
+  color: #f3efe8;
+}
+
+.car-preview__label strong {
+  font-family: var(--font-display);
+  font-size: 1.2rem;
+  letter-spacing: -0.02em;
+}
+
+.car-preview__year {
+  font-size: 0.75rem;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: color-mix(in srgb, #f3efe8 65%, transparent);
+}
