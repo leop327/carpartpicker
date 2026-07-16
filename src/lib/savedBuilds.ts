@@ -82,6 +82,21 @@ export function deleteSavedBuild(id: string): void {
   writeAll(readAll().filter((b) => b.id !== id))
 }
 
+export function renameSavedBuild(id: string, name: string): SavedBuild | null {
+  const trimmed = name.trim()
+  if (!trimmed) return null
+  const items = readAll()
+  const existing = items.find((b) => b.id === id)
+  if (!existing) return null
+  const entry: SavedBuild = {
+    ...existing,
+    name: trimmed,
+    updatedAt: new Date().toISOString(),
+  }
+  writeAll(items.map((b) => (b.id === id ? entry : b)))
+  return entry
+}
+
 export function selectionLabel(selection: BuildSelection): string {
   return defaultNameForSelection(selection)
 }

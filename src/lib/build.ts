@@ -2,6 +2,7 @@ import type {
   CarModel,
   Figures,
   FiguresDelta,
+  Market,
   SpecChoice,
   SpecOptionGroup,
 } from '../types/catalog'
@@ -19,13 +20,16 @@ export function resolveSpecChoices(
   return car.specOptions.map((group) => {
     const selectedId = specChoices[group.id]
     if (selectedId) {
-      return group.choices.find((c) => c.id === selectedId) ?? getDefaultSpecChoice(group)
+      return (
+        group.choices.find((c) => c.id === selectedId) ??
+        getDefaultSpecChoice(group)
+      )
     }
     return getDefaultSpecChoice(group)
   })
 }
 
-function applyDelta(figures: Figures, delta?: FiguresDelta): Figures {
+export function applyDelta(figures: Figures, delta?: FiguresDelta): Figures {
   if (!delta) return figures
   return {
     ...figures,
@@ -42,10 +46,32 @@ function applyDelta(figures: Figures, delta?: FiguresDelta): Figures {
   }
 }
 
+/** Base factory figures for a car/year/market before options & mods. */
+export function resolveBaseFigures(
+  car: CarModel,
+  year: number | null | undefined,
+  market: Market = 'us',
+): Figures {
+  let figures = { ...car.baseFigures }
+  if (year != null && car.yearFigures?.[year]) {
+    figures = applyDelta(figures, car.yearFigures[year])
+  }
+  if (market === 'eu' && car.euFiguresDelta) {
+    figures = applyDelta(figures, car.euFiguresDelta)
+  }
+  return figures
+}
+
+export function resolveBasePrice(car: CarModel, market: Market = 'us'): number {
+  if (market === 'eu' && car.euBasePrice != null) return car.euBasePrice
+  return car.basePrice
+}
+
 export function computeBuildFigures(
   car: CarModel,
   specChoices: Record<string, string>,
   modIds: string[],
+  opts?: { year?: number | null; market?: Market },
 ): {
   base: Figures
   configured: Figures
@@ -54,11 +80,12 @@ export function computeBuildFigures(
   modsPrice: number
   totalPrice: number
 } {
-  const base = { ...car.baseFigures }
+  const market = opts?.market ?? 'us'
+  const base = resolveBaseFigures(car, opts?.year, market)
   const resolved = resolveSpecChoices(car, specChoices)
 
   let configured = { ...base }
-  let configuredPrice = car.basePrice
+  let configuredPrice = resolveBasePrice(car, market)
 
   for (const choice of resolved) {
     configured = applyDelta(configured, choice.figuresDelta)
@@ -97,6 +124,21 @@ export function formatTorque(nm: number): string {
   return `${nm} Nm / ${lbft} lb-ft`
 }
 
+export function figuresSourceLabel(
+  source: 'oem' | 'estimated' | 'tuner' | undefined,
+): string {
+  switch (source) {
+    case 'oem':
+      return 'OEM'
+    case 'tuner':
+      return 'Tuner claim'
+    case 'estimated':
+      return 'Estimated'
+    default:
+      return 'Estimated'
+  }
+}
+
 export function formatBuildSummary(input: {
   year: number
   make: string
@@ -107,11 +149,17 @@ export function formatBuildSummary(input: {
   modLabels: string[]
   figures: Figures
   totalPrice: number
+  market?: Market
+  figuresSource?: string
 }): string {
+  const market = input.market ?? 'us'
+  const accel = market === 'eu' ? '0–100 km/h' : '0–60 mph'
   const lines = [
     `CarPartPicker build`,
     `${input.year} ${input.make} ${input.model} (${input.generation})`,
     `Colour: ${input.colourName}`,
+    `Market: ${market.toUpperCase()}`,
+    input.figuresSource ? `Figures: ${input.figuresSource}` : '',
     '',
     'Factory options:',
     ...(input.optionLabels.length
@@ -126,12 +174,12 @@ export function formatBuildSummary(input: {
     'Figures:',
     `  Power: ${input.figures.hp} hp`,
     `  Torque: ${formatTorque(input.figures.torqueNm)}`,
-    `  0–60: ${input.figures.zeroToSixtySec.toFixed(2)} s`,
+    `  ${accel}: ${input.figures.zeroToSixtySec.toFixed(2)} s`,
     `  Weight: ${input.figures.weightKg} kg`,
     `  Drivetrain: ${input.figures.drivetrain}`,
     `  Engine: ${input.figures.engineSizeL.toFixed(1)} L · ${input.figures.engineCode}`,
     '',
     `Estimated total: ${formatMoney(input.totalPrice)}`,
   ]
-  return lines.join('\n')
+  return lines.filter((l) => l !== undefined).join('\n')
 }

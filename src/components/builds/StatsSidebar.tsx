@@ -1,9 +1,14 @@
 import { useState } from 'react'
 import { catalog } from '../../data/catalog'
-import { formatMoney, resolveSpecChoices } from '../../lib/build'
+import {
+  figuresSourceLabel,
+  formatBuildSummary,
+  formatMoney,
+  resolveSpecChoices,
+} from '../../lib/build'
 import { buildShareUrl, type BuildStage } from '../../lib/buildState'
-import { formatBuildSummary } from '../../lib/build'
-import type { BuildSelection, CarModel, Figures } from '../../types/catalog'
+import { openPrintableSummary } from '../../lib/selection'
+import type { BuildSelection, CarModel, Figures, Market } from '../../types/catalog'
 import { FiguresGrid } from './FiguresGrid'
 import './StatsSidebar.css'
 
@@ -16,6 +21,9 @@ interface Props {
   totalPrice: number
   selection: BuildSelection
   stage: BuildStage
+  market: Market
+  accelLabel: string
+  sourceNote?: string
   onRemoveMod: (modId: string) => void
   onSave?: () => void
 }
@@ -38,6 +46,9 @@ export function StatsSidebar({
   totalPrice,
   selection,
   stage,
+  market,
+  accelLabel,
+  sourceNote,
   onRemoveMod,
   onSave,
 }: Props) {
@@ -46,6 +57,27 @@ export function StatsSidebar({
   const selectedMods = selection.modIds
     .map((id) => catalog.getModById(id))
     .filter(Boolean)
+
+  function summaryText() {
+    const options = resolveSpecChoices(car, selection.specChoices).map(
+      (c) => c.name,
+    )
+    return formatBuildSummary({
+      year,
+      make: car.make,
+      model: car.label,
+      generation: car.generation,
+      colourName,
+      optionLabels: options,
+      modLabels: selectedMods.map((m) =>
+        m ? `${m.brand} ${m.name} (${formatMoney(m.price)})` : '',
+      ),
+      figures: final,
+      totalPrice,
+      market,
+      figuresSource: sourceNote ?? figuresSourceLabel(car.figuresSource),
+    })
+  }
 
   async function handleCopyLink() {
     const url = buildShareUrl({
@@ -61,27 +93,18 @@ export function StatsSidebar({
   }
 
   async function handleCopySummary() {
-    const options = resolveSpecChoices(car, selection.specChoices).map(
-      (c) => c.name,
-    )
-    const text = formatBuildSummary({
-      year,
-      make: car.make,
-      model: car.label,
-      generation: car.generation,
-      colourName,
-      optionLabels: options,
-      modLabels: selectedMods.map((m) =>
-        m ? `${m.brand} ${m.name} (${formatMoney(m.price)})` : '',
-      ),
-      figures: final,
-      totalPrice,
-    })
-    const ok = await copyText(text)
+    const ok = await copyText(summaryText())
     if (ok) {
       setCopied('summary')
       window.setTimeout(() => setCopied(null), 1600)
     }
+  }
+
+  function handleExport() {
+    openPrintableSummary(
+      summaryText(),
+      `${year} ${car.make} ${car.label}`,
+    )
   }
 
   return (
@@ -91,12 +114,16 @@ export function StatsSidebar({
         <h2>
           {year} {car.make} {car.label}
         </h2>
-        <p className="stats-sidebar__colour">{colourName}</p>
+        <p className="stats-sidebar__colour">
+          {colourName} · {market.toUpperCase()}
+        </p>
 
         <FiguresGrid
           title="With selected mods"
           figures={final}
           compareTo={configured}
+          accelLabel={accelLabel}
+          sourceNote={sourceNote}
         />
 
         <div className="stats-sidebar__price">
@@ -114,6 +141,9 @@ export function StatsSidebar({
             onClick={handleCopySummary}
           >
             {copied === 'summary' ? 'Summary copied' : 'Copy summary'}
+          </button>
+          <button type="button" className="btn btn--ghost btn--small" onClick={handleExport}>
+            Export / print
           </button>
           {onSave && (
             <button type="button" className="btn btn--ghost btn--small" onClick={onSave}>

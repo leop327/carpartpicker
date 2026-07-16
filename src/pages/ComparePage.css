@@ -1,0 +1,135 @@
+.compare {
+  display: grid;
+  gap: 1.5rem;
+}
+
+.compare__eyebrow {
+  margin: 0 0 0.25rem;
+  font-size: 0.75rem;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+
+.compare__eyebrow a {
+  color: var(--ink-muted);
+  text-decoration: none;
+}
+
+.compare__header h1 {
+  font-family: var(--font-display);
+  margin: 0;
+  letter-spacing: -0.03em;
+}
+
+.compare__market {
+  margin: 0.35rem 0 0;
+  color: var(--ink-muted);
+  font-size: 0.9rem;
+}
+
+.compare__grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 1rem;
+}
+
+.compare__card {
+  border: 1px solid var(--line);
+  background: var(--surface);
+  padding: 0 0 1rem;
+  display: grid;
+  gap: 0.65rem;
+}
+
+.compare__card h2 {
+  margin: 0;
+  padding: 0 1rem;
+  font-family: var(--font-display);
+  font-size: 1.2rem;
+}
+
+.compare__photo {
+  width: 100%;
+  height: 160px;
+  object-fit: cover;
+  display: block;
+  background: #111;
+}
+
+.compare__meta {
+  margin: 0;
+  padding: 0 1rem;
+  color: var(--ink-muted);
+  font-size: 0.9rem;
+}
+
+.compare__card .figures {
+  padding: 0 1rem;
+}
+
+.compare__price {
+  margin: 0;
+  padding: 0 1rem;
+  font-weight: 700;
+  font-size: 1.2rem;
+  font-variant-numeric: tabular-nums;
+}
+
+.compare__mods {
+  margin: 0;
+  padding: 0 1rem;
+  list-style: none;
+  display: grid;
+  gap: 0.25rem;
+  font-size: 0.85rem;
+  color: var(--ink-muted);
+}
+
+.compare__card .btn {
+  margin: 0.25rem 1rem 0;
+  justify-self: start;
+}
+
+.compare__delta {
+  border-top: 1px solid var(--line);
+  padding-top: 1rem;
+}
+
+.compare__delta h2 {
+  font-family: var(--font-display);
+  font-size: 1.15rem;
+  margin: 0 0 0.75rem;
+}
+
+.compare__delta dl {
+  margin: 0;
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(140px, 1fr));
+  gap: 0.75rem;
+}
+
+.compare__delta div {
+  display: grid;
+  gap: 0.15rem;
+}
+
+.compare__delta dt {
+  font-size: 0.72rem;
+  font-weight: 700;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: var(--ink-muted);
+}
+
+.compare__delta dd {
+  margin: 0;
+  font-weight: 700;
+  font-variant-numeric: tabular-nums;
+}
+
+@media (max-width: 760px) {
+  .compare__grid {
+    grid-template-columns: 1fr;
+  }
+}

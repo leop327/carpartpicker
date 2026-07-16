@@ -22,7 +22,13 @@ export function CarPreview({ car, colour, year, compact }: Props) {
           alt={`${year} ${car.make} ${car.label}`}
           loading="lazy"
         />
+        <div className="car-preview__wash" aria-hidden />
         <span className="car-preview__paint" aria-hidden />
+        {!compact && (
+          <span className="car-preview__swatch-chip" aria-hidden>
+            {colour.name}
+          </span>
+        )}
       </div>
       {!compact && (
         <div className="car-preview__label">

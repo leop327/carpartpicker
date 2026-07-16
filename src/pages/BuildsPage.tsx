@@ -1,7 +1,7 @@
 import { useEffect, useMemo, useState } from 'react'
 import { Link, useSearchParams } from 'react-router-dom'
 import { catalog } from '../data/catalog'
-import { formatMoney } from '../lib/build'
+import { figuresSourceLabel, formatMoney } from '../lib/build'
 import {
   clearBuildStorage,
   emptySelection,
@@ -11,9 +11,10 @@ import {
   type BuildStage,
   type PersistedBuild,
 } from '../lib/buildState'
+import { accelLabel, getMarket, setMarket } from '../lib/market'
 import { getSavedBuild, saveBuild } from '../lib/savedBuilds'
 import { figuresFromSelection, initSpecChoicesForCar } from '../lib/selection'
-import type { BuildSelection } from '../types/catalog'
+import type { BuildSelection, Market } from '../types/catalog'
 import { CarPreview } from '../components/builds/CarPreview'
 import { ColourSwatches } from '../components/builds/ColourSwatches'
 import { FiguresGrid } from '../components/builds/FiguresGrid'
@@ -60,6 +61,7 @@ export function BuildsPage() {
   const [selection, setSelection] = useState<BuildSelection>(initial.selection)
   const [activeSavedId, setActiveSavedId] = useState<string | null>(savedIdParam)
   const [saveNote, setSaveNote] = useState<string | null>(null)
+  const [market, setMarketState] = useState<Market>(() => getMarket())
 
   useEffect(() => {
     if (isNew || savedIdParam) {
@@ -84,7 +86,17 @@ export function BuildsPage() {
     car && selection.colourId
       ? car.colours.find((c) => c.id === selection.colourId)
       : undefined
-  const figures = useMemo(() => figuresFromSelection(selection), [selection])
+  const figures = useMemo(
+    () => figuresFromSelection(selection, market),
+    [selection, market],
+  )
+  const accel = accelLabel(market)
+  const sourceNote = car ? figuresSourceLabel(car.figuresSource) : undefined
+
+  function changeMarket(next: Market) {
+    setMarket(next)
+    setMarketState(next)
+  }
 
   const unlocked: BuildStage[] = useMemo(() => {
     const list: BuildStage[] = ['brand']
@@ -135,22 +147,21 @@ export function BuildsPage() {
 
   function toggleMod(modId: string) {
     setSelection((prev) => {
-      const mod = catalog.getModById(modId)
-      if (!mod) return prev
-      const already = prev.modIds.includes(modId)
-      if (already) {
-        return { ...prev, modIds: prev.modIds.filter((id) => id !== modId) }
+      const selected = !prev.modIds.includes(modId)
+      return {
+        ...prev,
+        modIds: catalog.applyModSelection(prev.modIds, modId, selected),
       }
-      const conflicts = new Set(mod.conflictsWith ?? [])
-      const withoutConflicts = prev.modIds.filter((id) => {
-        const other = catalog.getModById(id)
-        if (!other) return true
-        if (conflicts.has(id)) return false
-        if (other.conflictsWith?.includes(modId)) return false
-        return true
-      })
-      return { ...prev, modIds: [...withoutConflicts, modId] }
     })
+  }
+
+  function applyPreset(presetId: string) {
+    const preset = catalog.stagePresets.find((p) => p.id === presetId)
+    if (!preset) return
+    setSelection((prev) => ({
+      ...prev,
+      modIds: catalog.applyPreset(prev.modIds, preset),
+    }))
   }
 
   function handleStepClick(next: BuildStage) {
@@ -192,6 +203,26 @@ export function BuildsPage() {
           <h1>New build</h1>
         </div>
         <div className="builds__header-actions">
+          <div className="builds__market" role="group" aria-label="Market">
+            <button
+              type="button"
+              className={
+                market === 'us' ? 'mods-chip mods-chip--active' : 'mods-chip'
+              }
+              onClick={() => changeMarket('us')}
+            >
+              US
+            </button>
+            <button
+              type="button"
+              className={
+                market === 'eu' ? 'mods-chip mods-chip--active' : 'mods-chip'
+              }
+              onClick={() => changeMarket('eu')}
+            >
+              EU
+            </button>
+          </div>
           <button type="button" className="btn btn--ghost btn--small" onClick={handleSave}>
             Save build
           </button>
@@ -305,7 +336,12 @@ export function BuildsPage() {
                 selectedId={selection.colourId}
                 onSelect={pickColour}
               />
-              <FiguresGrid title="Factory figures" figures={car.baseFigures} />
+              <FiguresGrid
+                title="Factory figures"
+                figures={figures?.base ?? car.baseFigures}
+                accelLabel={accel}
+                sourceNote={sourceNote}
+              />
               <p className="builds__base-price">
                 From {formatMoney(car.basePrice)}
                 <span> MSRP when new (approx.)</span>
@@ -331,6 +367,8 @@ export function BuildsPage() {
                   title="Configured figures"
                   figures={figures.configured}
                   compareTo={figures.base}
+                  accelLabel={accel}
+                  sourceNote={sourceNote}
                 />
                 <p className="builds__base-price">
                   {formatMoney(figures.configuredPrice)}
@@ -397,6 +435,7 @@ export function BuildsPage() {
                 car={car}
                 selectedModIds={selection.modIds}
                 onToggle={toggleMod}
+                onApplyPreset={applyPreset}
               />
               <StatsSidebar
                 car={car}
@@ -407,6 +446,9 @@ export function BuildsPage() {
                 totalPrice={figures.totalPrice}
                 selection={selection}
                 stage={stage}
+                market={market}
+                accelLabel={accel}
+                sourceNote={sourceNote}
                 onRemoveMod={toggleMod}
                 onSave={handleSave}
               />
@@ -417,7 +459,7 @@ export function BuildsPage() {
                 <strong>{formatMoney(figures.totalPrice)}</strong>
                 <span>
                   {figures.final.hp} hp ·{' '}
-                  {figures.final.zeroToSixtySec.toFixed(2)}s 0–60
+                  {figures.final.zeroToSixtySec.toFixed(2)}s {accel}
                 </span>
               </div>
             </div>

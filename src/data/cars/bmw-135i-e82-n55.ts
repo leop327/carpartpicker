@@ -30,6 +30,8 @@ export const bmw135iE82N55: CarModel = {
     engineSizeL: 3.0,
     engineCode: 'N55B30',
   },
+  figuresSource: 'oem',
+  euFiguresDelta: { zeroToSixtySec: 0.15 },
   description:
     'E82 LCI 135i — single twin-scroll turbo N55B30 (2011–2013).',
   image: '/cars/bmw-135i-e82.jpg',

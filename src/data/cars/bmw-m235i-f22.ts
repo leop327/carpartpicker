@@ -29,6 +29,9 @@ export const bmwM235iF22: CarModel = {
     engineSizeL: 3.0,
     engineCode: 'N55B30',
   },
+  figuresSource: 'oem',
+  euFiguresDelta: { hp: 4, zeroToSixtySec: 0.15 },
+  euBasePrice: 45000,
   description:
     'F22 M235i Coupe — N55B30 before the dedicated M2 arrived (2014–2016).',
   image: '/cars/bmw-m235i-f22.jpg',

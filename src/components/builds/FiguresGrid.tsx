@@ -6,6 +6,9 @@ interface Props {
   title: string
   figures: Figures
   compareTo?: Figures
+  /** e.g. "0–60 mph" or "0–100 km/h" */
+  accelLabel?: string
+  sourceNote?: string
 }
 
 function delta(current: number, base?: number, invert = false) {
@@ -16,7 +19,13 @@ function delta(current: number, base?: number, invert = false) {
   return { text: `${sign}${Number(diff.toFixed(2))}`, better }
 }
 
-export function FiguresGrid({ title, figures, compareTo }: Props) {
+export function FiguresGrid({
+  title,
+  figures,
+  compareTo,
+  accelLabel = '0–60 mph',
+  sourceNote,
+}: Props) {
   const rows: {
     label: string
     value: string
@@ -33,7 +42,7 @@ export function FiguresGrid({ title, figures, compareTo }: Props) {
       tip: delta(figures.torqueNm, compareTo?.torqueNm),
     },
     {
-      label: '0–60 mph',
+      label: accelLabel,
       value: `${figures.zeroToSixtySec.toFixed(2)} s`,
       tip: delta(figures.zeroToSixtySec, compareTo?.zeroToSixtySec, true),
     },
@@ -51,7 +60,10 @@ export function FiguresGrid({ title, figures, compareTo }: Props) {
 
   return (
     <div className="figures">
-      <h3 className="figures__title">{title}</h3>
+      <div className="figures__head">
+        <h3 className="figures__title">{title}</h3>
+        {sourceNote && <span className="figures__source">{sourceNote}</span>}
+      </div>
       <dl className="figures__grid">
         {rows.map((row) => (
           <div key={row.label} className="figures__row">

@@ -29,6 +29,10 @@ export const bmwM2CompetitionF87: CarModel = {
     engineSizeL: 3.0,
     engineCode: 'S55B30T0',
   },
+  figuresSource: 'oem',
+  /** EU press kits often quote 410 PS; 0–100 km/h ~0.1–0.2 s slower than US 0–60 claims. */
+  euFiguresDelta: { hp: 5, zeroToSixtySec: 0.15 },
+  euBasePrice: 62000,
   description:
     'F87 M2 Competition — S55B30T0 twin-turbo from the F8x M3/M4 family.',
   image: '/cars/bmw-m2-competition-f87.jpg',

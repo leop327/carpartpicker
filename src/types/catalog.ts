@@ -1,6 +1,8 @@
 /** Shared catalog types. Add fields carefully — keep data files as source of truth. */
 
 export type Drivetrain = 'RWD' | 'FWD' | 'AWD' | '4WD'
+export type Market = 'us' | 'eu'
+export type FiguresSource = 'oem' | 'estimated' | 'tuner'
 
 export interface Figures {
   hp: number
@@ -61,7 +63,15 @@ export interface CarModel {
   years: number[]
   colours: Colour[]
   basePrice: number
+  /** Optional EU list price (approx). Falls back to basePrice. */
+  euBasePrice?: number
   baseFigures: Figures
+  /** Where baseFigures come from. */
+  figuresSource: FiguresSource
+  /** Optional per-year figure deltas on top of baseFigures. */
+  yearFigures?: Partial<Record<number, FiguresDelta>>
+  /** Applied when market is EU (e.g. PS rating / 0–100 timing notes). */
+  euFiguresDelta?: FiguresDelta
   description: string
   /** Public path to a real photo, e.g. `/cars/bmw-m2-f87.jpg`. */
   image: string
@@ -75,6 +85,7 @@ export type ModCategoryId =
   | 'intake'
   | 'forced-induction'
   | 'ecu'
+  | 'fueling'
   | 'suspension'
   | 'brakes'
   | 'wheels'
@@ -96,6 +107,7 @@ export interface Mod {
   price: number
   description: string
   figuresDelta: FiguresDelta
+  figuresSource?: FiguresSource
   /**
    * Empty = universal. Otherwise the car must share at least one tag,
    * or include the special `*` tag on the mod for all cars.
@@ -103,6 +115,19 @@ export interface Mod {
   compatibleTags: string[]
   /** Mutually exclusive mod ids. */
   conflictsWith?: string[]
+  /**
+   * Mods sharing a group are mutually exclusive
+   * (e.g. all ECU tunes use `ecu-tune`).
+   */
+  conflictGroup?: string
+}
+
+export interface StagePreset {
+  id: string
+  name: string
+  description: string
+  compatibleTags: string[]
+  modIds: string[]
 }
 
 /** In-progress / completed build selections (wizard). */

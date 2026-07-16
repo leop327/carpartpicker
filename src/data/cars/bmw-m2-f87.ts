@@ -30,6 +30,12 @@ export const bmwM2F87: CarModel = {
     engineSizeL: 3.0,
     engineCode: 'N55B30T0',
   },
+  figuresSource: 'oem',
+  euFiguresDelta: { zeroToSixtySec: 0.15 },
+  euBasePrice: 54000,
+  yearFigures: {
+    2018: { weightKg: 5 },
+  },
   description:
     'F87 M2 — high-output N55B30T0, Active M Differential, first-gen M2.',
   image: '/cars/bmw-m2-f87.jpg',

@@ -4,12 +4,17 @@ import {
   formatBuildSummary,
   formatMoney,
   formatTorque,
+  figuresSourceLabel,
   getDefaultSpecChoice,
   resolveSpecChoices,
 } from './build'
-import type { BuildSelection, Figures } from '../types/catalog'
+import { getMarket } from './market'
+import type { BuildSelection, Figures, Market } from '../types/catalog'
 
-export function figuresFromSelection(selection: BuildSelection): {
+export function figuresFromSelection(
+  selection: BuildSelection,
+  market: Market = getMarket(),
+): {
   base: Figures
   configured: Figures
   final: Figures
@@ -20,10 +25,16 @@ export function figuresFromSelection(selection: BuildSelection): {
   if (!selection.carId) return null
   const car = catalog.getCarById(selection.carId)
   if (!car) return null
-  return computeBuildFigures(car, selection.specChoices, selection.modIds)
+  return computeBuildFigures(car, selection.specChoices, selection.modIds, {
+    year: selection.year,
+    market,
+  })
 }
 
-export function buildSummaryText(selection: BuildSelection): string | null {
+export function buildSummaryText(
+  selection: BuildSelection,
+  market: Market = getMarket(),
+): string | null {
   const car = selection.carId ? catalog.getCarById(selection.carId) : undefined
   if (!car || selection.year == null || !selection.colourId) return null
   const colour =
@@ -32,6 +43,7 @@ export function buildSummaryText(selection: BuildSelection): string | null {
     car,
     selection.specChoices,
     selection.modIds,
+    { year: selection.year, market },
   )
   const options = resolveSpecChoices(car, selection.specChoices).map(
     (c) => c.name,
@@ -50,6 +62,8 @@ export function buildSummaryText(selection: BuildSelection): string | null {
     modLabels,
     figures: figures.final,
     totalPrice: figures.totalPrice,
+    market,
+    figuresSource: figuresSourceLabel(car.figuresSource),
   })
 }
 
@@ -63,4 +77,19 @@ export function initSpecChoicesForCar(carId: string): Record<string, string> {
   return defaults
 }
 
-export { formatMoney, formatTorque }
+export function openPrintableSummary(text: string, title: string): void {
+  const w = window.open('', '_blank', 'noopener,noreferrer,width=720,height=900')
+  if (!w) return
+  w.document.write(`<!doctype html><html><head><title>${title}</title>
+    <style>
+      body { font-family: ui-monospace, SFMono-Regular, Menlo, monospace; padding: 2rem; line-height: 1.5; color: #111; }
+      pre { white-space: pre-wrap; }
+      @media print { button { display: none; } }
+    </style></head><body>
+    <button onclick="window.print()">Print / Save as PDF</button>
+    <pre>${text.replace(/</g, '&lt;')}</pre>
+    </body></html>`)
+  w.document.close()
+}
+
+export { formatMoney, formatTorque, figuresSourceLabel }

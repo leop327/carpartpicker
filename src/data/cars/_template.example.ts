@@ -29,6 +29,7 @@ export const exampleCar: CarModel = {
     engineSizeL: 3.0,
     engineCode: 'EXAMPLE',
   },
+  figuresSource: 'oem',
   description: 'Short one-line description.',
   image: '/cars/bmw-135i-e82.jpg',
   modTags: ['bmw', 'example', 'rwd'],

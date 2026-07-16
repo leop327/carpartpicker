@@ -1,5 +1,14 @@
 import { cars, getCarById, getCarsByMake, getMakes } from './cars'
-import { getModById, getModsForCar, modCategories, mods } from './mods'
+import {
+  applyModSelection,
+  applyPreset,
+  getModById,
+  getModsForCar,
+  getPresetsForCar,
+  modCategories,
+  mods,
+  stagePresets,
+} from './mods'
 
 /**
  * Single entry point for catalog reads.
@@ -10,11 +19,23 @@ export const catalog = {
   cars,
   mods,
   modCategories,
+  stagePresets,
   getCarById,
   getCarsByMake,
   getMakes,
   getModById,
   getModsForCar,
+  getPresetsForCar,
+  applyModSelection,
+  applyPreset,
 }
 
-export type { CarModel, Mod, ModCategory, Figures, BuildSelection } from '../types/catalog'
+export type {
+  CarModel,
+  Mod,
+  ModCategory,
+  Figures,
+  BuildSelection,
+  StagePreset,
+  Market,
+} from '../types/catalog'

@@ -41,14 +41,44 @@
   min-height: 72px;
 }
 
+.car-preview__wash {
+  position: absolute;
+  inset: 0;
+  background:
+    linear-gradient(
+      180deg,
+      color-mix(in srgb, var(--paint) 18%, transparent),
+      transparent 42%,
+      color-mix(in srgb, var(--paint) 22%, transparent)
+    );
+  mix-blend-mode: soft-light;
+  pointer-events: none;
+}
+
 .car-preview__paint {
   position: absolute;
   left: 0;
   right: 0;
   bottom: 0;
-  height: 5px;
+  height: 6px;
   background: var(--paint);
-  box-shadow: 0 0 24px color-mix(in srgb, var(--paint) 55%, transparent);
+  box-shadow: 0 0 28px color-mix(in srgb, var(--paint) 65%, transparent);
+}
+
+.car-preview__swatch-chip {
+  position: absolute;
+  left: 0.75rem;
+  bottom: 0.85rem;
+  padding: 0.3rem 0.55rem;
+  background: color-mix(in srgb, #0e1013 78%, transparent);
+  color: #f3efe8;
+  font-size: 0.75rem;
+  font-weight: 600;
+  max-width: calc(100% - 1.5rem);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  border-left: 3px solid var(--paint);
 }
 
 .car-preview__label {

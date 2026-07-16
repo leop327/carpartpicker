@@ -3,6 +3,97 @@
   gap: 1.75rem;
 }
 
+.mods-presets__head h3 {
+  font-family: var(--font-display);
+  font-size: 1.15rem;
+  margin: 0 0 0.25rem;
+  letter-spacing: -0.02em;
+}
+
+.mods-presets__head p {
+  margin: 0 0 0.75rem;
+  color: var(--ink-muted);
+  font-size: 0.9rem;
+}
+
+.mods-presets__grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+  gap: 0.55rem;
+}
+
+.mods-preset {
+  display: grid;
+  gap: 0.25rem;
+  text-align: left;
+  padding: 0.85rem 0.95rem;
+  border: 1px solid var(--line);
+  background: var(--surface);
+  cursor: pointer;
+  font: inherit;
+  color: inherit;
+}
+
+.mods-preset:hover {
+  border-color: var(--ink);
+}
+
+.mods-preset strong {
+  font-size: 0.95rem;
+}
+
+.mods-preset span {
+  font-size: 0.82rem;
+  color: var(--ink-muted);
+  line-height: 1.35;
+}
+
+.mods-toolbar {
+  display: grid;
+  gap: 0.65rem;
+  position: sticky;
+  top: 4.25rem;
+  z-index: 5;
+  padding: 0.65rem 0;
+  background: color-mix(in srgb, var(--bg) 92%, transparent);
+  backdrop-filter: blur(8px);
+}
+
+.mods-search input {
+  width: 100%;
+  padding: 0.7rem 0.85rem;
+  border: 1px solid var(--line);
+  background: var(--surface);
+  color: var(--ink);
+}
+
+.mods-filters {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.35rem;
+}
+
+.mods-chip {
+  padding: 0.3rem 0.65rem;
+  border: 1px solid var(--line);
+  background: var(--surface);
+  font: inherit;
+  font-size: 0.8rem;
+  font-weight: 600;
+  color: var(--ink-muted);
+  cursor: pointer;
+}
+
+.mods-chip--active {
+  border-color: var(--ink);
+  color: var(--ink);
+}
+
+.mods-empty {
+  margin: 0;
+  color: var(--ink-muted);
+}
+
 .mods-category__head h3 {
   font-family: var(--font-display);
   font-size: 1.2rem;
@@ -41,12 +132,12 @@
 }
 
 .mod-row:hover {
-  border-color: color-mix(in srgb, var(--accent) 55%, var(--line));
+  border-color: color-mix(in srgb, var(--ink) 35%, var(--line));
 }
 
 .mod-row--active {
-  border-color: var(--accent);
-  background: color-mix(in srgb, var(--accent) 9%, var(--surface));
+  border-color: var(--ink);
+  background: color-mix(in srgb, var(--ink) 4%, var(--surface));
 }
 
 .mod-row__main {
@@ -76,7 +167,7 @@
 .mod-row__delta {
   font-size: 0.82rem;
   font-weight: 600;
-  color: var(--accent-ink);
+  color: var(--signal);
   margin-top: 0.2rem;
 }
 
@@ -97,10 +188,26 @@
   font-weight: 700;
   letter-spacing: 0.04em;
   text-transform: uppercase;
-  color: var(--accent);
+  color: var(--signal);
+}
+
+.visually-hidden {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  white-space: nowrap;
+  border: 0;
 }
 
 @media (max-width: 640px) {
+  .mods-toolbar {
+    top: 3.6rem;
+  }
+
   .mod-row {
     flex-direction: column;
   }

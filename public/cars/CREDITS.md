@@ -8,9 +8,9 @@ Car photos are from [Wikimedia Commons](https://commons.wikimedia.org/). License
 - Author: Tokumeigakarinoaoshima
 
 ## `bmw-m140i-f20.jpg`
-- Source: [File:BMW 1-Series F20 Shishi 01 2022-09-12.jpg](https://commons.wikimedia.org/wiki/File%3ABMW_1-Series_F20_Shishi_01_2022-09-12.jpg)
-- License: [CC BY-SA 4.0](https://creativecommons.org/licenses/by-sa/4.0)
-- Author: JamesYoung8167
+- Source: [File:2017 BMW M140i.jpg](https://commons.wikimedia.org/wiki/File%3A2017_BMW_M140i.jpg)
+- License: [CC BY 4.0](https://creativecommons.org/licenses/by/4.0)
+- Author: Calreyn88
 
 ## `bmw-m2-competition-f87.jpg`
 - Source: [File:BMW M2 Competition (F87) front.jpg](https://commons.wikimedia.org/wiki/File%3ABMW_M2_Competition_%28F87%29_front.jpg)

@@ -30,6 +30,8 @@ export const bmw135iE82N54: CarModel = {
     engineSizeL: 3.0,
     engineCode: 'N54B30',
   },
+  figuresSource: 'oem',
+  euFiguresDelta: { zeroToSixtySec: 0.15 },
   description:
     'E82 1 Series Coupe 135i — twin-turbo N54B30 (2008–2010), the classic tuner motor.',
   image: '/cars/bmw-135i-e82.jpg',

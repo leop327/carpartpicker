@@ -29,6 +29,12 @@ export const bmwM140iF20: CarModel = {
     engineSizeL: 3.0,
     engineCode: 'B58B30M0',
   },
+  figuresSource: 'oem',
+  euBasePrice: 35570,
+  euFiguresDelta: { zeroToSixtySec: 0.1 },
+  yearFigures: {
+    2019: { weightKg: 10 },
+  },
   description:
     'F20/F21 M140i — B58B30M0 straight-six hot hatch (UK/EU markets).',
   image: '/cars/bmw-m140i-f20.jpg',
