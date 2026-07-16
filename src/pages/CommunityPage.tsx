@@ -102,6 +102,7 @@ export function CommunityPage() {
         <section className="community__race" aria-labelledby="community-race">
           <h2 id="community-race">1/4-mile drag race</h2>
           <DragRace
+            timesBeside
             title={`${myBuild.name} vs ${opponent.title}`}
             left={{
               id: myBuild.id,

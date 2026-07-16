@@ -16,6 +16,8 @@ interface Props {
   right: DragRacer
   title?: string
   compact?: boolean
+  /** Place ET times to the right of the track (community layout). */
+  timesBeside?: boolean
 }
 
 type RacePhase = 'idle' | 'racing' | 'done'
@@ -23,7 +25,7 @@ type RacePhase = 'idle' | 'racing' | 'done'
 /** Wall-clock ms per second of ET — keeps races watchable. */
 const MS_PER_SEC = 420
 
-export function DragRace({ left, right, title, compact }: Props) {
+export function DragRace({ left, right, title, compact, timesBeside }: Props) {
   const [phase, setPhase] = useState<RacePhase>('idle')
   const [progress, setProgress] = useState({ left: 0, right: 0 })
   const [winnerId, setWinnerId] = useState<string | null>(null)
@@ -87,7 +89,15 @@ export function DragRace({ left, right, title, compact }: Props) {
           : null
 
   return (
-    <div className={compact ? 'drag-race drag-race--compact' : 'drag-race'}>
+    <div
+      className={[
+        'drag-race',
+        compact ? 'drag-race--compact' : '',
+        timesBeside ? 'drag-race--times-beside' : '',
+      ]
+        .filter(Boolean)
+        .join(' ')}
+    >
       <div className="drag-race__head">
         <div>
           {title ? <h3 className="drag-race__title">{title}</h3> : null}
@@ -108,30 +118,32 @@ export function DragRace({ left, right, title, compact }: Props) {
         </div>
       </div>
 
-      <div className="drag-race__track" aria-live="polite">
-        {phase === 'done' && resultLabel ? (
-          <div className="drag-race__banner">{resultLabel}</div>
-        ) : null}
+      <div className="drag-race__body">
+        <div className="drag-race__track" aria-live="polite">
+          {phase === 'done' && resultLabel ? (
+            <div className="drag-race__banner">{resultLabel}</div>
+          ) : null}
 
-        <Lane
-          racer={left}
-          progress={progress.left}
-          won={winnerId === left.id}
-        />
-        <Lane
-          racer={right}
-          progress={progress.right}
-          won={winnerId === right.id}
-        />
-      </div>
+          <Lane
+            racer={left}
+            progress={progress.left}
+            won={winnerId === left.id}
+          />
+          <Lane
+            racer={right}
+            progress={progress.right}
+            won={winnerId === right.id}
+          />
+        </div>
 
-      <div className="drag-race__times">
-        <span>
-          {left.label}: <strong>{left.quarterMileSec.toFixed(2)}s</strong>
-        </span>
-        <span>
-          {right.label}: <strong>{right.quarterMileSec.toFixed(2)}s</strong>
-        </span>
+        <div className="drag-race__times">
+          <span>
+            {left.label}: <strong>{left.quarterMileSec.toFixed(2)}s</strong>
+          </span>
+          <span>
+            {right.label}: <strong>{right.quarterMileSec.toFixed(2)}s</strong>
+          </span>
+        </div>
       </div>
     </div>
   )

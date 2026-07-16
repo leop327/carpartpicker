@@ -506,6 +506,14 @@ export function BuildsPage() {
                       }
                 }
                 onSave={viewOnly ? undefined : handleSave}
+                onCheckout={
+                  viewOnly
+                    ? undefined
+                    : () => {
+                        celebrate(unlockMilestone('first-checkout'))
+                        setStage('checkout')
+                      }
+                }
                 celebration={celebration}
                 readOnly={viewOnly}
               />

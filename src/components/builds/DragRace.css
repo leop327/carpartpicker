@@ -37,6 +37,33 @@
   gap: 0.4rem;
 }
 
+.drag-race__body {
+  display: grid;
+  gap: 0.65rem;
+}
+
+.drag-race--times-beside .drag-race__body {
+  grid-template-columns: minmax(0, 1fr) auto;
+  align-items: stretch;
+  gap: 0.85rem;
+}
+
+.drag-race--times-beside .drag-race__times {
+  flex-direction: column;
+  justify-content: center;
+  align-self: stretch;
+  min-width: 7.5rem;
+  padding: 0.65rem 0.75rem;
+  border: 1px solid var(--line);
+  background: var(--surface);
+  gap: 0.65rem;
+}
+
+.drag-race--times-beside .drag-race__times span {
+  display: grid;
+  gap: 0.15rem;
+}
+
 .drag-race__track {
   position: relative;
   display: grid;
@@ -195,6 +222,16 @@
 
   .drag-race__actions .btn {
     width: 100%;
+  }
+
+  .drag-race--times-beside .drag-race__body {
+    grid-template-columns: 1fr;
+  }
+
+  .drag-race--times-beside .drag-race__times {
+    flex-direction: row;
+    justify-content: space-between;
+    min-width: 0;
   }
 
   .drag-race__times {

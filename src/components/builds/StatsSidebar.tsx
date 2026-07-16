@@ -33,6 +33,7 @@ interface Props {
   onRemoveMod: (modId: string) => void
   onAddMod?: (modId: string) => void
   onSave?: () => void
+  onCheckout?: () => void
   celebration?: string | null
   readOnly?: boolean
 }
@@ -62,6 +63,7 @@ export function StatsSidebar({
   onRemoveMod,
   onAddMod,
   onSave,
+  onCheckout,
   celebration,
   readOnly,
 }: Props) {
@@ -211,6 +213,15 @@ export function StatsSidebar({
                 onClick={onSave}
               >
                 Save build
+              </button>
+            ) : null}
+            {onCheckout ? (
+              <button
+                type="button"
+                className="btn btn--primary btn--small"
+                onClick={onCheckout}
+              >
+                Checkout
               </button>
             ) : null}
           </div>

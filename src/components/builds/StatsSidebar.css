@@ -228,12 +228,16 @@
 
   .stats-sidebar__actions {
     display: grid;
-    grid-template-columns: 1fr;
+    grid-template-columns: 1fr 1fr;
   }
 
   .stats-sidebar__actions .btn {
     width: 100%;
     justify-content: center;
+  }
+
+  .stats-sidebar__actions .btn--primary {
+    grid-column: 1 / -1;
   }
 
   .stats-sidebar__mods li {
