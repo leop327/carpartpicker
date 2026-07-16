@@ -19,6 +19,8 @@ export interface PersistedBuild {
 
 const STORAGE_KEY = 'carpartpicker:draft:v2'
 export const BUILD_URL_PARAM = 'b'
+/** Present on shared links — recipient can view but not edit. */
+export const VIEW_URL_PARAM = 'view'
 
 const STAGES: BuildStage[] = [
   'brand',
@@ -196,7 +198,25 @@ export function buildShareUrl(
   return url.toString()
 }
 
-export function syncBuildToUrl(build: PersistedBuild): void {
+/** View-only share link — opens the build without editing or overwriting drafts. */
+export function buildViewOnlyUrl(
+  build: PersistedBuild,
+  origin = window.location.origin,
+): string {
+  const url = new URL('/builds', origin)
+  url.searchParams.set(BUILD_URL_PARAM, encodeBuildParam(build))
+  url.searchParams.set(VIEW_URL_PARAM, '1')
+  return url.toString()
+}
+
+export function isViewOnlySearch(search: string): boolean {
+  return new URLSearchParams(search).get(VIEW_URL_PARAM) === '1'
+}
+
+export function syncBuildToUrl(
+  build: PersistedBuild,
+  opts?: { viewOnly?: boolean },
+): void {
   const url = new URL(window.location.href)
   if (
     !build.selection.make &&
@@ -204,8 +224,11 @@ export function syncBuildToUrl(build: PersistedBuild): void {
     build.stage === 'brand'
   ) {
     url.searchParams.delete(BUILD_URL_PARAM)
+    url.searchParams.delete(VIEW_URL_PARAM)
   } else {
     url.searchParams.set(BUILD_URL_PARAM, encodeBuildParam(build))
+    if (opts?.viewOnly) url.searchParams.set(VIEW_URL_PARAM, '1')
+    else url.searchParams.delete(VIEW_URL_PARAM)
   }
   window.history.replaceState(
     null,

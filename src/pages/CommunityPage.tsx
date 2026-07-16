@@ -1,36 +1,79 @@
-import { useMemo, useState } from 'react'
+import { useState } from 'react'
 import { Link } from 'react-router-dom'
+import { catalog } from '../data/catalog'
 import { DragRace } from '../components/builds/DragRace'
 import { formatMoney } from '../lib/build'
 import {
   listCommunityBuilds,
   type CommunityBuild,
 } from '../lib/community'
-import { listSavedBuilds } from '../lib/savedBuilds'
+import { estimateQuarterMileSec } from '../lib/quarterMile'
+import { figuresFromSelection } from '../lib/selection'
+import { MARKET } from '../lib/market'
+import {
+  listSavedBuilds,
+  selectionLabel,
+  type SavedBuild,
+} from '../lib/savedBuilds'
 import './CommunityPage.css'
+
+function etForSnapshot(s: CommunityBuild['snapshot']): number {
+  if (typeof s.quarterMileSec === 'number' && Number.isFinite(s.quarterMileSec)) {
+    return s.quarterMileSec
+  }
+  return estimateQuarterMileSec({
+    hp: s.hp,
+    weightKg: s.weightKg,
+    zeroToSixtySec: s.zeroToSixtySec,
+  })
+}
+
+function etForOwned(build: SavedBuild): number | null {
+  const figures = figuresFromSelection(build.build.selection, MARKET)
+  if (!figures) return null
+  return estimateQuarterMileSec(figures.final)
+}
+
+function imageForOwned(build: SavedBuild): string | undefined {
+  const carId = build.build.selection.carId
+  return carId ? catalog.getCarById(carId)?.image : undefined
+}
 
 export function CommunityPage() {
   const [builds] = useState(() => listCommunityBuilds())
+  const [owned] = useState(() =>
+    listSavedBuilds().filter((b) => b.ownership === 'owned'),
+  )
   const [selectedId, setSelectedId] = useState<string | null>(
     () => builds[0]?.id ?? null,
   )
-  const [challengerId, setChallengerId] = useState<string | null>(null)
-  const [raceVsId, setRaceVsId] = useState<string | null>(null)
-
-  const owned = useMemo(
-    () => listSavedBuilds().filter((b) => b.ownership === 'owned'),
-    [],
-  )
+  const [raceOpponentId, setRaceOpponentId] = useState<string | null>(null)
+  const [myRacerId, setMyRacerId] = useState<string | null>(null)
+  const [pickingForId, setPickingForId] = useState<string | null>(null)
 
   const selected = builds.find((b) => b.id === selectedId) ?? builds[0]
-  const raceOpponent =
-    (raceVsId && builds.find((b) => b.id === raceVsId)) ||
-    builds.find((b) => b.id !== selected?.id) ||
-    null
+  const opponent = raceOpponentId
+    ? builds.find((b) => b.id === raceOpponentId)
+    : null
+  const myBuild = myRacerId
+    ? owned.find((b) => b.id === myRacerId)
+    : null
 
-  function pickRace(opponentId: string) {
-    setRaceVsId(opponentId)
-    setChallengerId(selected?.id ?? null)
+  const myEt = myBuild ? etForOwned(myBuild) : null
+  const oppEt = opponent ? etForSnapshot(opponent.snapshot) : null
+
+  function startPick(communityId: string) {
+    setSelectedId(communityId)
+    setPickingForId(communityId)
+    setRaceOpponentId(null)
+    setMyRacerId(null)
+  }
+
+  function chooseMyBuild(ownedId: string) {
+    if (!pickingForId) return
+    setMyRacerId(ownedId)
+    setRaceOpponentId(pickingForId)
+    setPickingForId(null)
   }
 
   return (
@@ -38,43 +81,43 @@ export function CommunityPage() {
       <header className="community__hero">
         <h1>Community</h1>
         <p>
-          Browse builds from the garage. Race 0–62 against another setup. Upload
-          your owned car from a saved build.
+          Browse garage builds. Challenge any of them to a 1/4-mile with one of
+          your owned cars.
         </p>
         {owned.length === 0 ? (
           <p className="community__hint">
-            Mark a saved build as <strong>Owned</strong> (with registration),
-            then publish it from the build page.{' '}
-            <Link to="/saved">Open saved builds</Link>
+            Mark a saved build as <strong>Owned</strong> (with registration) to
+            race. <Link to="/saved">Open saved builds</Link>
           </p>
         ) : (
           <p className="community__hint">
-            You have {owned.length} owned build{owned.length === 1 ? '' : 's'}.{' '}
+            You have {owned.length} owned build{owned.length === 1 ? '' : 's'}{' '}
+            ready to race.{' '}
             <Link to={`/saved/${owned[0].id}`}>Publish from your garage</Link>
           </p>
         )}
       </header>
 
-      {selected && raceOpponent && challengerId === selected.id ? (
+      {opponent && myBuild && myEt != null && oppEt != null ? (
         <section className="community__race" aria-labelledby="community-race">
-          <h2 id="community-race">Drag race</h2>
+          <h2 id="community-race">1/4-mile drag race</h2>
           <DragRace
-            title={`${selected.title} vs ${raceOpponent.title}`}
+            title={`${myBuild.name} vs ${opponent.title}`}
             left={{
-              id: selected.id,
-              label: selected.title,
-              sublabel: `${selected.snapshot.hp} hp · ${selected.authorName}`,
-              image: selected.snapshot.image,
-              zeroToSixtySec: selected.snapshot.zeroToSixtySec,
-              accent: selected.snapshot.colourHex,
+              id: myBuild.id,
+              label: myBuild.name,
+              sublabel: `${selectionLabel(myBuild.build.selection)} · you`,
+              image: imageForOwned(myBuild),
+              quarterMileSec: myEt,
+              accent: 'var(--signal)',
             }}
             right={{
-              id: raceOpponent.id,
-              label: raceOpponent.title,
-              sublabel: `${raceOpponent.snapshot.hp} hp · ${raceOpponent.authorName}`,
-              image: raceOpponent.snapshot.image,
-              zeroToSixtySec: raceOpponent.snapshot.zeroToSixtySec,
-              accent: raceOpponent.snapshot.colourHex,
+              id: opponent.id,
+              label: opponent.title,
+              sublabel: `${opponent.snapshot.hp} hp · ${opponent.authorName}`,
+              image: opponent.snapshot.image,
+              quarterMileSec: oppEt,
+              accent: opponent.snapshot.colourHex,
             }}
           />
         </section>
@@ -88,21 +131,15 @@ export function CommunityPage() {
               <CommunityCard
                 build={build}
                 selected={build.id === selected?.id}
+                owned={owned}
+                picking={pickingForId === build.id}
                 onSelect={() => {
                   setSelectedId(build.id)
-                  setChallengerId(null)
+                  setPickingForId(null)
                 }}
-                onRace={() => {
-                  setSelectedId(build.id)
-                  const opponent =
-                    builds.find((b) => b.id !== build.id) ?? null
-                  if (opponent) pickRace(opponent.id)
-                }}
-                opponents={builds.filter((b) => b.id !== build.id)}
-                onRaceVs={(id) => {
-                  setSelectedId(build.id)
-                  pickRace(id)
-                }}
+                onDragRace={() => startPick(build.id)}
+                onPickOwned={chooseMyBuild}
+                onCancelPick={() => setPickingForId(null)}
               />
             </li>
           ))}
@@ -115,20 +152,24 @@ export function CommunityPage() {
 function CommunityCard({
   build,
   selected,
+  owned,
+  picking,
   onSelect,
-  onRace,
-  opponents,
-  onRaceVs,
+  onDragRace,
+  onPickOwned,
+  onCancelPick,
 }: {
   build: CommunityBuild
   selected: boolean
+  owned: SavedBuild[]
+  picking: boolean
   onSelect: () => void
-  onRace: () => void
-  opponents: CommunityBuild[]
-  onRaceVs: (id: string) => void
+  onDragRace: () => void
+  onPickOwned: (id: string) => void
+  onCancelPick: () => void
 }) {
-  const [pickOpen, setPickOpen] = useState(false)
   const s = build.snapshot
+  const et = etForSnapshot(s)
 
   return (
     <article
@@ -160,8 +201,8 @@ function CommunityCard({
               <dd>{s.hp} hp</dd>
             </div>
             <div>
-              <dt>0–62</dt>
-              <dd>{s.zeroToSixtySec.toFixed(2)}s</dd>
+              <dt>1/4-mile</dt>
+              <dd>{et.toFixed(2)}s</dd>
             </div>
             <div>
               <dt>Mods</dt>
@@ -183,35 +224,50 @@ function CommunityCard({
         </div>
       </button>
       <div className="community-card__actions">
-        <button type="button" className="btn btn--primary btn--small" onClick={onRace}>
-          Race someone
-        </button>
         <button
           type="button"
-          className="btn btn--ghost btn--small"
-          onClick={() => setPickOpen((v) => !v)}
-          aria-expanded={pickOpen}
+          className="btn btn--primary btn--small"
+          onClick={onDragRace}
         >
-          Pick opponent
+          Drag race
         </button>
       </div>
-      {pickOpen ? (
-        <ul className="community-card__opponents">
-          {opponents.map((o) => (
-            <li key={o.id}>
-              <button
-                type="button"
-                onClick={() => {
-                  onRaceVs(o.id)
-                  setPickOpen(false)
-                }}
-              >
-                vs {o.title}{' '}
-                <span>{o.snapshot.zeroToSixtySec.toFixed(2)}s</span>
-              </button>
-            </li>
-          ))}
-        </ul>
+      {picking ? (
+        <div className="community-card__pick">
+          <p className="community-card__pick-label">
+            {owned.length === 0
+              ? 'You need an owned build to race.'
+              : 'Pick one of your owned builds:'}
+          </p>
+          {owned.length === 0 ? (
+            <Link to="/saved" className="btn btn--ghost btn--small">
+              Go to saved builds
+            </Link>
+          ) : (
+            <ul className="community-card__opponents">
+              {owned.map((o) => {
+                const oEt = etForOwned(o)
+                return (
+                  <li key={o.id}>
+                    <button type="button" onClick={() => onPickOwned(o.id)}>
+                      {o.name}{' '}
+                      <span>
+                        {oEt != null ? `${oEt.toFixed(2)}s ET` : '—'}
+                      </span>
+                    </button>
+                  </li>
+                )
+              })}
+            </ul>
+          )}
+          <button
+            type="button"
+            className="btn btn--ghost btn--small"
+            onClick={onCancelPick}
+          >
+            Cancel
+          </button>
+        </div>
       ) : null}
     </article>
   )

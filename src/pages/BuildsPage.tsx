@@ -5,19 +5,18 @@ import { figuresSourceLabel } from '../lib/build'
 import {
   emptySelection,
   hydrateBuildFromLocation,
+  isViewOnlySearch,
   syncBuildToUrl,
   writeBuildToStorage,
   type BuildStage,
   type PersistedBuild,
 } from '../lib/buildState'
-import { downloadModList } from '../lib/exportMods'
 import { accelLabel, MARKET } from '../lib/market'
 import { unlockMilestone } from '../lib/milestones'
 import { requireAccount } from '../lib/profile'
 import {
   getSavedBuild,
   saveBuild,
-  selectionLabel,
 } from '../lib/savedBuilds'
 import { figuresFromSelection, initSpecChoicesForCar } from '../lib/selection'
 import type { BuildSelection } from '../types/catalog'
@@ -56,6 +55,7 @@ export function BuildsPage() {
   const [params, setParams] = useSearchParams()
   const isNew = params.get('new') === '1'
   const savedIdParam = params.get('saved')
+  const [viewOnly] = useState(() => isViewOnlySearch(window.location.search))
 
   const initial = useMemo(
     () => bootState(window.location.search, isNew, savedIdParam),
@@ -64,16 +64,28 @@ export function BuildsPage() {
     [],
   )
 
-  const [stage, setStage] = useState<BuildStage>(initial.stage)
+  const [stage, setStage] = useState<BuildStage>(() =>
+    viewOnly &&
+    initial.selection.carId &&
+    initial.selection.year != null &&
+    initial.selection.colourId
+      ? 'mods'
+      : initial.stage,
+  )
   const [selection, setSelection] = useState<BuildSelection>(initial.selection)
-  const [activeSavedId, setActiveSavedId] = useState<string | null>(savedIdParam)
+  const [activeSavedId, setActiveSavedId] = useState<string | null>(
+    viewOnly ? null : savedIdParam,
+  )
   const [editingName, setEditingName] = useState<string | null>(() =>
-    savedIdParam ? getSavedBuild(savedIdParam)?.name ?? null : null,
+    !viewOnly && savedIdParam
+      ? getSavedBuild(savedIdParam)?.name ?? null
+      : null,
   )
   const [saveNote, setSaveNote] = useState<string | null>(null)
   const [celebration, setCelebration] = useState<string | null>(null)
 
   useEffect(() => {
+    if (viewOnly) return
     if (isNew || savedIdParam) {
       const next = new URLSearchParams(params)
       next.delete('new')
@@ -85,9 +97,13 @@ export function BuildsPage() {
 
   useEffect(() => {
     const build: PersistedBuild = { v: 2, stage, selection }
+    if (viewOnly) {
+      syncBuildToUrl(build, { viewOnly: true })
+      return
+    }
     writeBuildToStorage(build)
     syncBuildToUrl(build)
-  }, [stage, selection])
+  }, [stage, selection, viewOnly])
 
   const car = selection.carId
     ? catalog.getCarById(selection.carId)
@@ -115,10 +131,12 @@ export function BuildsPage() {
   }, [selection])
 
   function patchSelection(patch: Partial<BuildSelection>) {
+    if (viewOnly) return
     setSelection((prev) => ({ ...prev, ...patch }))
   }
 
   function pickBrand(make: string) {
+    if (viewOnly) return
     setSelection({
       ...emptySelection(),
       make,
@@ -127,6 +145,7 @@ export function BuildsPage() {
   }
 
   function pickModel(carId: string) {
+    if (viewOnly) return
     const next = catalog.getCarById(carId)
     if (!next) return
     setSelection({
@@ -141,16 +160,19 @@ export function BuildsPage() {
   }
 
   function pickYear(year: number) {
+    if (viewOnly) return
     patchSelection({ year, colourId: null })
     setStage('colour')
   }
 
   function pickColour(colourId: string) {
+    if (viewOnly) return
     patchSelection({ colourId })
     setStage('options')
   }
 
   function toggleMod(modId: string) {
+    if (viewOnly) return
     setSelection((prev) => {
       const selected = !prev.modIds.includes(modId)
       return {
@@ -161,6 +183,7 @@ export function BuildsPage() {
   }
 
   function applyPreset(presetId: string) {
+    if (viewOnly) return
     const preset = catalog.stagePresets.find((p) => p.id === presetId)
     if (!preset) return
     setSelection((prev) => ({
@@ -170,6 +193,7 @@ export function BuildsPage() {
   }
 
   function handleStepClick(next: BuildStage) {
+    if (viewOnly) return
     if (!unlocked.includes(next)) return
     setStage(next)
   }
@@ -181,6 +205,7 @@ export function BuildsPage() {
   }
 
   function handleSave() {
+    if (viewOnly) return
     requireAccount(() => {
       if (!selection.carId || selection.year == null || !selection.colourId) {
         setSaveNote('Finish brand, model, year, and colour before saving.')
@@ -199,20 +224,8 @@ export function BuildsPage() {
     }, 'Create an account to save builds.')
   }
 
-  function handleExportMods() {
-    requireAccount(() => {
-      const ok = downloadModList(selection, {
-        filename: `${(editingName ?? selectionLabel(selection) ?? 'build')
-          .replace(/\s+/g, '-')
-          .toLowerCase()}-mods.csv`,
-        format: 'csv',
-      })
-      setSaveNote(ok ? 'Mod list downloaded' : 'Add mods before exporting')
-      window.setTimeout(() => setSaveNote(null), 2000)
-    }, 'Create an account to export your mod list.')
-  }
-
   function skipOptions() {
+    if (viewOnly) return
     if (car) {
       patchSelection({ specChoices: initSpecChoicesForCar(car.id) })
     }
@@ -230,12 +243,27 @@ export function BuildsPage() {
             {' · '}
             <Link to="/saved">Saved builds</Link>
           </p>
-          <h1>{activeSavedId ? 'Edit build' : 'New build'}</h1>
-          {editingName && (
+          <h1>
+            {viewOnly
+              ? 'Shared build'
+              : activeSavedId
+                ? 'Edit build'
+                : 'New build'}
+          </h1>
+          {viewOnly ? (
+            <p className="builds__editing">View only — copy the link to share.</p>
+          ) : editingName ? (
             <p className="builds__editing">Editing “{editingName}”</p>
-          )}
+          ) : null}
         </div>
       </header>
+
+      {viewOnly ? (
+        <p className="builds__notice" role="status">
+          This is a view-only link. Start a new build from Home to configure your
+          own car.
+        </p>
+      ) : null}
 
       {saveNote && (
         <p className="builds__notice" role="status">
@@ -243,11 +271,13 @@ export function BuildsPage() {
         </p>
       )}
 
-      <StepIndicator
-        stage={stage}
-        onStepClick={handleStepClick}
-        unlocked={unlocked}
-      />
+      {viewOnly ? null : (
+        <StepIndicator
+          stage={stage}
+          onStepClick={handleStepClick}
+          unlocked={unlocked}
+        />
+      )}
 
       {stage === 'brand' && (
         <section className="wizard" aria-labelledby="brand-title">
@@ -443,9 +473,9 @@ export function BuildsPage() {
                 car={car}
                 selectedModIds={selection.modIds}
                 stockFigures={figures.base}
-                builtFigures={figures.final}
                 onToggle={toggleMod}
                 onApplyPreset={applyPreset}
+                readOnly={viewOnly}
               />
               <StatsSidebar
                 car={car}
@@ -453,6 +483,7 @@ export function BuildsPage() {
                 year={selection.year}
                 configured={figures.configured}
                 final={figures.final}
+                stockFigures={figures.base}
                 totalPrice={figures.totalPrice}
                 selection={selection}
                 stage={stage}
@@ -460,19 +491,23 @@ export function BuildsPage() {
                 accelLabel={accel}
                 sourceNote={sourceNote}
                 onRemoveMod={toggleMod}
-                onAddMod={(modId) => {
-                  setSelection((prev) => ({
-                    ...prev,
-                    modIds: catalog.applyModSelection(prev.modIds, modId, true),
-                  }))
-                }}
-                onSave={handleSave}
-                onExportMods={handleExportMods}
+                onAddMod={
+                  viewOnly
+                    ? undefined
+                    : (modId) => {
+                        setSelection((prev) => ({
+                          ...prev,
+                          modIds: catalog.applyModSelection(
+                            prev.modIds,
+                            modId,
+                            true,
+                          ),
+                        }))
+                      }
+                }
+                onSave={viewOnly ? undefined : handleSave}
                 celebration={celebration}
-                onCheckout={() => {
-                  celebrate(unlockMilestone('first-checkout'))
-                  setStage('checkout')
-                }}
+                readOnly={viewOnly}
               />
             </div>
           </section>
@@ -511,8 +546,6 @@ export function BuildsPage() {
               modsTotal={figures.totalPrice}
               onRemoveMod={toggleMod}
               onBackToMods={() => setStage('mods')}
-              onSave={handleSave}
-              onExportMods={handleExportMods}
             />
           </section>
         )}

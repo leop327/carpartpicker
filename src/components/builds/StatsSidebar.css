@@ -51,6 +51,25 @@
   letter-spacing: -0.02em;
 }
 
+.stats-sidebar__et {
+  display: flex;
+  justify-content: space-between;
+  align-items: baseline;
+  gap: 1rem;
+  margin-top: -0.35rem;
+}
+
+.stats-sidebar__et span {
+  font-size: 0.82rem;
+  color: var(--ink-muted);
+}
+
+.stats-sidebar__et strong {
+  font-size: 1.05rem;
+  font-variant-numeric: tabular-nums;
+  letter-spacing: -0.02em;
+}
+
 .stats-sidebar__actions {
   display: flex;
   flex-wrap: wrap;
@@ -209,16 +228,12 @@
 
   .stats-sidebar__actions {
     display: grid;
-    grid-template-columns: 1fr 1fr;
+    grid-template-columns: 1fr;
   }
 
   .stats-sidebar__actions .btn {
     width: 100%;
     justify-content: center;
-  }
-
-  .stats-sidebar__actions .btn--primary {
-    grid-column: 1 / -1;
   }
 
   .stats-sidebar__mods li {

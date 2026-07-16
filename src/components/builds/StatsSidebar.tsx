@@ -6,13 +6,14 @@ import {
   formatMoney,
   resolveSpecChoices,
 } from '../../lib/build'
-import { buildShareUrl, type BuildStage } from '../../lib/buildState'
+import { buildViewOnlyUrl, type BuildStage } from '../../lib/buildState'
 import { resolveBuildTips } from '../../lib/buildTips'
 import { unlockMilestone } from '../../lib/milestones'
 import { requireAccount } from '../../lib/profile'
-import { renderShareCard } from '../../lib/shareCard'
+import { quarterMileFromFigures } from '../../lib/quarterMile'
 import { openPrintableSummary } from '../../lib/selection'
 import type { BuildSelection, CarModel, Figures, Market } from '../../types/catalog'
+import { DragRace } from './DragRace'
 import { FiguresGrid } from './FiguresGrid'
 import './StatsSidebar.css'
 
@@ -22,6 +23,7 @@ interface Props {
   colourName: string
   configured: Figures
   final: Figures
+  stockFigures: Figures
   totalPrice: number
   selection: BuildSelection
   stage: BuildStage
@@ -31,9 +33,8 @@ interface Props {
   onRemoveMod: (modId: string) => void
   onAddMod?: (modId: string) => void
   onSave?: () => void
-  onExportMods?: () => void
-  onCheckout?: () => void
   celebration?: string | null
+  readOnly?: boolean
 }
 
 async function copyText(text: string): Promise<boolean> {
@@ -51,6 +52,7 @@ export function StatsSidebar({
   colourName,
   configured,
   final,
+  stockFigures,
   totalPrice,
   selection,
   stage,
@@ -60,20 +62,22 @@ export function StatsSidebar({
   onRemoveMod,
   onAddMod,
   onSave,
-  onExportMods,
-  onCheckout,
   celebration,
+  readOnly,
 }: Props) {
-  const [copied, setCopied] = useState<'link' | 'summary' | 'card' | null>(null)
+  const [copied, setCopied] = useState(false)
 
   const selectedMods = selection.modIds
     .map((id) => catalog.getModById(id))
     .filter(Boolean)
 
   const tips = useMemo(
-    () => resolveBuildTips(selection.modIds, car.modTags),
-    [selection.modIds, car.modTags],
+    () => (readOnly ? [] : resolveBuildTips(selection.modIds, car.modTags)),
+    [selection.modIds, car.modTags, readOnly],
   )
+
+  const stockEt = quarterMileFromFigures(stockFigures)
+  const builtEt = quarterMileFromFigures(final)
 
   function summaryText() {
     const options = resolveSpecChoices(car, selection.specChoices).map(
@@ -97,7 +101,7 @@ export function StatsSidebar({
   }
 
   async function handleCopyLink() {
-    const url = buildShareUrl({
+    const url = buildViewOnlyUrl({
       v: 2,
       stage,
       selection,
@@ -105,55 +109,9 @@ export function StatsSidebar({
     const ok = await copyText(url)
     if (ok) {
       unlockMilestone('first-share')
-      setCopied('link')
-      window.setTimeout(() => setCopied(null), 1600)
+      setCopied(true)
+      window.setTimeout(() => setCopied(false), 1600)
     }
-  }
-
-  async function handleCopySummary() {
-    const ok = await copyText(summaryText())
-    if (ok) {
-      unlockMilestone('first-share')
-      setCopied('summary')
-      window.setTimeout(() => setCopied(null), 1600)
-    }
-  }
-
-  async function handleShareCard() {
-    const blob = await renderShareCard({
-      title: `${year} ${car.make} ${car.label}`,
-      subtitle: `${colourName} · ${selection.modIds.length} mods`,
-      figures: final,
-      modsTotal: totalPrice,
-      levelLabel: `${final.hp} hp build`,
-      accelLabel,
-    })
-    if (!blob) return
-    unlockMilestone('first-share')
-    const file = new File([blob], 'carpartpicker-build.png', {
-      type: 'image/png',
-    })
-    if (navigator.share && navigator.canShare?.({ files: [file] })) {
-      try {
-        await navigator.share({
-          files: [file],
-          title: `${year} ${car.label} build`,
-        })
-        setCopied('card')
-        window.setTimeout(() => setCopied(null), 1600)
-        return
-      } catch {
-        // fall through to download
-      }
-    }
-    const href = URL.createObjectURL(blob)
-    const a = document.createElement('a')
-    a.href = href
-    a.download = 'carpartpicker-build.png'
-    a.click()
-    URL.revokeObjectURL(href)
-    setCopied('card')
-    window.setTimeout(() => setCopied(null), 1600)
   }
 
   function handleExport() {
@@ -173,7 +131,9 @@ export function StatsSidebar({
             {celebration}
           </p>
         )}
-        <p className="stats-sidebar__eyebrow">Live figures</p>
+        <p className="stats-sidebar__eyebrow">
+          {readOnly ? 'View only' : 'Live figures'}
+        </p>
         <h2>
           {year} {car.make} {car.label}
         </h2>
@@ -215,7 +175,7 @@ export function StatsSidebar({
           compareTo={configured}
           accelLabel={accelLabel}
           sourceNote={sourceNote}
-          animate
+          animate={!readOnly}
         />
 
         <div className="stats-sidebar__price">
@@ -223,51 +183,69 @@ export function StatsSidebar({
           <strong>{formatMoney(totalPrice)}</strong>
         </div>
 
-        <div className="stats-sidebar__actions">
-          <button type="button" className="btn btn--ghost btn--small" onClick={handleCopyLink}>
-            {copied === 'link' ? 'Link copied' : 'Copy link'}
-          </button>
-          <button
-            type="button"
-            className="btn btn--ghost btn--small"
-            onClick={handleShareCard}
-          >
-            {copied === 'card' ? 'Card ready' : 'Share card'}
-          </button>
-          <button
-            type="button"
-            className="btn btn--ghost btn--small"
-            onClick={handleCopySummary}
-          >
-            {copied === 'summary' ? 'Summary copied' : 'Copy summary'}
-          </button>
-          <button type="button" className="btn btn--ghost btn--small" onClick={handleExport}>
-            Export / print
-          </button>
-          {onCheckout && (
-            <button
-              type="button"
-              className="btn btn--primary btn--small"
-              onClick={onCheckout}
-            >
-              Checkout
-            </button>
-          )}
-          {onSave && (
-            <button type="button" className="btn btn--ghost btn--small" onClick={onSave}>
-              Save
-            </button>
-          )}
-          {onExportMods && (
+        <div className="stats-sidebar__et">
+          <span>Est. 1/4-mile</span>
+          <strong>{builtEt.toFixed(2)}s</strong>
+        </div>
+
+        {!readOnly ? (
+          <div className="stats-sidebar__actions">
             <button
               type="button"
               className="btn btn--ghost btn--small"
-              onClick={onExportMods}
+              onClick={handleCopyLink}
             >
-              Export mods
+              {copied ? 'Link copied' : 'Copy link'}
             </button>
-          )}
-        </div>
+            <button
+              type="button"
+              className="btn btn--ghost btn--small"
+              onClick={handleExport}
+            >
+              Export build
+            </button>
+            {onSave ? (
+              <button
+                type="button"
+                className="btn btn--ghost btn--small"
+                onClick={onSave}
+              >
+                Save build
+              </button>
+            ) : null}
+          </div>
+        ) : (
+          <div className="stats-sidebar__actions">
+            <button
+              type="button"
+              className="btn btn--ghost btn--small"
+              onClick={handleCopyLink}
+            >
+              {copied ? 'Link copied' : 'Copy link'}
+            </button>
+          </div>
+        )}
+
+        <DragRace
+          compact
+          title="Stock vs build · 1/4-mile"
+          left={{
+            id: 'stock',
+            label: 'Stock',
+            sublabel: `${stockFigures.hp} hp`,
+            image: car.image,
+            quarterMileSec: stockEt,
+            accent: '#6b7280',
+          }}
+          right={{
+            id: 'built',
+            label: 'Your build',
+            sublabel: `${final.hp} hp · ${selection.modIds.length} mods`,
+            image: car.image,
+            quarterMileSec: builtEt,
+            accent: 'var(--signal)',
+          }}
+        />
 
         {selectedMods.length > 0 ? (
           <ul className="stats-sidebar__mods">
@@ -280,14 +258,16 @@ export function StatsSidebar({
                     </span>
                     <span className="stats-sidebar__mod-meta">
                       <span>{formatMoney(mod.price)}</span>
-                      <button
-                        type="button"
-                        className="stats-sidebar__remove"
-                        onClick={() => onRemoveMod(mod.id)}
-                        aria-label={`Remove ${mod.brand} ${mod.name}`}
-                      >
-                        Remove
-                      </button>
+                      {!readOnly ? (
+                        <button
+                          type="button"
+                          className="stats-sidebar__remove"
+                          onClick={() => onRemoveMod(mod.id)}
+                          aria-label={`Remove ${mod.brand} ${mod.name}`}
+                        >
+                          Remove
+                        </button>
+                      ) : null}
                     </span>
                   </li>
                 ),
@@ -295,7 +275,9 @@ export function StatsSidebar({
           </ul>
         ) : (
           <p className="stats-sidebar__empty">
-            Add mods to stack figures against your factory config.
+            {readOnly
+              ? 'No mods on this shared build.'
+              : 'Add mods to stack figures against your factory config.'}
           </p>
         )}
       </div>

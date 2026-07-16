@@ -2,6 +2,7 @@ import { catalog } from '../data/catalog'
 import type { BuildSelection } from '../types/catalog'
 import { figuresFromSelection } from './selection'
 import { MARKET } from './market'
+import { estimateQuarterMileSec } from './quarterMile'
 import type { SavedBuild } from './savedBuilds'
 import { selectionLabel } from './savedBuilds'
 
@@ -14,6 +15,7 @@ export interface CommunityBuildSnapshot {
   image: string
   hp: number
   zeroToSixtySec: number
+  quarterMileSec: number
   torqueNm: number
   weightKg: number
   modsPrice: number
@@ -63,6 +65,7 @@ function snapshotFromSelection(
     image: car.image,
     hp: figures.final.hp,
     zeroToSixtySec: figures.final.zeroToSixtySec,
+    quarterMileSec: estimateQuarterMileSec(figures.final),
     torqueNm: figures.final.torqueNm,
     weightKg: figures.final.weightKg,
     modsPrice: figures.modsPrice,

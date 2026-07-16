@@ -10,8 +10,6 @@ interface Props {
   modsTotal: number
   onRemoveMod: (modId: string) => void
   onBackToMods: () => void
-  onSave?: () => void
-  onExportMods?: () => void
 }
 
 export function CheckoutPanel({
@@ -19,8 +17,6 @@ export function CheckoutPanel({
   modsTotal,
   onRemoveMod,
   onBackToMods,
-  onSave,
-  onExportMods,
 }: Props) {
   const [bought, setBought] = useState<Set<string>>(() => new Set())
 
@@ -161,16 +157,6 @@ export function CheckoutPanel({
           <button type="button" className="btn btn--ghost" onClick={onBackToMods}>
             Edit mods
           </button>
-          {onSave && (
-            <button type="button" className="btn btn--ghost" onClick={onSave}>
-              Save build
-            </button>
-          )}
-          {onExportMods && (
-            <button type="button" className="btn btn--ghost" onClick={onExportMods}>
-              Export mod list
-            </button>
-          )}
           {mods.length > 0 && (
             <button
               type="button"

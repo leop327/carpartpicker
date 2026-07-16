@@ -6,7 +6,8 @@ export interface DragRacer {
   label: string
   sublabel?: string
   image?: string
-  zeroToSixtySec: number
+  /** 1/4-mile ET in seconds */
+  quarterMileSec: number
   accent?: string
 }
 
@@ -14,14 +15,13 @@ interface Props {
   left: DragRacer
   right: DragRacer
   title?: string
-  /** Compact layout for embedding in mods tab. */
   compact?: boolean
 }
 
 type RacePhase = 'idle' | 'racing' | 'done'
 
-/** Wall-clock ms per second of 0–62 — keeps races watchable. */
-const MS_PER_SEC = 850
+/** Wall-clock ms per second of ET — keeps races watchable. */
+const MS_PER_SEC = 420
 
 export function DragRace({ left, right, title, compact }: Props) {
   const [phase, setPhase] = useState<RacePhase>('idle')
@@ -45,22 +45,22 @@ export function DragRace({ left, right, title, compact }: Props) {
     setPhase('idle')
     setProgress({ left: 0, right: 0 })
     setWinnerId(null)
-  }, [left.id, right.id, left.zeroToSixtySec, right.zeroToSixtySec])
+  }, [left.id, right.id, left.quarterMileSec, right.quarterMileSec])
 
   function tick(now: number) {
     const L = leftRef.current
     const R = rightRef.current
     const elapsed = now - startRef.current
-    const leftMs = Math.max(L.zeroToSixtySec, 1.5) * MS_PER_SEC
-    const rightMs = Math.max(R.zeroToSixtySec, 1.5) * MS_PER_SEC
+    const leftMs = Math.max(L.quarterMileSec, 9) * MS_PER_SEC
+    const rightMs = Math.max(R.quarterMileSec, 9) * MS_PER_SEC
     const pL = Math.min(1, elapsed / leftMs)
     const pR = Math.min(1, elapsed / rightMs)
     setProgress({ left: pL, right: pR })
 
     if (pL >= 1 && pR >= 1) {
-      const tie = Math.abs(L.zeroToSixtySec - R.zeroToSixtySec) < 0.005
+      const tie = Math.abs(L.quarterMileSec - R.quarterMileSec) < 0.005
       setWinnerId(
-        tie ? 'tie' : L.zeroToSixtySec < R.zeroToSixtySec ? L.id : R.id,
+        tie ? 'tie' : L.quarterMileSec < R.quarterMileSec ? L.id : R.id,
       )
       setPhase('done')
       return
@@ -92,7 +92,7 @@ export function DragRace({ left, right, title, compact }: Props) {
         <div>
           {title ? <h3 className="drag-race__title">{title}</h3> : null}
           <p className="drag-race__hint">
-            Quicker 0–62 reaches the line first.
+            1/4-mile — lower ET reaches the stripe first.
           </p>
         </div>
         <div className="drag-race__actions">
@@ -127,10 +127,10 @@ export function DragRace({ left, right, title, compact }: Props) {
 
       <div className="drag-race__times">
         <span>
-          {left.label}: <strong>{left.zeroToSixtySec.toFixed(2)}s</strong>
+          {left.label}: <strong>{left.quarterMileSec.toFixed(2)}s</strong>
         </span>
         <span>
-          {right.label}: <strong>{right.zeroToSixtySec.toFixed(2)}s</strong>
+          {right.label}: <strong>{right.quarterMileSec.toFixed(2)}s</strong>
         </span>
       </div>
     </div>

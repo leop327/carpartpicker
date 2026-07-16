@@ -2,16 +2,15 @@ import { useMemo, useState } from 'react'
 import { catalog } from '../../data/catalog'
 import { formatMoney, applyDelta } from '../../lib/build'
 import type { CarModel, Figures } from '../../types/catalog'
-import { DragRace } from './DragRace'
 import './ModsPanel.css'
 
 interface Props {
   car: CarModel
   selectedModIds: string[]
   stockFigures: Figures
-  builtFigures: Figures
   onToggle: (modId: string) => void
   onApplyPreset: (presetId: string) => void
+  readOnly?: boolean
 }
 
 function deltaLabel(delta: {
@@ -53,9 +52,9 @@ export function ModsPanel({
   car,
   selectedModIds,
   stockFigures,
-  builtFigures,
   onToggle,
   onApplyPreset,
+  readOnly,
 }: Props) {
   const [query, setQuery] = useState('')
   const [categoryFilter, setCategoryFilter] = useState<string | 'all'>('all')
@@ -111,33 +110,7 @@ export function ModsPanel({
 
   return (
     <div className="mods-panel">
-      <section className="mods-drag" aria-labelledby="mods-drag-title">
-        <DragRace
-          compact
-          title="Before / after drag race"
-          left={{
-            id: 'stock',
-            label: 'Stock',
-            sublabel: `${stockFigures.hp} hp`,
-            image: car.image,
-            zeroToSixtySec: stockFigures.zeroToSixtySec,
-            accent: '#6b7280',
-          }}
-          right={{
-            id: 'built',
-            label: 'Your build',
-            sublabel: `${builtFigures.hp} hp · ${selectedModIds.length} mods`,
-            image: car.image,
-            zeroToSixtySec: builtFigures.zeroToSixtySec,
-            accent: 'var(--signal)',
-          }}
-        />
-        <p id="mods-drag-title" className="visually-hidden">
-          Before and after drag race
-        </p>
-      </section>
-
-      {presets.length > 0 && (
+      {presets.length > 0 && !readOnly && (
         <section className="mods-presets" aria-labelledby="presets-title">
           <div className="mods-presets__head">
             <h3 id="presets-title">Stage presets</h3>
@@ -175,49 +148,53 @@ export function ModsPanel({
         </section>
       )}
 
-      <div className="mods-toolbar">
-        <label className="mods-search">
-          <span className="visually-hidden">Search mods</span>
-          <input
-            type="search"
-            placeholder="Search brand, part, category…"
-            value={query}
-            onChange={(e) => setQuery(e.target.value)}
-          />
-        </label>
-        <div className="mods-filters" role="group" aria-label="Filter by category">
-          <button
-            type="button"
-            className={
-              categoryFilter === 'all'
-                ? 'mods-chip mods-chip--active'
-                : 'mods-chip'
-            }
-            onClick={() => setCategoryFilter('all')}
-          >
-            All
-          </button>
-          {categoriesWithMods.map((c) => (
+      {!readOnly && (
+        <div className="mods-toolbar">
+          <label className="mods-search">
+            <span className="visually-hidden">Search mods</span>
+            <input
+              type="search"
+              placeholder="Search brand, part, category…"
+              value={query}
+              onChange={(e) => setQuery(e.target.value)}
+            />
+          </label>
+          <div className="mods-filters" role="group" aria-label="Filter by category">
             <button
-              key={c.id}
               type="button"
               className={
-                categoryFilter === c.id
+                categoryFilter === 'all'
                   ? 'mods-chip mods-chip--active'
                   : 'mods-chip'
               }
-              onClick={() =>
-                setCategoryFilter((prev) => (prev === c.id ? 'all' : c.id))
-              }
+              onClick={() => setCategoryFilter('all')}
             >
-              {c.name}
+              All
             </button>
-          ))}
+            {categoriesWithMods.map((c) => (
+              <button
+                key={c.id}
+                type="button"
+                className={
+                  categoryFilter === c.id
+                    ? 'mods-chip mods-chip--active'
+                    : 'mods-chip'
+                }
+                onClick={() =>
+                  setCategoryFilter((prev) => (prev === c.id ? 'all' : c.id))
+                }
+              >
+                {c.name}
+              </button>
+            ))}
+          </div>
         </div>
-      </div>
+      )}
 
       {byCategory.length === 0 ? (
-        <p className="mods-empty">No mods match that search.</p>
+        <p className="mods-empty">
+          {readOnly ? 'No mods on this build.' : 'No mods match that search.'}
+        </p>
       ) : (
         byCategory.map(({ category, mods }) => (
           <section
@@ -238,8 +215,11 @@ export function ModsPanel({
                     <button
                       type="button"
                       className={active ? 'mod-row mod-row--active' : 'mod-row'}
-                      onClick={() => onToggle(mod.id)}
+                      onClick={() => {
+                        if (!readOnly) onToggle(mod.id)
+                      }}
                       aria-pressed={active}
+                      disabled={readOnly}
                     >
                       <span className="mod-row__main">
                         <span className="mod-row__top">
@@ -264,9 +244,11 @@ export function ModsPanel({
                         <span className="mod-row__price">
                           {formatMoney(mod.price)}
                         </span>
-                        <span className="mod-row__toggle">
-                          {active ? 'Added' : 'Add'}
-                        </span>
+                        {!readOnly ? (
+                          <span className="mod-row__toggle">
+                            {active ? 'Added' : 'Add'}
+                          </span>
+                        ) : null}
                       </span>
                     </button>
                   </li>
