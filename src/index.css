@@ -1,13 +1,15 @@
 :root {
-  --bg: #ebe6de;
-  --surface: #f7f3ec;
-  --ink: #17191d;
-  --ink-muted: #5c616a;
-  --line: #d2ccc1;
-  --accent: #c4451c;
-  --accent-ink: #9a3212;
-  --font-display: 'Syne', 'Avenir Next', 'Segoe UI', sans-serif;
-  --font-body: 'Source Sans 3', 'Segoe UI', sans-serif;
+  --bg: #eef0f3;
+  --surface: #ffffff;
+  --ink: #11141a;
+  --ink-muted: #667085;
+  --line: #dce0e6;
+  --accent: #11141a;
+  --accent-ink: #000000;
+  --accent-soft: #dfeaef;
+  --signal: #c2410c;
+  --font-display: 'Space Grotesk', 'Avenir Next', 'Segoe UI', sans-serif;
+  --font-body: 'Manrope', 'Avenir Next', 'Segoe UI', sans-serif;
   font-family: var(--font-body);
   line-height: 1.5;
   font-weight: 400;
@@ -35,14 +37,8 @@ body {
   margin: 0;
   min-width: 320px;
   background:
-    radial-gradient(ellipse 90% 50% at 0% 0%, color-mix(in srgb, var(--accent) 10%, transparent), transparent 50%),
-    repeating-linear-gradient(
-      -12deg,
-      transparent,
-      transparent 11px,
-      color-mix(in srgb, var(--ink) 3.5%, transparent) 11px,
-      color-mix(in srgb, var(--ink) 3.5%, transparent) 12px
-    ),
+    radial-gradient(ellipse 55% 40% at 0% 0%, #e4ebf0, transparent 60%),
+    radial-gradient(ellipse 45% 35% at 100% 10%, #efe8e2, transparent 55%),
     var(--bg);
   color: var(--ink);
 }
@@ -70,6 +66,6 @@ select {
 }
 
 :focus-visible {
-  outline: 2px solid var(--accent);
+  outline: 2px solid var(--signal);
   outline-offset: 2px;
 }

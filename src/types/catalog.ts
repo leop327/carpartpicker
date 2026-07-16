@@ -55,12 +55,16 @@ export interface CarModel {
   make: string
   model: string
   generation: string
+  /** Short label for lists, e.g. "135i N54". */
+  label: string
   /** Model years you can configure. */
   years: number[]
   colours: Colour[]
   basePrice: number
   baseFigures: Figures
   description: string
+  /** Public path to a real photo, e.g. `/cars/bmw-m2-f87.jpg`. */
+  image: string
   /** Tags used to match compatible mods. */
   modTags: string[]
   specOptions: SpecOptionGroup[]
@@ -101,10 +105,12 @@ export interface Mod {
   conflictsWith?: string[]
 }
 
+/** In-progress / completed build selections (wizard). */
 export interface BuildSelection {
-  carId: string
-  year: number
-  colourId: string
+  make: string | null
+  carId: string | null
+  year: number | null
+  colourId: string | null
   /** Spec group id → choice id. Missing group = use default/base choice. */
   specChoices: Record<string, string>
   modIds: string[]

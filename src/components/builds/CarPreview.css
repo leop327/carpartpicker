@@ -1,9 +1,9 @@
 .car-preview {
   --paint: #6b6e73;
   border: 1px solid var(--line);
-  background: linear-gradient(180deg, #2a2e34 0%, #15181c 70%);
+  background: #12151a;
   overflow: hidden;
-  min-height: 220px;
+  min-height: 240px;
   display: flex;
   flex-direction: column;
   justify-content: flex-end;
@@ -11,7 +11,7 @@
 
 .car-preview--compact {
   min-height: 0;
-  width: 120px;
+  width: 132px;
   flex-shrink: 0;
   border: none;
   background: transparent;
@@ -20,72 +20,53 @@
 .car-preview__stage {
   position: relative;
   flex: 1;
-  display: grid;
-  place-items: end center;
-  padding: 1.5rem 1rem 0.5rem;
+  min-height: 200px;
+  overflow: hidden;
 }
 
 .car-preview--compact .car-preview__stage {
-  padding: 0.25rem;
+  min-height: 72px;
 }
 
-.car-preview__glow {
-  position: absolute;
-  inset: auto 10% 18% ;
-  height: 40%;
-  background: radial-gradient(ellipse at center, color-mix(in srgb, var(--paint) 45%, transparent), transparent 70%);
-  filter: blur(8px);
-}
-
-.car-preview__silhouette {
-  width: min(100%, 340px);
-  height: auto;
-  position: relative;
-  z-index: 1;
-  filter: drop-shadow(0 10px 16px rgb(0 0 0 / 0.45));
-}
-
-.car-preview--compact .car-preview__silhouette {
+.car-preview__photo {
   width: 100%;
+  height: 100%;
+  object-fit: cover;
+  object-position: center;
+  display: block;
+  min-height: 200px;
 }
 
-.car-preview__body {
-  fill: var(--paint);
-  stroke: color-mix(in srgb, var(--paint) 70%, #000);
-  stroke-width: 1.5;
+.car-preview--compact .car-preview__photo {
+  min-height: 72px;
 }
 
-.car-preview__cabin {
-  fill: color-mix(in srgb, var(--paint) 35%, #1a2030);
-  opacity: 0.85;
-}
-
-.car-preview__wheel {
-  fill: #121417;
-  stroke: #3a3e45;
-  stroke-width: 2;
-}
-
-.car-preview__hub {
-  fill: #9aa0a8;
+.car-preview__paint {
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  height: 5px;
+  background: var(--paint);
+  box-shadow: 0 0 24px color-mix(in srgb, var(--paint) 55%, transparent);
 }
 
 .car-preview__label {
   display: grid;
   gap: 0.15rem;
-  padding: 0.85rem 1.1rem 1.1rem;
-  background: color-mix(in srgb, #0e1013 78%, transparent);
+  padding: 0.85rem 1.1rem 1.05rem;
+  background: color-mix(in srgb, #0e1013 88%, transparent);
   color: #f3efe8;
 }
 
 .car-preview__label strong {
   font-family: var(--font-display);
-  font-size: 1.2rem;
+  font-size: 1.15rem;
   letter-spacing: -0.02em;
 }
 
 .car-preview__year {
-  font-size: 0.75rem;
+  font-size: 0.72rem;
   letter-spacing: 0.06em;
   text-transform: uppercase;
   color: color-mix(in srgb, #f3efe8 65%, transparent);

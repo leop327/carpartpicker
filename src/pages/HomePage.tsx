@@ -1,37 +1,103 @@
-import { Link } from 'react-router-dom'
+import { Link, useNavigate } from 'react-router-dom'
+import { catalog } from '../data/catalog'
+import {
+  clearBuildStorage,
+  emptySelection,
+  writeBuildToStorage,
+} from '../lib/buildState'
+import {
+  deleteSavedBuild,
+  listSavedBuilds,
+  selectionLabel,
+} from '../lib/savedBuilds'
+import { useMemo, useState } from 'react'
 import './HomePage.css'
 
 export function HomePage() {
+  const navigate = useNavigate()
+  const [saved, setSaved] = useState(() => listSavedBuilds())
+
+  const savedRows = useMemo(() => saved, [saved])
+
+  function startNewBuild() {
+    clearBuildStorage()
+    writeBuildToStorage({
+      v: 2,
+      stage: 'brand',
+      selection: emptySelection(),
+    })
+    navigate('/builds?new=1')
+  }
+
+  function openSaved(id: string) {
+    navigate(`/builds?saved=${id}`)
+  }
+
+  function removeSaved(id: string) {
+    deleteSavedBuild(id)
+    setSaved(listSavedBuilds())
+  }
+
   return (
-    <div className="home">
-      <section className="home__hero">
-        <p className="home__brand">CarPartPicker</p>
-        <h1 className="home__headline">Build it like you drive it.</h1>
-        <p className="home__lede">
-          Pick your exact car, lock in factory options, then stack real mods —
-          and watch the numbers move.
-        </p>
-        <div className="home__cta">
-          <Link className="btn btn--primary" to="/builds">
-            Builds
-          </Link>
-        </div>
+    <div className="start">
+      <section className="start__hero">
+        <p className="start__brand">CarPartPicker</p>
+        <p className="start__tagline">Configure the car. Add the mods. See the numbers.</p>
+        <button type="button" className="btn btn--primary btn--lg" onClick={startNewBuild}>
+          Create new build
+        </button>
       </section>
 
-      <section className="home__explain" aria-labelledby="what-you-can-do">
-        <h2 id="what-you-can-do">What you can do</h2>
-        <p>
-          Start from a real model, year, and colour. Choose factory options or
-          leave them on the base spec. Then add exhausts, intakes, tunes,
-          suspension, and more — each with a street price and figure deltas.
-          Compatible parts stay filtered to your car so the list stays honest.
-        </p>
-        <ul>
-          <li>Match the car you already own (or the one you want)</li>
-          <li>Optional factory packs — unpicked stays on base options</li>
-          <li>Mods by category with live HP, torque, 0–60, and weight</li>
-        </ul>
+      <section className="start__saved" aria-labelledby="saved-heading">
+        <div className="start__saved-head">
+          <h2 id="saved-heading">Saved builds</h2>
+          {savedRows.length === 0 && (
+            <p className="start__muted">Nothing saved yet — create a build to see it here.</p>
+          )}
+        </div>
+
+        {savedRows.length > 0 && (
+          <ul className="start__list">
+            {savedRows.map((item) => {
+              const car = item.build.selection.carId
+                ? catalog.getCarById(item.build.selection.carId)
+                : undefined
+              const colour = car?.colours.find(
+                (c) => c.id === item.build.selection.colourId,
+              )
+              return (
+                <li key={item.id} className="start__row">
+                  <button
+                    type="button"
+                    className="start__row-main"
+                    onClick={() => openSaved(item.id)}
+                  >
+                    <span className="start__row-title">{item.name}</span>
+                    <span className="start__row-meta">
+                      {selectionLabel(item.build.selection)}
+                      {colour ? ` · ${colour.name}` : ''}
+                      {item.build.selection.modIds.length
+                        ? ` · ${item.build.selection.modIds.length} mods`
+                        : ''}
+                    </span>
+                  </button>
+                  <button
+                    type="button"
+                    className="start__row-delete"
+                    onClick={() => removeSaved(item.id)}
+                  >
+                    Delete
+                  </button>
+                </li>
+              )
+            })}
+          </ul>
+        )}
       </section>
+
+      <p className="start__footer-link">
+        <Link to="/builds">Continue current draft</Link>
+      </p>
     </div>
   )
 }

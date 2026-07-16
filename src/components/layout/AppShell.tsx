@@ -12,18 +12,12 @@ export function AppShell() {
           <NavLink to="/" end>
             Home
           </NavLink>
-          <NavLink to="/builds">Builds</NavLink>
+          <NavLink to="/builds">Build</NavLink>
         </nav>
       </header>
       <main className="shell__main">
         <Outlet />
       </main>
-      <footer className="shell__footer">
-        <span>CarPartPicker</span>
-        <span className="shell__footer-note">
-          Specs & prices are starter estimates — extend via the data catalog.
-        </span>
-      </footer>
     </div>
   )
 }

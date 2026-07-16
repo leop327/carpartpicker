@@ -96,3 +96,42 @@ export function formatTorque(nm: number): string {
   const lbft = Math.round(nm * 0.73756)
   return `${nm} Nm / ${lbft} lb-ft`
 }
+
+export function formatBuildSummary(input: {
+  year: number
+  make: string
+  model: string
+  generation: string
+  colourName: string
+  optionLabels: string[]
+  modLabels: string[]
+  figures: Figures
+  totalPrice: number
+}): string {
+  const lines = [
+    `CarPartPicker build`,
+    `${input.year} ${input.make} ${input.model} (${input.generation})`,
+    `Colour: ${input.colourName}`,
+    '',
+    'Factory options:',
+    ...(input.optionLabels.length
+      ? input.optionLabels.map((l) => `  - ${l}`)
+      : ['  - Base spec']),
+    '',
+    'Mods:',
+    ...(input.modLabels.length
+      ? input.modLabels.map((l) => `  - ${l}`)
+      : ['  - None']),
+    '',
+    'Figures:',
+    `  Power: ${input.figures.hp} hp`,
+    `  Torque: ${formatTorque(input.figures.torqueNm)}`,
+    `  0–60: ${input.figures.zeroToSixtySec.toFixed(2)} s`,
+    `  Weight: ${input.figures.weightKg} kg`,
+    `  Drivetrain: ${input.figures.drivetrain}`,
+    `  Engine: ${input.figures.engineSizeL.toFixed(1)} L · ${input.figures.engineCode}`,
+    '',
+    `Estimated total: ${formatMoney(input.totalPrice)}`,
+  ]
+  return lines.join('\n')
+}

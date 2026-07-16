@@ -1,4 +1,4 @@
-import { cars, getCarById } from './cars'
+import { cars, getCarById, getCarsByMake, getMakes } from './cars'
 import { getModById, getModsForCar, modCategories, mods } from './mods'
 
 /**
@@ -11,6 +11,8 @@ export const catalog = {
   mods,
   modCategories,
   getCarById,
+  getCarsByMake,
+  getMakes,
   getModById,
   getModsForCar,
 }
