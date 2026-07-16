@@ -1,0 +1,90 @@
+.reg-modal {
+  position: fixed;
+  inset: 0;
+  z-index: 80;
+  display: grid;
+  place-items: center;
+  padding: 1.25rem;
+}
+
+.reg-modal__backdrop {
+  position: absolute;
+  inset: 0;
+  border: none;
+  background: color-mix(in srgb, #000 45%, transparent);
+  cursor: pointer;
+}
+
+.reg-modal__card {
+  position: relative;
+  z-index: 1;
+  width: min(26rem, 100%);
+  display: grid;
+  gap: 0.9rem;
+  padding: 1.25rem;
+  background: var(--surface);
+  border: 1px solid var(--line);
+  box-shadow: 0 18px 50px color-mix(in srgb, #000 25%, transparent);
+}
+
+.reg-modal__card h2 {
+  margin: 0;
+  font-family: var(--font-display);
+  font-size: 1.25rem;
+  letter-spacing: -0.02em;
+}
+
+.reg-modal__card p {
+  margin: 0;
+  color: var(--ink-muted);
+  line-height: 1.45;
+  font-size: 0.95rem;
+}
+
+.reg-modal__card label {
+  display: grid;
+  gap: 0.35rem;
+  font-size: 0.85rem;
+  font-weight: 700;
+}
+
+.reg-modal__card input {
+  padding: 0.7rem 0.8rem;
+  border: 1px solid var(--line);
+  background: var(--bg);
+  color: var(--ink);
+  font-size: 1.05rem;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+}
+
+.reg-modal__actions {
+  display: flex;
+  justify-content: flex-end;
+  gap: 0.5rem;
+  flex-wrap: wrap;
+}
+
+@media (max-width: 640px) {
+  .reg-modal {
+    padding: 0.75rem;
+    align-items: end;
+  }
+
+  .reg-modal__card {
+    width: 100%;
+    padding: 1.1rem 1rem max(1.1rem, env(safe-area-inset-bottom));
+  }
+
+  .reg-modal__actions {
+    flex-direction: column-reverse;
+  }
+
+  .reg-modal__actions .btn {
+    width: 100%;
+  }
+
+  .reg-modal__card input {
+    font-size: 16px;
+  }
+}

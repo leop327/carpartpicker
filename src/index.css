@@ -2,12 +2,14 @@
   --bg: #eef0f3;
   --surface: #ffffff;
   --ink: #11141a;
-  --ink-muted: #667085;
-  --line: #dce0e6;
+  --ink-muted: #5b6575;
+  --line: #d0d5dd;
   --accent: #11141a;
-  --accent-ink: #000000;
-  --accent-soft: #dfeaef;
+  --accent-ink: #ffffff;
+  --accent-soft: #e8eef3;
   --signal: #c2410c;
+  --bg-glow-a: #e4ebf0;
+  --bg-glow-b: #efe8e2;
   --font-display: 'Space Grotesk', 'Avenir Next', 'Segoe UI', sans-serif;
   --font-body: 'Manrope', 'Avenir Next', 'Segoe UI', sans-serif;
   font-family: var(--font-body);
@@ -19,6 +21,22 @@
   text-rendering: optimizeLegibility;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
+  color-scheme: light;
+}
+
+:root[data-theme='dark'] {
+  --bg: #0c0e12;
+  --surface: #161a22;
+  --ink: #eef1f6;
+  --ink-muted: #9aa3b2;
+  --line: #2a313d;
+  --accent: #eef1f6;
+  --accent-ink: #0c0e12;
+  --accent-soft: #1e2633;
+  --signal: #ea580c;
+  --bg-glow-a: #141a24;
+  --bg-glow-b: #1a1512;
+  color-scheme: dark;
 }
 
 *,
@@ -36,11 +54,13 @@ body,
 body {
   margin: 0;
   min-width: 320px;
+  overflow-x: clip;
   background:
-    radial-gradient(ellipse 55% 40% at 0% 0%, #e4ebf0, transparent 60%),
-    radial-gradient(ellipse 45% 35% at 100% 10%, #efe8e2, transparent 55%),
+    radial-gradient(ellipse 55% 40% at 0% 0%, var(--bg-glow-a), transparent 60%),
+    radial-gradient(ellipse 45% 35% at 100% 10%, var(--bg-glow-b), transparent 55%),
     var(--bg);
   color: var(--ink);
+  -webkit-tap-highlight-color: transparent;
 }
 
 h1,
@@ -61,8 +81,18 @@ svg {
 
 button,
 input,
-select {
+select,
+textarea {
   font: inherit;
+}
+
+/* Prevent iOS zoom on focus */
+@media (max-width: 640px) {
+  input,
+  select,
+  textarea {
+    font-size: 16px;
+  }
 }
 
 :focus-visible {

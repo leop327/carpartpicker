@@ -104,3 +104,25 @@
   font-size: 0.9rem;
   white-space: nowrap;
 }
+
+@media (max-width: 640px) {
+  .spec-options {
+    margin-top: 1.5rem;
+  }
+
+  .spec-options__intro h2 {
+    font-size: 1.2rem;
+  }
+
+  .spec-choice {
+    grid-template-columns: auto 1fr;
+    gap: 0.65rem;
+    padding: 0.8rem 0.85rem;
+  }
+
+  .spec-choice__price {
+    grid-column: 2;
+    justify-self: start;
+    font-size: 0.85rem;
+  }
+}

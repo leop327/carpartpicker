@@ -71,3 +71,20 @@
   opacity: 1;
   transform: translateX(-50%) translateY(0);
 }
+
+@media (max-width: 640px) {
+  .colour-picker__swatches {
+    gap: 0.75rem;
+  }
+
+  .swatch {
+    width: 2.65rem;
+    height: 2.65rem;
+  }
+
+  /* Tooltips are awkward on touch — colour name is shown below */
+  .swatch::after,
+  .swatch::before {
+    display: none;
+  }
+}

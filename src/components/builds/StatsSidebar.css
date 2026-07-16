@@ -107,3 +107,126 @@
   color: var(--ink-muted);
   line-height: 1.45;
 }
+
+.stats-sidebar__tagline {
+  margin: 0;
+  font-size: 0.88rem;
+  color: var(--ink-muted);
+  line-height: 1.4;
+  font-style: italic;
+}
+
+.stats-sidebar__celebrate {
+  margin: 0;
+  padding: 0.55rem 0.7rem;
+  border: 1px solid color-mix(in srgb, var(--signal) 45%, var(--line));
+  background: color-mix(in srgb, var(--signal) 12%, var(--surface));
+  color: var(--signal);
+  font-size: 0.82rem;
+  font-weight: 700;
+  letter-spacing: 0.02em;
+  animation: celebrate-in 0.45s ease;
+}
+
+@keyframes celebrate-in {
+  from {
+    opacity: 0;
+    transform: translateY(-4px);
+  }
+  to {
+    opacity: 1;
+    transform: none;
+  }
+}
+
+.build-tips {
+  display: grid;
+  gap: 0.4rem;
+}
+
+.build-tips__label {
+  margin: 0;
+  font-size: 0.72rem;
+  font-weight: 700;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: var(--ink-muted);
+}
+
+.build-tips ul {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: grid;
+  gap: 0.4rem;
+}
+
+.build-tips__item {
+  margin: 0;
+  padding: 0.55rem 0.65rem;
+  font-size: 0.8rem;
+  line-height: 1.4;
+  border-left: 3px solid var(--line);
+  background: color-mix(in srgb, var(--bg) 40%, var(--surface));
+  display: grid;
+  gap: 0.45rem;
+}
+
+.build-tips__item--warn {
+  border-left-color: var(--signal);
+}
+
+.build-tips__item--good {
+  border-left-color: #1f7a45;
+}
+
+.build-tips__item--info {
+  border-left-color: var(--ink-muted);
+}
+
+.build-tips__add {
+  justify-self: start;
+  border: 1px solid var(--line);
+  background: var(--surface);
+  font: inherit;
+  font-size: 0.72rem;
+  font-weight: 700;
+  letter-spacing: 0.03em;
+  text-transform: uppercase;
+  color: var(--signal);
+  cursor: pointer;
+  padding: 0.3rem 0.5rem;
+}
+
+.build-tips__add:hover {
+  border-color: var(--signal);
+}
+
+@media (max-width: 640px) {
+  .stats-sidebar__sticky {
+    gap: 0.75rem;
+  }
+
+  .stats-sidebar__actions {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+  }
+
+  .stats-sidebar__actions .btn {
+    width: 100%;
+    justify-content: center;
+  }
+
+  .stats-sidebar__actions .btn--primary {
+    grid-column: 1 / -1;
+  }
+
+  .stats-sidebar__mods li {
+    display: grid;
+    gap: 0.25rem;
+  }
+
+  .stats-sidebar__mod-meta {
+    justify-items: start;
+  }
+}

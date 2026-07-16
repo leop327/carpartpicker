@@ -1,0 +1,52 @@
+.static {
+  max-width: 40rem;
+  display: grid;
+  gap: 1rem;
+}
+
+.static h1 {
+  margin: 0;
+  font-family: var(--font-display);
+  font-size: clamp(1.75rem, 4vw, 2.25rem);
+  letter-spacing: -0.03em;
+}
+
+.static__lead {
+  margin: 0;
+  font-size: 1.05rem;
+  color: var(--ink-muted);
+  line-height: 1.55;
+}
+
+.static p {
+  margin: 0;
+  line-height: 1.55;
+  color: var(--ink);
+}
+
+.static__list {
+  margin: 0;
+  padding-left: 1.15rem;
+  display: grid;
+  gap: 0.75rem;
+  line-height: 1.5;
+}
+
+.static a {
+  color: var(--accent);
+}
+
+@media (max-width: 640px) {
+  .static {
+    max-width: none;
+    gap: 0.85rem;
+  }
+
+  .static h1 {
+    font-size: 1.55rem;
+  }
+
+  .static__lead {
+    font-size: 0.98rem;
+  }
+}

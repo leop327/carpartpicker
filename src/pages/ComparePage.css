@@ -129,7 +129,29 @@
 }
 
 @media (max-width: 760px) {
+  .compare {
+    gap: 1.15rem;
+  }
+
   .compare__grid {
     grid-template-columns: 1fr;
+  }
+
+  .compare__photo {
+    height: 140px;
+  }
+
+  .compare__card h2 {
+    font-size: 1.1rem;
+  }
+
+  .compare__card .btn {
+    width: calc(100% - 2rem);
+    justify-self: stretch;
+    margin-inline: 1rem;
+  }
+
+  .compare__delta dl {
+    grid-template-columns: 1fr 1fr;
   }
 }

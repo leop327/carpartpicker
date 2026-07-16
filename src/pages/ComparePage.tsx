@@ -3,7 +3,7 @@ import { catalog } from '../data/catalog'
 import { getSavedBuild } from '../lib/savedBuilds'
 import { figuresFromSelection } from '../lib/selection'
 import { formatMoney, figuresSourceLabel } from '../lib/build'
-import { accelLabel, getMarket } from '../lib/market'
+import { accelLabel } from '../lib/market'
 import { FiguresGrid } from '../components/builds/FiguresGrid'
 import './ComparePage.css'
 
@@ -11,7 +11,7 @@ export function ComparePage() {
   const [params] = useSearchParams()
   const aId = params.get('a')
   const bId = params.get('b')
-  const market = getMarket()
+  const accel = accelLabel()
 
   const a = aId ? getSavedBuild(aId) : undefined
   const b = bId ? getSavedBuild(bId) : undefined
@@ -32,8 +32,8 @@ export function ComparePage() {
   const bCar = b.build.selection.carId
     ? catalog.getCarById(b.build.selection.carId)
     : undefined
-  const aFigures = figuresFromSelection(a.build.selection, market)
-  const bFigures = figuresFromSelection(b.build.selection, market)
+  const aFigures = figuresFromSelection(a.build.selection)
+  const bFigures = figuresFromSelection(b.build.selection)
 
   return (
     <div className="compare">
@@ -43,7 +43,7 @@ export function ComparePage() {
             <Link to="/">Home</Link>
           </p>
           <h1>Compare builds</h1>
-          <p className="compare__market">Market: {market.toUpperCase()}</p>
+          <p className="compare__market">UK figures · {accel}</p>
         </div>
       </header>
 
@@ -75,7 +75,7 @@ export function ComparePage() {
                   <FiguresGrid
                     title="Final figures"
                     figures={figures.final}
-                    accelLabel={accelLabel(market)}
+                    accelLabel={accel}
                     sourceNote={figuresSourceLabel(car.figuresSource)}
                   />
                   <p className="compare__price">
@@ -96,7 +96,10 @@ export function ComparePage() {
                   <li>No mods</li>
                 )}
               </ul>
-              <Link className="btn btn--ghost btn--small" to={`/builds?saved=${saved.id}`}>
+              <Link
+                className="btn btn--ghost btn--small"
+                to={`/builds?saved=${saved.id}`}
+              >
                 Open build
               </Link>
             </article>
@@ -110,9 +113,7 @@ export function ComparePage() {
           <dl>
             <div>
               <dt>Power</dt>
-              <dd>
-                {fmtDelta(bFigures.final.hp - aFigures.final.hp)} hp
-              </dd>
+              <dd>{fmtDelta(bFigures.final.hp - aFigures.final.hp)} hp</dd>
             </div>
             <div>
               <dt>Torque</dt>
@@ -121,7 +122,7 @@ export function ComparePage() {
               </dd>
             </div>
             <div>
-              <dt>{accelLabel(market)}</dt>
+              <dt>{accel}</dt>
               <dd>
                 {fmtDelta(
                   bFigures.final.zeroToSixtySec - aFigures.final.zeroToSixtySec,
@@ -149,13 +150,12 @@ export function ComparePage() {
   )
 }
 
-function fmtDelta(n: number, invert = false, money = false) {
+function fmtDelta(n: number, _invert = false, money = false) {
   const sign = n > 0 ? '+' : ''
   if (money) {
     return `${sign}${formatMoney(n)}`
   }
-  const better = invert ? n < 0 : n > 0
   const text =
     Math.abs(n) >= 10 ? `${sign}${Math.round(n)}` : `${sign}${n.toFixed(2)}`
-  return better ? text : text
+  return text
 }

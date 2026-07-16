@@ -26,3 +26,13 @@ Car photos are from [Wikimedia Commons](https://commons.wikimedia.org/). License
 - Source: [File:BMW 2 SERIES COUPE (F22) China.jpg](https://commons.wikimedia.org/wiki/File%3ABMW_2_SERIES_COUPE_%28F22%29_China.jpg)
 - License: [CC BY-SA 4.0](https://creativecommons.org/licenses/by-sa/4.0)
 - Author: Dinkun Chen
+
+## `bmw-m3-f80.jpg`
+- Source: [File:BMW M3 F80 02 China 2016-04-10.jpg](https://commons.wikimedia.org/wiki/File%3ABMW_M3_F80_02_China_2016-04-10.jpg)
+- License: [CC BY-SA 4.0](https://creativecommons.org/licenses/by-sa/4.0)
+- Author: Navigator84
+
+## `bmw-m4-f82.jpg`
+- Source: [File:BMW M4 COUPE (F82) China.jpg](https://commons.wikimedia.org/wiki/File%3ABMW_M4_COUPE_%28F82%29_China.jpg)
+- License: [CC BY-SA 4.0](https://creativecommons.org/licenses/by-sa/4.0)
+- Author: Dinkun Chen

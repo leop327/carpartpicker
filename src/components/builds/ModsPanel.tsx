@@ -1,12 +1,15 @@
 import { useMemo, useState } from 'react'
 import { catalog } from '../../data/catalog'
-import { formatMoney } from '../../lib/build'
-import type { CarModel } from '../../types/catalog'
+import { formatMoney, applyDelta } from '../../lib/build'
+import type { CarModel, Figures } from '../../types/catalog'
+import { DragRace } from './DragRace'
 import './ModsPanel.css'
 
 interface Props {
   car: CarModel
   selectedModIds: string[]
+  stockFigures: Figures
+  builtFigures: Figures
   onToggle: (modId: string) => void
   onApplyPreset: (presetId: string) => void
 }
@@ -30,9 +33,27 @@ function deltaLabel(delta: {
   return parts.length ? parts.join(' · ') : 'Supporting / no figure change'
 }
 
+function sharpClaim(mod: {
+  claim?: string
+  figuresDelta: { hp?: number; zeroToSixtySec?: number }
+  description: string
+}): string {
+  if (mod.claim) return mod.claim
+  if (mod.figuresDelta.hp && mod.figuresDelta.hp >= 40) {
+    return `~${mod.figuresDelta.hp > 0 ? '+' : ''}${mod.figuresDelta.hp} hp when stacked right`
+  }
+  if (mod.figuresDelta.zeroToSixtySec && mod.figuresDelta.zeroToSixtySec < 0) {
+    return `${mod.figuresDelta.zeroToSixtySec.toFixed(2)}s off the sprint`
+  }
+  const first = mod.description.split(/[.—]/)[0]?.trim()
+  return first || mod.description
+}
+
 export function ModsPanel({
   car,
   selectedModIds,
+  stockFigures,
+  builtFigures,
   onToggle,
   onApplyPreset,
 }: Props) {
@@ -75,26 +96,81 @@ export function ModsPanel({
     return catalog.modCategories.filter((c) => ids.has(c.id))
   }, [available])
 
+  function presetPreview(modIds: string[]) {
+    let next = { ...stockFigures }
+    for (const id of modIds) {
+      const mod = catalog.getModById(id)
+      if (mod) next = applyDelta(next, mod.figuresDelta)
+    }
+    return next
+  }
+
+  function handlePreset(id: string) {
+    onApplyPreset(id)
+  }
+
   return (
     <div className="mods-panel">
+      <section className="mods-drag" aria-labelledby="mods-drag-title">
+        <DragRace
+          compact
+          title="Before / after drag race"
+          left={{
+            id: 'stock',
+            label: 'Stock',
+            sublabel: `${stockFigures.hp} hp`,
+            image: car.image,
+            zeroToSixtySec: stockFigures.zeroToSixtySec,
+            accent: '#6b7280',
+          }}
+          right={{
+            id: 'built',
+            label: 'Your build',
+            sublabel: `${builtFigures.hp} hp · ${selectedModIds.length} mods`,
+            image: car.image,
+            zeroToSixtySec: builtFigures.zeroToSixtySec,
+            accent: 'var(--signal)',
+          }}
+        />
+        <p id="mods-drag-title" className="visually-hidden">
+          Before and after drag race
+        </p>
+      </section>
+
       {presets.length > 0 && (
         <section className="mods-presets" aria-labelledby="presets-title">
           <div className="mods-presets__head">
             <h3 id="presets-title">Stage presets</h3>
-            <p>One-click stacks for this platform. Conflicting tunes are swapped automatically.</p>
+            <p>Stock → staged in one click. Conflicting tunes swap automatically.</p>
           </div>
           <div className="mods-presets__grid">
-            {presets.map((preset) => (
-              <button
-                key={preset.id}
-                type="button"
-                className="mods-preset"
-                onClick={() => onApplyPreset(preset.id)}
-              >
-                <strong>{preset.name}</strong>
-                <span>{preset.description}</span>
-              </button>
-            ))}
+            {presets.map((preset) => {
+              const after = presetPreview(preset.modIds)
+              return (
+                <button
+                  key={preset.id}
+                  type="button"
+                  className="mods-preset"
+                  onClick={() => handlePreset(preset.id)}
+                >
+                  <strong>{preset.name}</strong>
+                  <span>{preset.description}</span>
+                  <span className="mods-preset__compare" aria-label="Before and after">
+                    <span>
+                      <em>Stock</em>
+                      {stockFigures.hp} hp · {stockFigures.zeroToSixtySec.toFixed(2)}s
+                    </span>
+                    <span className="mods-preset__arrow" aria-hidden>
+                      →
+                    </span>
+                    <span>
+                      <em>After</em>
+                      {after.hp} hp · {after.zeroToSixtySec.toFixed(2)}s
+                    </span>
+                  </span>
+                </button>
+              )
+            })}
           </div>
         </section>
       )}
@@ -156,6 +232,7 @@ export function ModsPanel({
             <ul className="mods-list">
               {mods.map((mod) => {
                 const active = selectedModIds.includes(mod.id)
+                const source = mod.figuresSource ?? 'estimated'
                 return (
                   <li key={mod.id}>
                     <button
@@ -165,12 +242,22 @@ export function ModsPanel({
                       aria-pressed={active}
                     >
                       <span className="mod-row__main">
-                        <span className="mod-row__brand">{mod.brand}</span>
+                        <span className="mod-row__top">
+                          <span className="mod-row__brand">{mod.brand}</span>
+                          <span
+                            className={`mod-row__badge mod-row__badge--${source}`}
+                          >
+                            {source === 'oem'
+                              ? 'OEM'
+                              : source === 'tuner'
+                                ? 'Tuner'
+                                : 'Est.'}
+                          </span>
+                        </span>
                         <span className="mod-row__name">{mod.name}</span>
-                        <span className="mod-row__desc">{mod.description}</span>
+                        <span className="mod-row__claim">{sharpClaim(mod)}</span>
                         <span className="mod-row__delta">
                           {deltaLabel(mod.figuresDelta)}
-                          {mod.figuresSource === 'tuner' ? ' · tuner claim' : ''}
                         </span>
                       </span>
                       <span className="mod-row__side">

@@ -12,6 +12,40 @@
   justify-items: start;
 }
 
+.start__toast {
+  margin: 0;
+  padding: 0.75rem 0.9rem;
+  border: 1px solid color-mix(in srgb, var(--signal) 40%, var(--line));
+  background: color-mix(in srgb, var(--signal) 10%, var(--surface));
+  color: var(--signal);
+  font-size: 0.9rem;
+  font-weight: 700;
+}
+
+.start__milestones ul {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.4rem;
+}
+
+.start__milestones li {
+  font-size: 0.72rem;
+  font-weight: 700;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  padding: 0.35rem 0.55rem;
+  border: 1px solid var(--line);
+  color: var(--ink-muted);
+}
+
+.start__milestones li.is-done {
+  border-color: var(--signal);
+  color: var(--signal);
+}
+
 .start__brand {
   margin: 0;
   font-family: var(--font-display);
@@ -28,6 +62,12 @@
   font-size: 1.08rem;
   line-height: 1.5;
   max-width: 22rem;
+}
+
+.start__hero-links {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.6rem;
 }
 
 .start__saved-head {
@@ -56,31 +96,6 @@
   display: grid;
   gap: 0;
   border-top: 1px solid var(--line);
-}
-
-.start__market {
-  display: flex;
-  align-items: center;
-  gap: 0.4rem;
-  flex-wrap: wrap;
-  font-size: 0.85rem;
-  color: var(--ink-muted);
-}
-
-.start__market .mods-chip {
-  padding: 0.3rem 0.65rem;
-  border: 1px solid var(--line);
-  background: var(--surface);
-  font: inherit;
-  font-size: 0.8rem;
-  font-weight: 600;
-  color: var(--ink-muted);
-  cursor: pointer;
-}
-
-.start__market .mods-chip--active {
-  border-color: var(--ink);
-  color: var(--ink);
 }
 
 .start__compare-bar {
@@ -210,4 +225,84 @@
 
 .start__footer-link a:hover {
   color: var(--ink);
+}
+
+@media (max-width: 640px) {
+  .start {
+    padding: 1.75rem 0 2rem;
+    gap: 2rem;
+    max-width: none;
+  }
+
+  .start__hero {
+    gap: 0.95rem;
+    justify-items: stretch;
+  }
+
+  .start__brand {
+    font-size: clamp(2.35rem, 12vw, 3.25rem);
+  }
+
+  .start__tagline {
+    font-size: 1rem;
+    max-width: none;
+  }
+
+  .start__hero-links {
+    flex-direction: column;
+    width: 100%;
+  }
+
+  .start__hero-links .btn {
+    width: 100%;
+  }
+
+  .start__milestones ul {
+    gap: 0.35rem;
+  }
+
+  .start__milestones li {
+    font-size: 0.68rem;
+    padding: 0.4rem 0.5rem;
+  }
+
+  .start__row {
+    flex-direction: column;
+    align-items: stretch;
+    gap: 0.35rem;
+    padding: 0.65rem 0;
+  }
+
+  .start__compare {
+    justify-self: start;
+    padding: 0;
+  }
+
+  .start__row-main {
+    padding: 0.35rem 0;
+  }
+
+  .start__row-actions {
+    width: 100%;
+    justify-content: flex-start;
+    gap: 0.25rem;
+  }
+
+  .start__rename {
+    width: 100%;
+  }
+
+  .start__rename input {
+    min-width: 0;
+    width: 100%;
+  }
+
+  .start__compare-bar {
+    flex-direction: column;
+    align-items: stretch;
+  }
+
+  .start__compare-bar .btn {
+    width: 100%;
+  }
 }

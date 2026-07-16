@@ -1,5 +1,5 @@
 import type { SpecOptionGroup } from '../../types/catalog'
-import { formatMoney, getDefaultSpecChoice } from '../../lib/build'
+import { getDefaultSpecChoice } from '../../lib/build'
 import './SpecOptions.css'
 
 interface Props {
@@ -12,9 +12,8 @@ export function SpecOptions({ groups, selected, onChange }: Props) {
   if (groups.length === 0) return null
 
   return (
-    <section className="spec-options" aria-labelledby="spec-options-title">
+    <section className="spec-options" aria-label="Factory option groups">
       <div className="spec-options__intro">
-        <h2 id="spec-options-title">Factory options</h2>
         <p>
           Optional packs stay on the base choice until you pick something else —
           so you can configure the car exactly as it left the factory.
@@ -62,9 +61,6 @@ export function SpecOptions({ groups, selected, onChange }: Props) {
                             {choice.description}
                           </span>
                         )}
-                      </span>
-                      <span className="spec-choice__price">
-                        {choice.price === 0 ? 'Included' : formatMoney(choice.price)}
                       </span>
                     </label>
                   )

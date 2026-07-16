@@ -1,0 +1,247 @@
+.community {
+  display: grid;
+  gap: 1.75rem;
+  padding-bottom: 2.5rem;
+}
+
+.community__hero h1 {
+  margin: 0;
+  font-family: var(--font-display);
+  font-size: clamp(1.85rem, 4.5vw, 2.4rem);
+  letter-spacing: -0.03em;
+}
+
+.community__hero p {
+  margin: 0.55rem 0 0;
+  max-width: 36rem;
+  color: var(--ink-muted);
+  line-height: 1.55;
+}
+
+.community__hint {
+  font-size: 0.9rem;
+}
+
+.community__hint a {
+  color: var(--ink);
+  font-weight: 700;
+}
+
+.community__race,
+.community__feed {
+  display: grid;
+  gap: 0.85rem;
+}
+
+.community__race h2,
+.community__feed h2 {
+  margin: 0;
+  font-family: var(--font-display);
+  font-size: 1.15rem;
+  letter-spacing: -0.02em;
+}
+
+.community__list {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: grid;
+  gap: 1rem;
+}
+
+.community-card {
+  border: 1px solid var(--line);
+  background: var(--surface);
+  display: grid;
+}
+
+.community-card--selected {
+  border-color: color-mix(in srgb, var(--ink) 35%, var(--line));
+  box-shadow: 0 0 0 1px color-mix(in srgb, var(--ink) 12%, transparent);
+}
+
+.community-card__main {
+  display: grid;
+  grid-template-columns: minmax(7.5rem, 11rem) 1fr;
+  gap: 0;
+  width: 100%;
+  padding: 0;
+  border: 0;
+  background: transparent;
+  color: inherit;
+  font: inherit;
+  text-align: left;
+  cursor: pointer;
+}
+
+.community-card__media {
+  position: relative;
+  min-height: 8rem;
+  background: var(--accent-soft);
+}
+
+.community-card__media img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  min-height: 8rem;
+}
+
+.community-card__swatch {
+  position: absolute;
+  right: 0.5rem;
+  bottom: 0.5rem;
+  width: 0.85rem;
+  height: 0.85rem;
+  border: 1px solid color-mix(in srgb, var(--ink) 25%, transparent);
+}
+
+.community-card__body {
+  display: grid;
+  gap: 0.3rem;
+  padding: 0.9rem 1rem;
+  align-content: start;
+}
+
+.community-card__author {
+  margin: 0;
+  font-size: 0.72rem;
+  font-weight: 700;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  color: var(--ink-muted);
+}
+
+.community-card__body h3 {
+  margin: 0;
+  font-family: var(--font-display);
+  font-size: 1.15rem;
+  letter-spacing: -0.02em;
+}
+
+.community-card__car,
+.community-card__caption,
+.community-card__mods {
+  margin: 0;
+  font-size: 0.88rem;
+  color: var(--ink-muted);
+  line-height: 1.45;
+}
+
+.community-card__caption {
+  color: var(--ink);
+}
+
+.community-card__stats {
+  margin: 0.35rem 0 0;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.75rem 1.15rem;
+}
+
+.community-card__stats div {
+  display: grid;
+  gap: 0.1rem;
+}
+
+.community-card__stats dt {
+  font-size: 0.68rem;
+  font-weight: 700;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  color: var(--ink-muted);
+}
+
+.community-card__stats dd {
+  margin: 0;
+  font-weight: 700;
+  font-variant-numeric: tabular-nums;
+}
+
+.community-card__actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.45rem;
+  padding: 0 1rem 0.9rem;
+}
+
+.community-card__opponents {
+  list-style: none;
+  margin: 0;
+  padding: 0 1rem 0.9rem;
+  display: grid;
+  gap: 0.35rem;
+}
+
+.community-card__opponents button {
+  width: 100%;
+  display: flex;
+  justify-content: space-between;
+  gap: 0.75rem;
+  padding: 0.55rem 0.7rem;
+  border: 1px solid var(--line);
+  background: color-mix(in srgb, var(--accent-soft) 70%, var(--surface));
+  color: var(--ink);
+  font: inherit;
+  font-size: 0.86rem;
+  font-weight: 600;
+  cursor: pointer;
+  text-align: left;
+}
+
+.community-card__opponents button:hover {
+  border-color: color-mix(in srgb, var(--ink) 28%, var(--line));
+}
+
+.community-card__opponents span {
+  color: var(--ink-muted);
+  font-variant-numeric: tabular-nums;
+}
+
+@media (max-width: 640px) {
+  .community {
+    gap: 1.25rem;
+    padding-bottom: max(2rem, env(safe-area-inset-bottom));
+  }
+
+  .community__hero h1 {
+    font-size: 1.7rem;
+  }
+
+  .community__hero p {
+    font-size: 0.95rem;
+  }
+
+  .community-card__main {
+    grid-template-columns: 1fr;
+  }
+
+  .community-card__media {
+    min-height: 9.5rem;
+  }
+
+  .community-card__media img {
+    min-height: 9.5rem;
+  }
+
+  .community-card__body {
+    padding: 0.85rem 0.9rem;
+  }
+
+  .community-card__body h3 {
+    font-size: 1.05rem;
+  }
+
+  .community-card__actions {
+    flex-direction: column;
+    padding: 0 0.9rem 0.9rem;
+  }
+
+  .community-card__actions .btn {
+    width: 100%;
+  }
+
+  .community-card__opponents {
+    padding: 0 0.9rem 0.9rem;
+  }
+}

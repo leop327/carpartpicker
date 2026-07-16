@@ -9,6 +9,7 @@ export type BuildStage =
   | 'colour'
   | 'options'
   | 'mods'
+  | 'checkout'
 
 export interface PersistedBuild {
   v: 2
@@ -26,6 +27,7 @@ const STAGES: BuildStage[] = [
   'colour',
   'options',
   'mods',
+  'checkout',
 ]
 
 export function emptySelection(): BuildSelection {
@@ -102,7 +104,7 @@ export function sanitizeBuild(
       )
       next.modIds = next.modIds.filter((id) => available.has(id))
     }
-  } else if (['year', 'colour', 'options', 'mods'].includes(nextStage)) {
+  } else if (['year', 'colour', 'options', 'mods', 'checkout'].includes(nextStage)) {
     nextStage = next.make ? 'model' : 'brand'
   }
 
@@ -110,14 +112,18 @@ export function sanitizeBuild(
   if (next.make && !next.carId && !['brand', 'model'].includes(nextStage)) {
     nextStage = 'model'
   }
-  if (next.carId && !next.year && ['colour', 'options', 'mods'].includes(nextStage)) {
+  if (
+    next.carId &&
+    !next.year &&
+    ['colour', 'options', 'mods', 'checkout'].includes(nextStage)
+  ) {
     nextStage = 'year'
   }
   if (
     next.carId &&
     next.year &&
     !next.colourId &&
-    ['options', 'mods'].includes(nextStage)
+    ['options', 'mods', 'checkout'].includes(nextStage)
   ) {
     nextStage = 'colour'
   }

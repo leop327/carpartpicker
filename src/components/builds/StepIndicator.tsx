@@ -8,6 +8,7 @@ const STEPS: { id: BuildStage; label: string }[] = [
   { id: 'colour', label: 'Colour' },
   { id: 'options', label: 'Options' },
   { id: 'mods', label: 'Mods' },
+  { id: 'checkout', label: 'Checkout' },
 ]
 
 interface Props {

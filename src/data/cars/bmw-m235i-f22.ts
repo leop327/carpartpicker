@@ -1,9 +1,16 @@
 import type { CarModel } from '../../types/catalog'
+import {
+  adaptiveMSportSuspension,
+  mSportBrakesOption,
+  parkingAndCameras,
+  stepTronicTransmission,
+  sunProtectionGlass,
+} from './specHelpers'
 
 /**
- * F22 M235i Coupe.
- * Factory: 322 hp (326 PS), 332 lb-ft (450 Nm). 0–60 ~4.8 s (manual/RWD).
- * US curb weight ~3,450 lb (~1,565 kg).
+ * F22 M235i — BMW UK figures.
+ * Manual or 8-speed Steptronic; Adaptive M Sport suspension optional.
+ * xDrive existed in some markets — uncommon in UK retail so omitted for UK accuracy.
  */
 export const bmwM235iF22: CarModel = {
   id: 'bmw-m235i-f22',
@@ -19,47 +26,63 @@ export const bmwM235iF22: CarModel = {
     { id: 'estoril-blue', name: 'Estoril Blue Metallic', hex: '#1E4D8C' },
     { id: 'valencia-orange', name: 'Valencia Orange Metallic', hex: '#C45A1A' },
   ],
-  basePrice: 43200,
+  basePrice: 34250,
   baseFigures: {
-    hp: 322,
+    hp: 326,
     torqueNm: 450,
     zeroToSixtySec: 4.8,
-    weightKg: 1565,
+    weightKg: 1525,
     drivetrain: 'RWD',
     engineSizeL: 3.0,
     engineCode: 'N55B30',
   },
   figuresSource: 'oem',
-  euFiguresDelta: { hp: 4, zeroToSixtySec: 0.15 },
-  euBasePrice: 45000,
   description:
-    'F22 M235i Coupe — N55B30 before the dedicated M2 arrived (2014–2016).',
+    'F22 M235i Coupe — N55B30 (UK: 326 PS / 450 Nm) before the dedicated M2.',
+  tagline: 'The baby M that punched above its badge.',
   image: '/cars/bmw-m235i-f22.jpg',
   modTags: ['bmw', 'm235i', 'f22', 'n55', 'rwd', 'turbo'],
   specOptions: [
+    stepTronicTransmission({
+      autoDefault: true,
+      manualWeightDelta: -20,
+      manualZeroToSixtyDelta: 0.2,
+    }),
+    adaptiveMSportSuspension(),
+    mSportBrakesOption(),
     {
-      id: 'transmission',
-      name: 'Transmission',
+      id: 'seats',
+      name: 'Seats',
       required: false,
       choices: [
-        { id: 'manual', name: '6-speed manual', price: 0, isDefault: true },
+        { id: 'sport', name: 'Sport seats (standard)', price: 0, isDefault: true },
         {
-          id: 'auto',
-          name: '8-speed Steptronic',
+          id: 'electric',
+          name: 'Electric front seats with driver memory',
           price: 0,
-          figuresDelta: { weightKg: 35, zeroToSixtySec: -0.1 },
         },
       ],
     },
     {
-      id: 'package',
-      name: 'Package',
+      id: 'wheels',
+      name: 'Wheels',
       required: false,
       choices: [
-        { id: 'base', name: 'Base', price: 0, isDefault: true },
-        { id: 'premium', name: 'Premium Package', price: 2500 },
-        { id: 'tech', name: 'Technology Package', price: 2200 },
+        {
+          id: '18',
+          name: '18" M Sport alloys (standard)',
+          price: 0,
+          isDefault: true,
+        },
+        {
+          id: '19',
+          name: '19" Style 436M',
+          price: 0,
+          figuresDelta: { weightKg: -2 },
+        },
       ],
     },
+    parkingAndCameras(),
+    sunProtectionGlass(),
   ],
 }

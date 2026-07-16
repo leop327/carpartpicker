@@ -7,6 +7,7 @@ import {
   getPresetsForCar,
   modCategories,
   mods,
+  resolveProductUrl,
   stagePresets,
 } from './mods'
 
@@ -28,6 +29,7 @@ export const catalog = {
   getPresetsForCar,
   applyModSelection,
   applyPreset,
+  resolveProductUrl,
 }
 
 export type {

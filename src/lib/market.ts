@@ -1,29 +1,17 @@
 import type { Market } from '../types/catalog'
 
-const MARKET_KEY = 'carpartpicker:market'
+/** App is UK-only for now. */
+export const MARKET: Market = 'uk'
 
 export function getMarket(): Market {
-  try {
-    const raw = localStorage.getItem(MARKET_KEY)
-    if (raw === 'eu' || raw === 'us') return raw
-  } catch {
-    // ignore
-  }
-  return 'us'
+  return MARKET
 }
 
-export function setMarket(market: Market): void {
-  try {
-    localStorage.setItem(MARKET_KEY, market)
-  } catch {
-    // ignore
-  }
+export function marketLabel(_market: Market = MARKET): string {
+  return 'UK'
 }
 
-export function marketLabel(market: Market): string {
-  return market === 'eu' ? 'EU' : 'US'
-}
-
-export function accelLabel(market: Market): string {
-  return market === 'eu' ? '0–100 km/h' : '0–60 mph'
+/** BMW UK lists 0–62 mph (≈ 0–100 km/h). */
+export function accelLabel(_market: Market = MARKET): string {
+  return '0–62 mph'
 }

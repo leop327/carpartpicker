@@ -35,10 +35,34 @@
   object-position: center;
   display: block;
   min-height: 200px;
+  transition:
+    filter 0.45s ease,
+    transform 0.55s cubic-bezier(0.22, 1, 0.36, 1);
+  filter: saturate(1.05) contrast(1.02);
+}
+
+.car-preview--flash .car-preview__photo {
+  transform: scale(1.03);
+  filter: saturate(1.25) contrast(1.08)
+    drop-shadow(0 0 18px color-mix(in srgb, var(--paint) 45%, transparent));
 }
 
 .car-preview--compact .car-preview__photo {
   min-height: 72px;
+}
+
+.car-preview__grade {
+  position: absolute;
+  inset: 0;
+  background: color-mix(in srgb, var(--paint) 28%, transparent);
+  mix-blend-mode: color;
+  opacity: 0.35;
+  pointer-events: none;
+  transition: opacity 0.4s ease, background 0.4s ease;
+}
+
+.car-preview--flash .car-preview__grade {
+  opacity: 0.55;
 }
 
 .car-preview__wash {
@@ -47,12 +71,30 @@
   background:
     linear-gradient(
       180deg,
-      color-mix(in srgb, var(--paint) 18%, transparent),
+      color-mix(in srgb, var(--paint) 22%, transparent),
       transparent 42%,
-      color-mix(in srgb, var(--paint) 22%, transparent)
+      color-mix(in srgb, var(--paint) 28%, transparent)
     );
   mix-blend-mode: soft-light;
   pointer-events: none;
+  transition: opacity 0.35s ease;
+}
+
+.car-preview--flash .car-preview__wash {
+  opacity: 1;
+  animation: paint-bloom 0.55s ease;
+}
+
+@keyframes paint-bloom {
+  0% {
+    opacity: 0.4;
+  }
+  40% {
+    opacity: 1;
+  }
+  100% {
+    opacity: 1;
+  }
 }
 
 .car-preview__paint {
@@ -63,6 +105,12 @@
   height: 6px;
   background: var(--paint);
   box-shadow: 0 0 28px color-mix(in srgb, var(--paint) 65%, transparent);
+  transition: background 0.3s ease, box-shadow 0.3s ease, height 0.35s ease;
+}
+
+.car-preview--flash .car-preview__paint {
+  height: 10px;
+  box-shadow: 0 0 40px color-mix(in srgb, var(--paint) 80%, transparent);
 }
 
 .car-preview__swatch-chip {
@@ -79,6 +127,7 @@
   overflow: hidden;
   text-overflow: ellipsis;
   border-left: 3px solid var(--paint);
+  transition: border-color 0.3s ease;
 }
 
 .car-preview__label {
@@ -100,4 +149,32 @@
   letter-spacing: 0.06em;
   text-transform: uppercase;
   color: color-mix(in srgb, #f3efe8 65%, transparent);
+}
+
+@media (max-width: 640px) {
+  .car-preview {
+    min-height: 200px;
+  }
+
+  .car-preview__stage,
+  .car-preview__photo {
+    min-height: 170px;
+  }
+
+  .car-preview--compact {
+    width: 104px;
+  }
+
+  .car-preview--compact .car-preview__stage,
+  .car-preview--compact .car-preview__photo {
+    min-height: 64px;
+  }
+
+  .car-preview__label {
+    padding: 0.7rem 0.9rem 0.85rem;
+  }
+
+  .car-preview__label strong {
+    font-size: 1.05rem;
+  }
 }

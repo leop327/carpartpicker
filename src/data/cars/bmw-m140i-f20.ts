@@ -1,9 +1,15 @@
 import type { CarModel } from '../../types/catalog'
+import {
+  adaptiveMSportSuspension,
+  mSportBrakesOption,
+  parkingAndCameras,
+  stepTronicTransmission,
+  sunProtectionGlass,
+} from './specHelpers'
 
 /**
- * F20/F21 M140i (UK/EU — B58).
- * Factory: 340 hp (252 kW), 500 Nm. 0–62 mph ~4.6–4.8 s depending on transmission/drivetrain.
- * DIN kerb weight typically ~1,485–1,550 kg; RWD Steptronic ~1,510 kg used here.
+ * F20/F21 M140i — BMW UK figures.
+ * UK market was RWD only — xDrive was not officially sold here.
  */
 export const bmwM140iF20: CarModel = {
   id: 'bmw-m140i-f20',
@@ -20,6 +26,7 @@ export const bmwM140iF20: CarModel = {
     { id: 'melbourne-red', name: 'Melbourne Red Metallic', hex: '#A81C23' },
   ],
   basePrice: 35570,
+  euBasePrice: 35570,
   baseFigures: {
     hp: 340,
     torqueNm: 500,
@@ -30,52 +37,60 @@ export const bmwM140iF20: CarModel = {
     engineCode: 'B58B30M0',
   },
   figuresSource: 'oem',
-  euBasePrice: 35570,
-  euFiguresDelta: { zeroToSixtySec: 0.1 },
   yearFigures: {
     2019: { weightKg: 10 },
   },
   description:
-    'F20/F21 M140i — B58B30M0 straight-six hot hatch (UK/EU markets).',
+    'F20/F21 M140i — B58B30M0 (UK: 340 PS / 500 Nm). UK cars were RWD only; Adaptive M Sport suspension was optional.',
+  tagline: 'The last great hot hatch straight-six.',
   image: '/cars/bmw-m140i-f20.jpg',
   modTags: ['bmw', 'm140i', 'f20', 'b58', 'rwd', 'turbo'],
   specOptions: [
+    stepTronicTransmission({
+      autoDefault: true,
+      manualWeightDelta: -25,
+      manualZeroToSixtyDelta: 0.2,
+    }),
+    adaptiveMSportSuspension(),
+    mSportBrakesOption(),
     {
-      id: 'transmission',
-      name: 'Transmission',
+      id: 'seats',
+      name: 'Seats',
+      required: false,
+      choices: [
+        { id: 'sport', name: 'Sport seats (standard)', price: 0, isDefault: true },
+        {
+          id: 'electric',
+          name: 'Electric front seats with driver memory',
+          price: 0,
+        },
+        {
+          id: 'heated',
+          name: 'Heated front seats',
+          price: 0,
+        },
+      ],
+    },
+    {
+      id: 'wheels',
+      name: 'Wheels',
       required: false,
       choices: [
         {
-          id: 'auto',
-          name: '8-speed Steptronic',
+          id: '18',
+          name: '18" M Sport alloys (standard)',
           price: 0,
           isDefault: true,
         },
         {
-          id: 'manual',
-          name: '6-speed manual',
+          id: '19',
+          name: '19" M Style alloys',
           price: 0,
-          figuresDelta: { weightKg: -25, zeroToSixtySec: 0.2 },
+          figuresDelta: { weightKg: -2 },
         },
       ],
     },
-    {
-      id: 'xdrive',
-      name: 'Drivetrain',
-      required: false,
-      choices: [
-        { id: 'rwd', name: 'RWD', price: 0, isDefault: true },
-        {
-          id: 'xdrive',
-          name: 'xDrive AWD',
-          price: 2000,
-          figuresDelta: {
-            drivetrain: 'AWD',
-            weightKg: 75,
-            zeroToSixtySec: -0.2,
-          },
-        },
-      ],
-    },
+    parkingAndCameras(),
+    sunProtectionGlass(),
   ],
 }

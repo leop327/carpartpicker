@@ -1,9 +1,19 @@
 import type { CarModel } from '../../types/catalog'
+import {
+  f87Brakes,
+  f87FixedSuspension,
+  f87Seats,
+  f87Wheels,
+  interiorTrim,
+  mDctTransmission,
+  mDriversPackage,
+  parkingAndCameras,
+  sunProtectionGlass,
+} from './specHelpers'
 
 /**
- * F87 M2 Competition (S55).
- * US: 405 hp, 406 lb-ft (550 Nm). 0–60 4.2 s manual / 4.0 s DCT (BMW USA).
- * DIN unladen 1,550 kg manual / 1,575 kg DCT.
+ * F87 M2 Competition — BMW UK figures.
+ * UK brochure: no Adaptive suspension, no carbon ceramics, carbon trim standard.
  */
 export const bmwM2CompetitionF87: CarModel = {
   id: 'bmw-m2-competition-f87',
@@ -19,9 +29,9 @@ export const bmwM2CompetitionF87: CarModel = {
     { id: 'long-beach-blue', name: 'Long Beach Blue Metallic', hex: '#1A4F8C' },
     { id: 'sunset-orange', name: 'Sunset Orange Metallic', hex: '#C45A1A' },
   ],
-  basePrice: 58900,
+  basePrice: 51255,
   baseFigures: {
-    hp: 405,
+    hp: 410,
     torqueNm: 550,
     zeroToSixtySec: 4.2,
     weightKg: 1550,
@@ -30,41 +40,20 @@ export const bmwM2CompetitionF87: CarModel = {
     engineCode: 'S55B30T0',
   },
   figuresSource: 'oem',
-  /** EU press kits often quote 410 PS; 0–100 km/h ~0.1–0.2 s slower than US 0–60 claims. */
-  euFiguresDelta: { hp: 5, zeroToSixtySec: 0.15 },
-  euBasePrice: 62000,
   description:
-    'F87 M2 Competition — S55B30T0 twin-turbo from the F8x M3/M4 family.',
+    'F87 M2 Competition — S55B30T0 (UK: 410 PS / 550 Nm). Adaptive dampers and carbon ceramics were not factory options (CS only).',
+  tagline: 'M4 heart in an M2 suit.',
   image: '/cars/bmw-m2-competition-f87.jpg',
   modTags: ['bmw', 'm2', 'm2c', 'f87', 's55', 'rwd', 'turbo'],
   specOptions: [
-    {
-      id: 'transmission',
-      name: 'Transmission',
-      required: false,
-      choices: [
-        { id: 'manual', name: '6-speed manual', price: 0, isDefault: true },
-        {
-          id: 'dct',
-          name: '7-speed M DCT',
-          price: 2900,
-          figuresDelta: { weightKg: 25, zeroToSixtySec: -0.2 },
-        },
-      ],
-    },
-    {
-      id: 'carbon',
-      name: 'Carbon / seats',
-      required: false,
-      choices: [
-        { id: 'none', name: 'None (base)', price: 0, isDefault: true },
-        {
-          id: 'carbon-buckets',
-          name: 'Carbon fibre bucket seats',
-          price: 4800,
-          figuresDelta: { weightKg: -12 },
-        },
-      ],
-    },
+    mDctTransmission(-0.2),
+    f87FixedSuspension('M-specific Sport suspension (standard)'),
+    f87Seats(true),
+    f87Wheels(true),
+    f87Brakes(),
+    interiorTrim({ carbonStandard: true }),
+    mDriversPackage(),
+    parkingAndCameras(),
+    sunProtectionGlass(),
   ],
 }

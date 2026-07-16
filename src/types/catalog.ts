@@ -1,7 +1,7 @@
 /** Shared catalog types. Add fields carefully — keep data files as source of truth. */
 
 export type Drivetrain = 'RWD' | 'FWD' | 'AWD' | '4WD'
-export type Market = 'us' | 'eu'
+export type Market = 'uk'
 export type FiguresSource = 'oem' | 'estimated' | 'tuner'
 
 export interface Figures {
@@ -63,16 +63,18 @@ export interface CarModel {
   years: number[]
   colours: Colour[]
   basePrice: number
-  /** Optional EU list price (approx). Falls back to basePrice. */
+  /** Optional UK list price (approx). Falls back to basePrice as GBP. */
   euBasePrice?: number
   baseFigures: Figures
   /** Where baseFigures come from. */
   figuresSource: FiguresSource
   /** Optional per-year figure deltas on top of baseFigures. */
   yearFigures?: Partial<Record<number, FiguresDelta>>
-  /** Applied when market is EU (e.g. PS rating / 0–100 timing notes). */
+  /** Applied for UK figures (EU DIN / 0–62 timing notes). */
   euFiguresDelta?: FiguresDelta
   description: string
+  /** One-line flavour for model cards / preview. */
+  tagline?: string
   /** Public path to a real photo, e.g. `/cars/bmw-m2-f87.jpg`. */
   image: string
   /** Tags used to match compatible mods. */
@@ -90,6 +92,7 @@ export type ModCategoryId =
   | 'brakes'
   | 'wheels'
   | 'aero'
+  | 'styling'
   | 'drivetrain'
   | 'interior'
 
@@ -106,6 +109,8 @@ export interface Mod {
   category: ModCategoryId
   price: number
   description: string
+  /** Short punchy claim shown on mod cards. */
+  claim?: string
   figuresDelta: FiguresDelta
   figuresSource?: FiguresSource
   /**
@@ -120,6 +125,8 @@ export interface Mod {
    * (e.g. all ECU tunes use `ecu-tune`).
    */
   conflictGroup?: string
+  /** Product / retailer page opened from checkout. */
+  productUrl?: string
 }
 
 export interface StagePreset {

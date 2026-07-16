@@ -1,9 +1,8 @@
 import { useEffect, useMemo, useState } from 'react'
 import { Link, useSearchParams } from 'react-router-dom'
 import { catalog } from '../data/catalog'
-import { figuresSourceLabel, formatMoney } from '../lib/build'
+import { figuresSourceLabel } from '../lib/build'
 import {
-  clearBuildStorage,
   emptySelection,
   hydrateBuildFromLocation,
   syncBuildToUrl,
@@ -11,11 +10,19 @@ import {
   type BuildStage,
   type PersistedBuild,
 } from '../lib/buildState'
-import { accelLabel, getMarket, setMarket } from '../lib/market'
-import { getSavedBuild, saveBuild } from '../lib/savedBuilds'
+import { downloadModList } from '../lib/exportMods'
+import { accelLabel, MARKET } from '../lib/market'
+import { unlockMilestone } from '../lib/milestones'
+import { requireAccount } from '../lib/profile'
+import {
+  getSavedBuild,
+  saveBuild,
+  selectionLabel,
+} from '../lib/savedBuilds'
 import { figuresFromSelection, initSpecChoicesForCar } from '../lib/selection'
-import type { BuildSelection, Market } from '../types/catalog'
+import type { BuildSelection } from '../types/catalog'
 import { CarPreview } from '../components/builds/CarPreview'
+import { CheckoutPanel } from '../components/builds/CheckoutPanel'
 import { ColourSwatches } from '../components/builds/ColourSwatches'
 import { FiguresGrid } from '../components/builds/FiguresGrid'
 import { ModsPanel } from '../components/builds/ModsPanel'
@@ -60,8 +67,11 @@ export function BuildsPage() {
   const [stage, setStage] = useState<BuildStage>(initial.stage)
   const [selection, setSelection] = useState<BuildSelection>(initial.selection)
   const [activeSavedId, setActiveSavedId] = useState<string | null>(savedIdParam)
+  const [editingName, setEditingName] = useState<string | null>(() =>
+    savedIdParam ? getSavedBuild(savedIdParam)?.name ?? null : null,
+  )
   const [saveNote, setSaveNote] = useState<string | null>(null)
-  const [market, setMarketState] = useState<Market>(() => getMarket())
+  const [celebration, setCelebration] = useState<string | null>(null)
 
   useEffect(() => {
     if (isNew || savedIdParam) {
@@ -87,16 +97,11 @@ export function BuildsPage() {
       ? car.colours.find((c) => c.id === selection.colourId)
       : undefined
   const figures = useMemo(
-    () => figuresFromSelection(selection, market),
-    [selection, market],
+    () => figuresFromSelection(selection, MARKET),
+    [selection],
   )
-  const accel = accelLabel(market)
+  const accel = accelLabel()
   const sourceNote = car ? figuresSourceLabel(car.figuresSource) : undefined
-
-  function changeMarket(next: Market) {
-    setMarket(next)
-    setMarketState(next)
-  }
 
   const unlocked: BuildStage[] = useMemo(() => {
     const list: BuildStage[] = ['brand']
@@ -104,7 +109,7 @@ export function BuildsPage() {
     if (selection.carId) list.push('year')
     if (selection.carId && selection.year != null) list.push('colour')
     if (selection.carId && selection.year != null && selection.colourId) {
-      list.push('options', 'mods')
+      list.push('options', 'mods', 'checkout')
     }
     return list
   }, [selection])
@@ -169,26 +174,49 @@ export function BuildsPage() {
     setStage(next)
   }
 
-  function resetDraft() {
-    clearBuildStorage()
-    setSelection(emptySelection())
-    setStage('brand')
-    setActiveSavedId(null)
-    setSaveNote(null)
+  function celebrate(label: string | null) {
+    if (!label) return
+    setCelebration(label)
+    window.setTimeout(() => setCelebration(null), 2800)
   }
 
   function handleSave() {
-    if (!selection.carId || selection.year == null || !selection.colourId) {
-      setSaveNote('Finish brand, model, year, and colour before saving.')
-      return
+    requireAccount(() => {
+      if (!selection.carId || selection.year == null || !selection.colourId) {
+        setSaveNote('Finish brand, model, year, and colour before saving.')
+        window.setTimeout(() => setSaveNote(null), 2000)
+        return
+      }
+      const entry = saveBuild(
+        { v: 2, stage, selection },
+        { id: activeSavedId ?? undefined, name: editingName ?? undefined },
+      )
+      setActiveSavedId(entry.id)
+      setEditingName(entry.name)
+      setSaveNote(`Saved “${entry.name}”`)
+      celebrate(unlockMilestone('first-build'))
+      window.setTimeout(() => setSaveNote(null), 2000)
+    }, 'Create an account to save builds.')
+  }
+
+  function handleExportMods() {
+    requireAccount(() => {
+      const ok = downloadModList(selection, {
+        filename: `${(editingName ?? selectionLabel(selection) ?? 'build')
+          .replace(/\s+/g, '-')
+          .toLowerCase()}-mods.csv`,
+        format: 'csv',
+      })
+      setSaveNote(ok ? 'Mod list downloaded' : 'Add mods before exporting')
+      window.setTimeout(() => setSaveNote(null), 2000)
+    }, 'Create an account to export your mod list.')
+  }
+
+  function skipOptions() {
+    if (car) {
+      patchSelection({ specChoices: initSpecChoicesForCar(car.id) })
     }
-    const entry = saveBuild(
-      { v: 2, stage, selection },
-      { id: activeSavedId ?? undefined },
-    )
-    setActiveSavedId(entry.id)
-    setSaveNote(`Saved “${entry.name}”`)
-    window.setTimeout(() => setSaveNote(null), 2000)
+    setStage('mods')
   }
 
   const models = selection.make ? catalog.getCarsByMake(selection.make) : []
@@ -199,36 +227,13 @@ export function BuildsPage() {
         <div>
           <p className="builds__eyebrow">
             <Link to="/">Home</Link>
+            {' · '}
+            <Link to="/saved">Saved builds</Link>
           </p>
-          <h1>New build</h1>
-        </div>
-        <div className="builds__header-actions">
-          <div className="builds__market" role="group" aria-label="Market">
-            <button
-              type="button"
-              className={
-                market === 'us' ? 'mods-chip mods-chip--active' : 'mods-chip'
-              }
-              onClick={() => changeMarket('us')}
-            >
-              US
-            </button>
-            <button
-              type="button"
-              className={
-                market === 'eu' ? 'mods-chip mods-chip--active' : 'mods-chip'
-              }
-              onClick={() => changeMarket('eu')}
-            >
-              EU
-            </button>
-          </div>
-          <button type="button" className="btn btn--ghost btn--small" onClick={handleSave}>
-            Save build
-          </button>
-          <button type="button" className="btn btn--ghost btn--small" onClick={resetDraft}>
-            Reset
-          </button>
+          <h1>{activeSavedId ? 'Edit build' : 'New build'}</h1>
+          {editingName && (
+            <p className="builds__editing">Editing “{editingName}”</p>
+          )}
         </div>
       </header>
 
@@ -292,7 +297,9 @@ export function BuildsPage() {
                   {item.baseFigures.hp} hp · {item.baseFigures.engineCode} ·{' '}
                   {item.baseFigures.drivetrain}
                 </span>
-                <span className="choice-card__desc">{item.description}</span>
+                <span className="choice-card__desc">
+                  {item.tagline ?? item.description}
+                </span>
               </button>
             ))}
           </div>
@@ -342,10 +349,6 @@ export function BuildsPage() {
                 accelLabel={accel}
                 sourceNote={sourceNote}
               />
-              <p className="builds__base-price">
-                From {formatMoney(car.basePrice)}
-                <span> MSRP when new (approx.)</span>
-              </p>
             </div>
           </div>
         </section>
@@ -357,9 +360,18 @@ export function BuildsPage() {
         selection.year != null &&
         figures && (
           <section className="wizard" aria-labelledby="options-title">
-            <h2 id="options-title" className="wizard__title">
-              Factory options
-            </h2>
+            <div className="builds__options-top">
+              <h2 id="options-title" className="wizard__title">
+                Factory options
+              </h2>
+              <button
+                type="button"
+                className="btn btn--primary btn--lg builds__skip"
+                onClick={skipOptions}
+              >
+                Skip options
+              </button>
+            </div>
             <div className="builds__config-grid">
               <CarPreview car={car} colour={colour} year={selection.year} />
               <div>
@@ -370,10 +382,6 @@ export function BuildsPage() {
                   accelLabel={accel}
                   sourceNote={sourceNote}
                 />
-                <p className="builds__base-price">
-                  {formatMoney(figures.configuredPrice)}
-                  <span> car + options</span>
-                </p>
               </div>
             </div>
             <SpecOptions
@@ -434,6 +442,8 @@ export function BuildsPage() {
               <ModsPanel
                 car={car}
                 selectedModIds={selection.modIds}
+                stockFigures={figures.base}
+                builtFigures={figures.final}
                 onToggle={toggleMod}
                 onApplyPreset={applyPreset}
               />
@@ -446,23 +456,64 @@ export function BuildsPage() {
                 totalPrice={figures.totalPrice}
                 selection={selection}
                 stage={stage}
-                market={market}
+                market={MARKET}
                 accelLabel={accel}
                 sourceNote={sourceNote}
                 onRemoveMod={toggleMod}
+                onAddMod={(modId) => {
+                  setSelection((prev) => ({
+                    ...prev,
+                    modIds: catalog.applyModSelection(prev.modIds, modId, true),
+                  }))
+                }}
                 onSave={handleSave}
+                onExportMods={handleExportMods}
+                celebration={celebration}
+                onCheckout={() => {
+                  celebrate(unlockMilestone('first-checkout'))
+                  setStage('checkout')
+                }}
               />
             </div>
+          </section>
+        )}
 
-            <div className="builds__mobile-bar" aria-label="Build totals">
-              <div className="builds__mobile-bar-stats">
-                <strong>{formatMoney(figures.totalPrice)}</strong>
+      {stage === 'checkout' &&
+        car &&
+        colour &&
+        selection.year != null &&
+        figures && (
+          <section className="wizard" aria-labelledby="checkout-title">
+            <button
+              type="button"
+              className="builds__compact"
+              onClick={() => setStage('mods')}
+            >
+              <CarPreview
+                car={car}
+                colour={colour}
+                year={selection.year}
+                compact
+              />
+              <div className="builds__compact-meta">
+                <strong>
+                  {selection.year} {car.make} {car.label}
+                </strong>
                 <span>
-                  {figures.final.hp} hp ·{' '}
-                  {figures.final.zeroToSixtySec.toFixed(2)}s {accel}
+                  {figures.final.hp} hp · {figures.final.zeroToSixtySec.toFixed(2)}s{' '}
+                  {accel}
                 </span>
+                <span className="builds__compact-hint">Edit mods</span>
               </div>
-            </div>
+            </button>
+            <CheckoutPanel
+              modIds={selection.modIds}
+              modsTotal={figures.totalPrice}
+              onRemoveMod={toggleMod}
+              onBackToMods={() => setStage('mods')}
+              onSave={handleSave}
+              onExportMods={handleExportMods}
+            />
           </section>
         )}
     </div>

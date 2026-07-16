@@ -1,4 +1,4 @@
-import type { CSSProperties } from 'react'
+import { useEffect, useState, type CSSProperties } from 'react'
 import type { CarModel, Colour } from '../../types/catalog'
 import './CarPreview.css'
 
@@ -10,9 +10,23 @@ interface Props {
 }
 
 export function CarPreview({ car, colour, year, compact }: Props) {
+  const [flash, setFlash] = useState(false)
+
+  useEffect(() => {
+    setFlash(true)
+    const t = window.setTimeout(() => setFlash(false), 550)
+    return () => window.clearTimeout(t)
+  }, [colour.id])
+
   return (
     <div
-      className={compact ? 'car-preview car-preview--compact' : 'car-preview'}
+      className={[
+        'car-preview',
+        compact ? 'car-preview--compact' : '',
+        flash ? 'car-preview--flash' : '',
+      ]
+        .filter(Boolean)
+        .join(' ')}
       style={{ '--paint': colour.hex } as CSSProperties}
     >
       <div className="car-preview__stage">
@@ -22,6 +36,7 @@ export function CarPreview({ car, colour, year, compact }: Props) {
           alt={`${year} ${car.make} ${car.label}`}
           loading="lazy"
         />
+        <div className="car-preview__grade" aria-hidden />
         <div className="car-preview__wash" aria-hidden />
         <span className="car-preview__paint" aria-hidden />
         {!compact && (
@@ -36,7 +51,7 @@ export function CarPreview({ car, colour, year, compact }: Props) {
           <strong>
             {car.make} {car.label}
           </strong>
-          <span>{car.generation}</span>
+          <span>{car.tagline ?? car.generation}</span>
         </div>
       )}
     </div>

@@ -5,6 +5,8 @@ import { bmwM140iF20 } from './bmw-m140i-f20'
 import { bmwM235iF22 } from './bmw-m235i-f22'
 import { bmwM2CompetitionF87 } from './bmw-m2-competition-f87'
 import { bmwM2F87 } from './bmw-m2-f87'
+import { bmwM3F80 } from './bmw-m3-f80'
+import { bmwM4F82 } from './bmw-m4-f82'
 
 /**
  * Register new cars here only.
@@ -15,6 +17,8 @@ export const cars: CarModel[] = [
   bmw135iE82N55,
   bmwM2F87,
   bmwM2CompetitionF87,
+  bmwM3F80,
+  bmwM4F82,
   bmwM140iF20,
   bmwM235iF22,
 ]

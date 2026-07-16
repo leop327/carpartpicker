@@ -50,20 +50,20 @@ export function applyDelta(figures: Figures, delta?: FiguresDelta): Figures {
 export function resolveBaseFigures(
   car: CarModel,
   year: number | null | undefined,
-  market: Market = 'us',
+  market: Market = 'uk',
 ): Figures {
   let figures = { ...car.baseFigures }
   if (year != null && car.yearFigures?.[year]) {
     figures = applyDelta(figures, car.yearFigures[year])
   }
-  if (market === 'eu' && car.euFiguresDelta) {
+  if (market === 'uk' && car.euFiguresDelta) {
     figures = applyDelta(figures, car.euFiguresDelta)
   }
   return figures
 }
 
-export function resolveBasePrice(car: CarModel, market: Market = 'us'): number {
-  if (market === 'eu' && car.euBasePrice != null) return car.euBasePrice
+export function resolveBasePrice(car: CarModel, market: Market = 'uk'): number {
+  if (market === 'uk' && car.euBasePrice != null) return car.euBasePrice
   return car.basePrice
 }
 
@@ -80,16 +80,13 @@ export function computeBuildFigures(
   modsPrice: number
   totalPrice: number
 } {
-  const market = opts?.market ?? 'us'
+  const market = opts?.market ?? 'uk'
   const base = resolveBaseFigures(car, opts?.year, market)
   const resolved = resolveSpecChoices(car, specChoices)
 
   let configured = { ...base }
-  let configuredPrice = resolveBasePrice(car, market)
-
   for (const choice of resolved) {
     configured = applyDelta(configured, choice.figuresDelta)
-    configuredPrice += choice.price
   }
 
   let final = { ...configured }
@@ -105,18 +102,18 @@ export function computeBuildFigures(
     base,
     configured,
     final,
-    configuredPrice,
+    configuredPrice: 0,
     modsPrice,
-    totalPrice: configuredPrice + modsPrice,
+    totalPrice: modsPrice,
   }
 }
 
-export function formatMoney(usd: number): string {
-  return new Intl.NumberFormat('en-US', {
+export function formatMoney(gbp: number): string {
+  return new Intl.NumberFormat('en-GB', {
     style: 'currency',
-    currency: 'USD',
+    currency: 'GBP',
     maximumFractionDigits: 0,
-  }).format(usd)
+  }).format(gbp)
 }
 
 export function formatTorque(nm: number): string {
@@ -152,13 +149,12 @@ export function formatBuildSummary(input: {
   market?: Market
   figuresSource?: string
 }): string {
-  const market = input.market ?? 'us'
-  const accel = market === 'eu' ? '0–100 km/h' : '0–60 mph'
+  const accel = '0–62 mph'
   const lines = [
     `CarPartPicker build`,
     `${input.year} ${input.make} ${input.model} (${input.generation})`,
     `Colour: ${input.colourName}`,
-    `Market: ${market.toUpperCase()}`,
+    `Market: UK`,
     input.figuresSource ? `Figures: ${input.figuresSource}` : '',
     '',
     'Factory options:',
@@ -179,7 +175,7 @@ export function formatBuildSummary(input: {
     `  Drivetrain: ${input.figures.drivetrain}`,
     `  Engine: ${input.figures.engineSizeL.toFixed(1)} L · ${input.figures.engineCode}`,
     '',
-    `Estimated total: ${formatMoney(input.totalPrice)}`,
+    `Mods total: ${formatMoney(input.totalPrice)}`,
   ]
   return lines.filter((l) => l !== undefined).join('\n')
 }
