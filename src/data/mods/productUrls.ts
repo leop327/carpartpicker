@@ -51,6 +51,23 @@ export const brandStoreUrls: Record<string, string> = {
   'BMW M Performance': 'https://www.bmw.co.uk/en/shop/ls/dyc/m-performance-parts',
   BMW: 'https://www.bmw.co.uk/',
   'Maxton Design': 'https://maxtondesign.co.uk/',
+  AutoID: 'https://clubsportgarage.co.uk/collections/vendors?q=AutoID',
+  'Clubsport Garage': 'https://clubsportgarage.co.uk/',
+  'Zaero Design': 'https://clubsportgarage.co.uk/collections/vendors?q=Zaero',
+  DO88: 'https://clubsportgarage.co.uk/collections/vendors?q=DO88',
+  'Alpha-N': 'https://clubsportgarage.co.uk/collections/vendors?q=Alpha',
+  'Automotive Passion':
+    'https://clubsportgarage.co.uk/collections/vendors?q=Automotive+Passion',
+  Zunsport: 'https://clubsportgarage.co.uk/collections/vendors?q=Zunsport',
+  'Millway Motorsport':
+    'https://clubsportgarage.co.uk/collections/vendors?q=Millway',
+  Nitron: 'https://clubsportgarage.co.uk/collections/vendors?q=Nitron',
+  'MMX Performance': 'https://clubsportgarage.co.uk/collections/vendors?q=MMX',
+  Pagid: 'https://clubsportgarage.co.uk/collections/vendors?q=Pagid',
+  Endless: 'https://clubsportgarage.co.uk/collections/vendors?q=Endless',
+  'Pinnacle Motorsport':
+    'https://clubsportgarage.co.uk/collections/vendors?q=Pinnacle',
+  Hardrace: 'https://clubsportgarage.co.uk/collections/vendors?q=Hardrace',
   'Burger Motorsports': 'https://burgertuning.com/',
   'CBLP Styling': 'https://cblpstyling.com/collections/bmw',
   BOTRAAK: 'https://www.harrismotorsport.co.uk/wheel-spacers',
@@ -342,6 +359,189 @@ export const productUrls: Record<string, string> = {
   'cblp-diffuser-f22':
     'https://cblpstyling.com/products/bmw-f22-rear-diffuser',
   'cblp-door-lights': 'https://cblpstyling.com/products/bmw-led-door-lights',
+
+  // MHD Super Licenses (UK — Garage Whifbitz)
+  'mhd-super-n55':
+    'https://www.garagewhifbitz.co.uk/mhd-super-tuning-license-for-n55-2/',
+  'mhd-super-s55':
+    'https://www.garagewhifbitz.co.uk/mhd-super-tuning-license-for-s55/',
+  'mhd-super-s58':
+    'https://www.garagewhifbitz.co.uk/mhd-super-tuning-license-for-s58/',
+  'mhd-stage1-n55':
+    'https://www.garagewhifbitz.co.uk/mhd-super-tuning-license-for-n55-2/',
+  'mhd-stage2-n55':
+    'https://www.garagewhifbitz.co.uk/mhd-super-tuning-license-for-n55-2/',
+  'mhd-stage2plus-n55':
+    'https://www.garagewhifbitz.co.uk/mhd-super-tuning-license-for-n55-2/',
+  'mhd-e30-n55':
+    'https://www.garagewhifbitz.co.uk/mhd-super-tuning-license-for-n55-2/',
+  'mhd-stage1-s55':
+    'https://www.garagewhifbitz.co.uk/mhd-super-tuning-license-for-s55/',
+  'mhd-stage2-s55':
+    'https://www.garagewhifbitz.co.uk/mhd-super-tuning-license-for-s55/',
+  'mhd-stage1-s58':
+    'https://www.garagewhifbitz.co.uk/mhd-super-tuning-license-for-s58/',
+
+  // AutoID / Clubsport Garage (F87 M2)
+  'autoid-csl-splitter-f87':
+    'https://clubsportgarage.co.uk/products/autoid-f87-m2-carbon-fibre-csl-front-splitter',
+  'autoid-gts-splitter-f87c':
+    'https://clubsportgarage.co.uk/products/autoid-f87-m2-competition-pre-preg-carbon-fibre-performance-front-splitter',
+  'autoid-tre-splitter-f87':
+    'https://clubsportgarage.co.uk/products/autoid-tre-f87-m2-pre-preg-carbon-fibre-performance-front-splitter',
+  'autoid-diffuser-f87':
+    'https://clubsportgarage.co.uk/products/autoid-carbon-fibre-m-performance-style-rear-diffuser-for-bmw-f87-m2-m2-competition',
+  'autoid-skirts-f87':
+    'https://clubsportgarage.co.uk/products/bmw-m2-m2-competition-f87-carbon-fibre-side-skirts-2015-2021',
+  'tre-mirrors-f8x':
+    'https://clubsportgarage.co.uk/products/tre-pre-preg-carbon-fibre-wing-mirror-covers-for-f87-bmw-m2-competition-f80-m3-f82-m4',
+  'zaero-evo-s-splitter-f87':
+    'https://clubsportgarage.co.uk/products/zaero-design-f87-m2-evo-s-gloss-black-front-splitter',
+  'zaero-evo-s-splitter-f87c':
+    'https://clubsportgarage.co.uk/products/zaero-design-f87-m2-competition-evo-s-gloss-black-front-splitter',
+  'zaero-evo-s-splitter-g87':
+    'https://clubsportgarage.co.uk/products/zaero-design-g87-m2-evo-s-gloss-black-front-splitter',
+
+  // Maxton Design UK (M2)
+  'maxton-splitter-v3-f87':
+    'https://www.maxtondesign.co.uk/body-kits/bmw/bmw-m2/bmw-m2-f87/front-splitter-v.3-bmw-m2-f87-2016-2020',
+  'maxton-side-flaps-f87':
+    'https://www.maxtondesign.co.uk/body-kits/bmw/bmw-m2/bmw-m2-f87/side-flaps-bmw-m2-f87',
+  'maxton-rear-side-flaps-f87':
+    'https://www.maxtondesign.co.uk/body-kits/bmw/bmw-m2/bmw-m2-f87/rear-side-flaps-bmw-m2-f87',
+  'maxton-splitter-v1-g87':
+    'https://www.maxtondesign.co.uk/body-kits/bmw/bmw-m2/bmw-m2-g87/front-splitter-v.1-bmw-m2-g87',
+  'maxton-splitter-v2-g87':
+    'https://www.maxtondesign.co.uk/body-kits/bmw/bmw-m2/bmw-m2-g87/front-splitter-v.2-bmw-m2-g87',
+  'maxton-splitter-v3-g87':
+    'https://www.maxtondesign.co.uk/body-kits/bmw/bmw-m2/bmw-m2-g87/front-splitter-v.3-bmw-m2-g87',
+  'maxton-side-flaps-g87':
+    'https://www.maxtondesign.co.uk/body-kits/bmw/bmw-m2/bmw-m2-g87/side-flaps-bmw-m2-g87',
+
+  // Clubsport Garage — styling
+  'alphan-wings-f87':
+    'https://clubsportgarage.co.uk/products/alpha-n-carbon-fibre-front-wings-fenders-bmw-f87-m2-m2-competition',
+  'alphan-roof-f87':
+    'https://clubsportgarage.co.uk/products/alpha-n-carbon-fibre-roof-bmw-f87-m2-m2-competition',
+  'bmw-mperf-roof-f87':
+    'https://clubsportgarage.co.uk/products/genuine-bmw-m-performance-carbon-fibre-roof-f87-m2-m2-competition',
+  'bmw-cs-bonnet-f87':
+    'https://clubsportgarage.co.uk/products/genuine-bmw-f87-m2-cs-carbon-fibre-bonnet-hood',
+  'ap-arch-guards-f87':
+    'https://clubsportgarage.co.uk/products/automotive-passion-carbon-or-gloss-black-arch-guards-for-bmw-f87-m2-m2-competition',
+  'ap-arch-guards-g87':
+    'https://clubsportgarage.co.uk/products/automotive-passion-carbon-gloss-black-arch-guards-for-bmw-g87-m2',
+  'zunsport-grille-f87':
+    'https://clubsportgarage.co.uk/products/zunsport-front-grille-kit-for-bmw-f87-m2-2015-2018',
+  'zunsport-grille-f87c':
+    'https://clubsportgarage.co.uk/products/zunsport-front-grille-kit-for-bmw-f87-m2-competition',
+  'tre-comp-diffuser-f87':
+    'https://clubsportgarage.co.uk/products/tre-pre-preg-carbon-fibre-competition-rear-diffuser-for-bmw-f87-m2-m2-competition',
+  'tre-mperf-diffuser-f87':
+    'https://clubsportgarage.co.uk/products/tre-pre-preg-carbon-fibre-m-performance-style-rear-diffuser-for-bmw-f87-m2-m2-competition',
+  'eventuri-engine-cover-g8x':
+    'https://clubsportgarage.co.uk/products/eventuri-carbon-fibre-engine-cover-bmw-g80-g81-m3-g82-g83-m4-coupe-convertible-g87-m2',
+  'eventuri-strut-brace-g8x':
+    'https://clubsportgarage.co.uk/products/eventuri-carbon-fibre-strut-brace-bmw-g8x-m2-m3-m4',
+  'eventuri-scoop-g87':
+    'https://clubsportgarage.co.uk/products/eventuri-carbon-intake-scoop-set-for-bmw-g87-m2',
+
+  // Clubsport Garage — F87 N55 performance
+  'do88-chargepipe-f87':
+    'https://clubsportgarage.co.uk/products/do88-charge-pipe-f87-m2',
+  'do88-turbopipe-f87':
+    'https://clubsportgarage.co.uk/products/do88-turbo-pipe-f87-m2',
+  'do88-ic-f87':
+    'https://clubsportgarage.co.uk/products/do88-intercooler-bmw-f8x-m2-mx35i',
+  'wagner-evo2-ic-f87':
+    'https://clubsportgarage.co.uk/products/wagner-tuning-evo-2-competition-intercooler-bmw-f2x-f3x-f87',
+  'do88-oilcooler-f87':
+    'https://clubsportgarage.co.uk/products/do88-engine-oil-cooler-f87-m2',
+  'do88-radiator-f87':
+    'https://clubsportgarage.co.uk/products/do88-radiator-f87-m2',
+  'eventuri-intake-f87-n55':
+    'https://clubsportgarage.co.uk/products/eventuri-carbon-fibre-intake-system-v2-for-bmw-f87-m2-f22-m235i-f20-f21-m135',
+  'mst-inlet-f87-n55':
+    'https://clubsportgarage.co.uk/products/mst-performance-turbo-inlet-pipe-bmw-n55-f2x-f3x-f87',
+  'vrsf-dp-f87-n55':
+    'https://clubsportgarage.co.uk/products/vrsf-4-brushed-downpipe-for-bmw-n55-2013-f20-m135i-f22-m235i-f30-f31-335i-f32-f36-435i-f87-m2-non-comp',
+  'akrapovic-dp-f87-n55':
+    'https://clubsportgarage.co.uk/products/akrapovic-catless-downpipe-f87-m2-n55',
+  'milltek-catback-f87-m2':
+    'https://clubsportgarage.co.uk/products/milltek-sport-bmw-f87-m2-2015-2018-cat-back-exhaust-system',
+  'akrapovic-exhaust-f87-n55':
+    'https://clubsportgarage.co.uk/products/akrapovic-titanium-slip-on-exhaust-system-f87-m2',
+  'eibach-prokit-f87-csg':
+    'https://clubsportgarage.co.uk/products/eibach-pro-kit-performance-lowering-springs-bmw-f87-m2-m2c',
+  'eibach-prokit-f87':
+    'https://clubsportgarage.co.uk/products/eibach-pro-kit-performance-lowering-springs-bmw-f87-m2-m2c',
+  'millway-camber-f87':
+    'https://clubsportgarage.co.uk/products/millway-motorsport-adjustable-camber-plates-street-version-f87-m2',
+  'millway-diff-lift-f8x':
+    'https://clubsportgarage.co.uk/products/millway-motorsport-dual-mount-diff-lift-kit-street-version-f8x-m2-m2c-m3-m4',
+
+  // Clubsport Garage — S55 / Comp
+  'do88-chargecooler-s55':
+    'https://clubsportgarage.co.uk/products/do88-chargecooler-bmw-f8x-m2c-m3-m4',
+  'wagner-cc-s55':
+    'https://clubsportgarage.co.uk/products/wagner-tuning-bmw-m2-m3-m4-s55-intercooler-kit',
+  'do88-intake-s55':
+    'https://clubsportgarage.co.uk/products/do88-performance-air-intake-system-f8x-m2c-m3-m4',
+  'do88-turbo-inlet-s55':
+    'https://clubsportgarage.co.uk/products/do88-turbo-inlet-pipe-bmw-f8x-m2c-m3-m4',
+  'eventuri-intake-f87c':
+    'https://clubsportgarage.co.uk/products/eventuri-carbon-fibre-intake-system-for-bmw-m2-competition-f87',
+  'eventuri-chargepipe-s55':
+    'https://clubsportgarage.co.uk/products/eventuri-carbon-charge-pipe-kit-for-bmw-f80-m3-f82-f83-m4-f87-m2-competition',
+  'vrsf-intake-s55':
+    'https://clubsportgarage.co.uk/products/vrsf-high-flow-intake-kit-for-bmw-f87-m2-competition-f80-m3-f82-m4',
+  'vrsf-dp-s55-csg':
+    'https://clubsportgarage.co.uk/products/vrsf-3-brushed-downpipes-for-s55-f87-m2-competition-f80-m3-f82-m4',
+  'milltek-opfback-f87c':
+    'https://clubsportgarage.co.uk/products/milltek-sport-bmw-m2-competition-opf-gpf-back-exhaust-system',
+  'akrapovic-slip-f87c':
+    'https://clubsportgarage.co.uk/products/akrapovic-titanium-exhaust-f87-m2-competition',
+  'csf-dct-cooler-f8x':
+    'https://clubsportgarage.co.uk/products/csf-race-dct-transmission-cooler-f87-m2-competition',
+
+  // Clubsport Garage — G87 / S58
+  'eventuri-intake-g87':
+    'https://clubsportgarage.co.uk/products/eventuri-carbon-fibre-intake-system-v2-bmw-g87-m2-g80-g81-m3-g82-g83-m4-coupe-convertible-cs-csl',
+  'do88-chargepipe-s58':
+    'https://clubsportgarage.co.uk/products/do88-performance-s58-charge-pipe-bmw-g8x-m2-m3-m4',
+  'do88-manifold-s58':
+    'https://clubsportgarage.co.uk/products/do88-inlet-s58-manifold-bmw-g8x-m2-m3-m4',
+  'wagner-manifold-ic-s58':
+    'https://clubsportgarage.co.uk/products/wagner-tuning-bmw-m2-m3-m4-s58-intake-manifold-intercooler',
+  'do88-fmic-rad-s58':
+    'https://clubsportgarage.co.uk/products/do88-performance-front-s58-intercooler-radiator-bmw-g8x-m2-m3-m4',
+  'do88-oilcooler-s58':
+    'https://clubsportgarage.co.uk/products/do88-engine-oil-cooler-bmw-g8x-m2-m3-m4-s58',
+  'eibach-prokit-g87':
+    'https://clubsportgarage.co.uk/products/eibach-pro-kit-performance-lowering-springs-for-bmw-g87-m2-2023',
+  'kw-v3-g87-csg':
+    'https://clubsportgarage.co.uk/products/kw-v3-coilovers-for-bmw-g87-m2',
+
+  'nitron-r1-f87':
+    'https://clubsportgarage.co.uk/products/nitron-ntr-r1-coilovers-bmw-f87-m2-2016-2018',
+  'mmx-springs-f87':
+    'https://clubsportgarage.co.uk/products/mmr-performance-lowering-springs-bmw-f87-m2-m2c',
+  'hardrace-toe-f8x':
+    'https://clubsportgarage.co.uk/products/hardrace-adjustable-rear-toe-arms-for-bmw-f8x-g8x-m2-m3-and-m4-7733',
+  'pagid-rsl29-front-f87':
+    'https://clubsportgarage.co.uk/products/pagid-rsl29-front-brake-pads-for-bmw-f20-m135i-m140i-f22-m235i-m240i-f87-m2-f80-m3-f82-m4',
+  'pagid-rsl29-rear-f87':
+    'https://clubsportgarage.co.uk/products/pagid-rsl29-rear-brake-pads-for-bmw-f20-m135i-m140i-f22-m235i-m240i-f87-m2-f80-m3-f82-m4',
+  'endless-me22-front-f87':
+    'https://clubsportgarage.co.uk/products/endless-brakes-me22-front-brake-pads-f87-m2-f82-m4-f80-m3-m135i',
+  'pinnacle-brake-ducts-f8x':
+    'https://clubsportgarage.co.uk/products/pinnacle-motorsport-brake-cooling-kit-f87-m2-m2c-f80-m3-f82-m4',
+  'vrsf-chargepipe-f87-n55':
+    'https://clubsportgarage.co.uk/products/vrsf-charge-pipe-kit-for-bmw-f87-m2-f20-m135i-f22-m235i-f30-335i-f32-435i',
+  'vrsf-ic-f87-n55':
+    'https://clubsportgarage.co.uk/products/vrsf-n55-intercooler-for-bmw-f20-m135i-f22-m235i-f30-335i-f32-435i-f87-m2-non-comp',
+  'eventuri-panel-f87-n55':
+    'https://clubsportgarage.co.uk/products/eventuri-n55-panel-filter-bmw-m2-m135i-m235i-335i-435i',
 }
 
 export function resolveProductUrl(mod: {

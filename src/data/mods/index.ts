@@ -2,6 +2,7 @@ import type { Mod, ModCategory, StagePreset } from '../../types/catalog'
 import { extraMods, extraPresets } from './extraMods'
 import { moreMods, morePresets } from './extraModsMore'
 import { waveMods, wavePresets } from './extraModsWave'
+import { m2Mods, m2Presets } from './m2Mods'
 export { resolveProductUrl } from './productUrls'
 
 export const modCategories: ModCategory[] = [
@@ -1481,6 +1482,7 @@ export const mods: Mod[] = [
     description: 'ACS V1 front splitter for F87 M2/M2C.',
     figuresDelta: {},
     compatibleTags: ['m2', 'm2c', 'f87'],
+    conflictGroup: 'front-splitter',
   },
   {
     id: 'cblp-skirts-f87',
@@ -1491,6 +1493,7 @@ export const mods: Mod[] = [
     description: 'ACS V1 side skirts for F87 M2/M2C.',
     figuresDelta: {},
     compatibleTags: ['m2', 'm2c', 'f87'],
+    conflictGroup: 'side-skirts',
   },
   {
     id: 'cblp-diffuser-f87',
@@ -1501,6 +1504,7 @@ export const mods: Mod[] = [
     description: 'ACS V1 rear diffuser for F87 M2/M2C.',
     figuresDelta: {},
     compatibleTags: ['m2', 'm2c', 'f87'],
+    conflictGroup: 'rear-diffuser',
   },
   {
     id: 'cblp-spoiler-f87',
@@ -1587,6 +1591,7 @@ export const mods: Mod[] = [
   ...extraMods,
   ...moreMods,
   ...waveMods,
+  ...m2Mods,
 ]
 
 /**
@@ -1678,6 +1683,7 @@ export const stagePresets: StagePreset[] = [
   ...extraPresets,
   ...morePresets,
   ...wavePresets,
+  ...m2Presets,
 ]
 
 export function getModById(id: string): Mod | undefined {
