@@ -62,6 +62,7 @@ export function CarPreview({ car, colour, year, compact }: Props) {
         compact ? 'car-preview--compact' : '',
         flash ? 'car-preview--flash' : '',
         status === 'tinting' ? 'car-preview--loading' : '',
+        status === 'photo' ? 'car-preview--photo' : '',
       ]
         .filter(Boolean)
         .join(' ')}

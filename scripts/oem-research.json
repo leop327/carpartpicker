@@ -1,0 +1,36 @@
+{
+  "note": "Verified from BMW UK press / brochures / paintref — not LLM-generated (Gemini quota hit; no OpenAI key).",
+  "generatedAt": "2026-07-21",
+  "cars": {
+    "bmw-m2-f87": {
+      "confidence": "high",
+      "figures": { "hp": 370, "torqueNm": 465, "zeroToSixtySec": 4.3, "weightKg": 1495, "drivetrain": "RWD", "engineCode": "N55B30T0" },
+      "colours": ["Long Beach Blue Metallic (C16)", "Alpine White (300)", "Black Sapphire Metallic (475)", "Mineral Grey Metallic (B39)"],
+      "sources": ["https://www.press.bmwgroup.com/united-kingdom/article/detail/T0238509EN_GB/the-new-bmw-m2"]
+    },
+    "bmw-m2-competition-f87": {
+      "confidence": "high",
+      "figures": { "hp": 410, "torqueNm": 550, "zeroToSixtySec": 4.2, "weightKg": 1550, "drivetrain": "RWD", "engineCode": "S55B30T0" },
+      "colours": ["Alpine White", "Black Sapphire Metallic", "Long Beach Blue Metallic", "Sunset Orange Metallic", "Hockenheim Silver Metallic"],
+      "sources": ["https://www.press.bmwgroup.com/united-kingdom/article/detail/T0280161EN_GB/the-new-bmw-m2-competition"]
+    },
+    "bmw-m3-f80": {
+      "confidence": "high",
+      "figures": { "hp": 431, "torqueNm": 550, "zeroToSixtySec": 4.3, "weightKg": 1560, "drivetrain": "RWD", "engineCode": "S55B30T0" },
+      "colours": ["Alpine White", "Mineral White Metallic", "Silverstone Metallic", "Mineral Grey Metallic", "Black Sapphire Metallic", "Yas Marina Blue Metallic", "Austin Yellow Metallic", "Sakhir Orange Metallic"],
+      "sources": ["https://www.bmwbrochures.co.uk/0114/BMW_M3_M4_F80_F82/files/inc/b22539d50c.pdf"]
+    },
+    "bmw-m2-g87": {
+      "confidence": "high",
+      "figures": { "hp": 460, "torqueNm": 550, "zeroToSixtySec": 4.1, "weightKg": 1775, "drivetrain": "RWD", "engineCode": "S58B30T0", "lciHp": 480, "lciTorqueAutoNm": 600 },
+      "colours": ["Zane Grey", "Toronto Red", "Portimao Blue", "Alpine White", "Black Sapphire", "Sao Paulo Yellow", "Fire Red", "Skyscraper Grey", "Brooklyn Grey"],
+      "sources": ["https://www.press.bmwgroup.com/united-kingdom/article/detail/T0443099EN_GB/the-new-bmw-m2"]
+    },
+    "bmw-m3-competition-g80": {
+      "confidence": "high",
+      "figures": { "hp": 510, "torqueNm": 650, "zeroToSixtySec": 3.9, "weightKg": 1805, "drivetrain": "RWD", "engineCode": "S58B30T0", "laterHp": 530 },
+      "colours": ["Sao Paulo Yellow", "Isle of Man Green Metallic", "Brooklyn Grey Metallic", "Skyscraper Grey Metallic", "Toronto Red Metallic", "Portimao Blue Metallic", "Alpine White", "Black Sapphire Metallic"],
+      "sources": ["https://www.press.bmwgroup.com/united-kingdom/article/detail/T0316947EN_GB/the-new-bmw-m3-competition-saloon-and-bmw-m4-competition-coupe"]
+    }
+  }
+}

@@ -1,20 +1,25 @@
 :root {
-  --bg: #eef0f3;
-  --surface: #ffffff;
-  --ink: #11141a;
-  --ink-muted: #5b6575;
-  --line: #d0d5dd;
-  --accent: #11141a;
-  --accent-ink: #ffffff;
-  --accent-soft: #e8eef3;
-  --signal: #c2410c;
-  --ok: #1f7a45;
+  /* Forza garage — day mode (muted asphalt) */
+  --bg: #e8eaee;
+  --surface: #f4f5f7;
+  --surface-glass: color-mix(in srgb, #ffffff 78%, transparent);
+  --ink: #0c0e12;
+  --ink-muted: #5a6474;
+  --line: #c5ccd6;
+  --accent: #0c0e12;
+  --accent-ink: #f4f5f7;
+  --accent-soft: #dce2ea;
+  --signal: #e85d04;
+  --hud: #0a7ea4;
+  --ok: #1a7a45;
   --danger: #b42318;
-  --shadow: rgb(17 20 26 / 0.08);
-  --bg-glow-a: #e4ebf0;
-  --bg-glow-b: #efe8e2;
-  --font-display: 'Space Grotesk', 'Avenir Next', 'Segoe UI', sans-serif;
-  --font-body: 'Manrope', 'Avenir Next', 'Segoe UI', sans-serif;
+  --shadow: rgb(12 14 18 / 0.12);
+  --bg-glow-a: #d4dce8;
+  --bg-glow-b: #e8dcd0;
+  --stage: #12151c;
+  --font-display: 'Oswald', 'Arial Narrow', 'Segoe UI', sans-serif;
+  --font-body: 'Barlow', 'Avenir Next', 'Segoe UI', sans-serif;
+  --radius-none: 0;
   font-family: var(--font-body);
   line-height: 1.5;
   font-weight: 400;
@@ -28,20 +33,24 @@
 }
 
 :root[data-theme='dark'] {
-  --bg: #0b0d11;
-  --surface: #1c2330;
-  --ink: #f3f6fb;
-  --ink-muted: #c2c9d6;
-  --line: #445064;
-  --accent: #f3f6fb;
-  --accent-ink: #0b0d11;
-  --accent-soft: #2a3344;
-  --signal: #fb923c;
+  /* Forza garage — night (default) */
+  --bg: #050608;
+  --surface: #10131a;
+  --surface-glass: color-mix(in srgb, #0e1218 72%, transparent);
+  --ink: #f2f4f8;
+  --ink-muted: #9aa3b5;
+  --line: #2a3140;
+  --accent: #f2f4f8;
+  --accent-ink: #050608;
+  --accent-soft: #1a2030;
+  --signal: #ff6b1a;
+  --hud: #3ecfff;
   --ok: #4ade80;
   --danger: #f87171;
-  --shadow: rgb(0 0 0 / 0.5);
-  --bg-glow-a: #151c28;
-  --bg-glow-b: #1c1612;
+  --shadow: rgb(0 0 0 / 0.55);
+  --bg-glow-a: #0c1524;
+  --bg-glow-b: #1a1008;
+  --stage: #080a0e;
   color-scheme: dark;
 }
 
@@ -67,8 +76,9 @@ body {
   min-width: 320px;
   overflow-x: clip;
   background:
-    radial-gradient(ellipse 55% 40% at 0% 0%, var(--bg-glow-a), transparent 60%),
-    radial-gradient(ellipse 45% 35% at 100% 10%, var(--bg-glow-b), transparent 55%),
+    radial-gradient(ellipse 70% 50% at 15% -10%, var(--bg-glow-a), transparent 55%),
+    radial-gradient(ellipse 55% 40% at 95% 5%, var(--bg-glow-b), transparent 50%),
+    linear-gradient(180deg, color-mix(in srgb, var(--bg) 92%, #1a1a1a) 0%, var(--bg) 40%),
     var(--bg);
   color: var(--ink);
   -webkit-tap-highlight-color: transparent;
@@ -85,7 +95,11 @@ textarea {
 h1,
 h2,
 h3 {
+  font-family: var(--font-display);
+  font-weight: 600;
   text-wrap: balance;
+  letter-spacing: 0.02em;
+  text-transform: uppercase;
 }
 
 p {
@@ -105,7 +119,6 @@ textarea {
   font: inherit;
 }
 
-/* Prevent iOS zoom on focus */
 @media (max-width: 640px) {
   input,
   select,
@@ -117,4 +130,20 @@ textarea {
 :focus-visible {
   outline: 2px solid var(--signal);
   outline-offset: 2px;
+}
+
+/* Shared HUD / garage surfaces */
+.hud-panel {
+  border: 1px solid var(--line);
+  background: var(--surface-glass);
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
+}
+
+.hud-label {
+  font-size: 0.68rem;
+  font-weight: 700;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--hud);
 }

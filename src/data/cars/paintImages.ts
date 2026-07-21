@@ -9,8 +9,11 @@ import type { CarModel, Colour } from '../../types/catalog'
  * Example: `/cars/paint/bmw-135i-e82-n54--alpine-white.jpg`
  */
 export const paintImages: Record<string, string> = {
-  // 'bmw-135i-e82-n54:alpine-white':
-  //   '/cars/paint/bmw-135i-e82-n54--alpine-white.jpg',
+  'bmw-m2-f87:long-beach-blue':
+    '/cars/paint/bmw-m2-f87--long-beach-blue.jpg',
+  'bmw-m2-f87:alpine-white': '/cars/paint/bmw-m2-f87--alpine-white.jpg',
+  'bmw-m2-f87:mineral-grey': '/cars/paint/bmw-m2-f87--mineral-grey.jpg',
+  'bmw-m2-f87:black-sapphire': '/cars/paint/bmw-m2-f87--black-sapphire.jpg',
 }
 
 export function paintImageKey(carId: string, colourId: string): string {

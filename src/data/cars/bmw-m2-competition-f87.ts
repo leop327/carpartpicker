@@ -1,4 +1,5 @@
 import type { CarModel } from '../../types/catalog'
+import { coloursM2CompetitionF87 } from './colourPresets'
 import {
   f87Brakes,
   f87FixedSuspension,
@@ -13,7 +14,7 @@ import {
 
 /**
  * F87 M2 Competition — BMW UK figures.
- * UK brochure: no Adaptive suspension, no carbon ceramics, carbon trim standard.
+ * UK brochure paints: Alpine White, Black Sapphire, Long Beach Blue, Sunset Orange, Hockenheim Silver.
  */
 export const bmwM2CompetitionF87: CarModel = {
   id: 'bmw-m2-competition-f87',
@@ -22,14 +23,8 @@ export const bmwM2CompetitionF87: CarModel = {
   model: 'M2 Competition',
   generation: 'F87',
   label: 'M2 Competition',
-  years: [2019, 2020, 2021],
-  colours: [
-    { id: 'hockenheim-silver', name: 'Hockenheim Silver Metallic', hex: '#A8ADB4' },
-    { id: 'alpine-white', name: 'Alpine White', hex: '#F4F4F2' },
-    { id: 'black-sapphire', name: 'Black Sapphire Metallic', hex: '#0B0B0C' },
-    { id: 'long-beach-blue', name: 'Long Beach Blue Metallic', hex: '#1A4F8C' },
-    { id: 'sunset-orange', name: 'Sunset Orange Metallic', hex: '#C45A1A' },
-  ],
+  years: [2018, 2019, 2020, 2021],
+  colours: coloursM2CompetitionF87,
   basePrice: 51255,
   baseFigures: {
     hp: 410,

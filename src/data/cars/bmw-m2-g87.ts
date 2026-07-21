@@ -1,4 +1,5 @@
 import type { CarModel } from '../../types/catalog'
+import { C } from './colourPresets'
 import {
   interiorTrim,
   mDriversPackage,
@@ -8,7 +9,7 @@ import {
 
 /**
  * G87 M2 — UK figures (S58).
- * Official model is simply “M2” (no Competition badge like F87).
+ * Pre-LCI ~460 PS; MY2025 LCI 480 PS (UK press).
  */
 export const bmwM2G87: CarModel = {
   id: 'bmw-m2-g87',
@@ -19,12 +20,15 @@ export const bmwM2G87: CarModel = {
   label: 'M2',
   years: [2023, 2024, 2025, 2026],
   colours: [
-    { id: 'zane-grey', name: 'Zane Grey Metallic', hex: '#6B6E73' },
-    { id: 'toronto-red', name: 'Toronto Red Metallic', hex: '#A81C23' },
-    { id: 'portimao-blue', name: 'Portimao Blue Metallic', hex: '#1B4F8C' },
-    { id: 'alpine-white', name: 'Alpine White', hex: '#F4F4F2' },
-    { id: 'black-sapphire', name: 'Black Sapphire Metallic', hex: '#0B0B0C' },
-    { id: 'sao-paulo-yellow', name: 'Sao Paulo Yellow', hex: '#E8C41A' },
+    C.zaneGrey,
+    C.torontoRed,
+    C.portimaoBlue,
+    C.alpineWhite,
+    C.blackSapphire,
+    C.saoPauloYellow,
+    C.fireRed,
+    C.skyscraperGrey,
+    C.brooklynGrey,
   ],
   basePrice: 64890,
   euBasePrice: 64890,
@@ -38,8 +42,13 @@ export const bmwM2G87: CarModel = {
     engineCode: 'S58B30T0',
   },
   figuresSource: 'oem',
+  yearFigures: {
+    // MY2025 LCI — 480 PS / 600 Nm (auto)
+    2025: { hp: 20, torqueNm: 50, zeroToSixtySec: -0.1 },
+    2026: { hp: 20, torqueNm: 50, zeroToSixtySec: -0.1 },
+  },
   description:
-    'G87 M2 — twin-turbo S58 (UK: 460 PS / 550 Nm). 0–62 is 4.1s with 8-speed, 4.3s manual. Active M Differential standard.',
+    'G87 M2 — twin-turbo S58. Pre-LCI UK: 460 PS / 550 Nm (4.1s auto). MY2025 LCI: 480 PS / 600 Nm auto.',
   tagline: 'Compact M, modern S58.',
   image: '/cars/bmw-g87-m2.jpg',
   modTags: ['bmw', 'm2', 'g87', 's58', 'rwd', 'turbo', 'petrol'],

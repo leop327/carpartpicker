@@ -1,3 +1,12 @@
+.builds {
+  width: min(1180px, 100%);
+  margin: 0 auto;
+  padding:
+    clamp(1rem, 2.5vw, 1.75rem)
+    max(0.9rem, env(safe-area-inset-left), env(safe-area-inset-right))
+    max(2.5rem, env(safe-area-inset-bottom));
+}
+
 .builds__header {
   display: flex;
   justify-content: space-between;
@@ -7,10 +16,10 @@
 }
 
 .builds__eyebrow {
-  margin: 0 0 0.25rem;
-  font-size: 0.75rem;
+  margin: 0 0 0.35rem;
+  font-size: 0.68rem;
   font-weight: 700;
-  letter-spacing: 0.08em;
+  letter-spacing: 0.14em;
   text-transform: uppercase;
 }
 
@@ -20,14 +29,15 @@
 }
 
 .builds__eyebrow a:hover {
-  color: var(--ink);
+  color: var(--signal);
 }
 
 .builds__header h1 {
   font-family: var(--font-display);
-  font-size: clamp(1.5rem, 3vw, 1.85rem);
+  font-size: clamp(1.65rem, 3.5vw, 2.15rem);
   margin: 0;
-  letter-spacing: -0.03em;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
 }
 
 .builds__editing {
@@ -53,8 +63,6 @@
 .builds__skip {
   min-width: min(100%, 16rem);
   justify-content: center;
-  font-size: 1.05rem;
-  padding: 0.95rem 1.4rem;
 }
 
 .builds__header-actions {
@@ -68,21 +76,24 @@
   margin: 0 0 1rem;
   padding: 0.75rem 0.9rem;
   border: 1px solid var(--line);
-  background: var(--surface);
+  border-left: 3px solid var(--signal);
+  background: var(--surface-glass);
   color: var(--ink-muted);
   font-size: 0.92rem;
+  backdrop-filter: blur(10px);
 }
 
 .wizard {
   display: grid;
-  gap: 1.25rem;
+  gap: 1.15rem;
 }
 
 .wizard__title {
   font-family: var(--font-display);
   font-size: 1.35rem;
   margin: 0;
-  letter-spacing: -0.02em;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
 }
 
 .wizard__head {
@@ -94,10 +105,11 @@
 
 .wizard__count {
   margin: 0;
-  font-size: 0.82rem;
+  font-size: 0.78rem;
   font-weight: 700;
-  color: var(--ink-muted);
-  letter-spacing: 0.02em;
+  color: var(--hud);
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
 }
 
 .wizard__empty {
@@ -114,7 +126,7 @@
 .car-search__input {
   width: 100%;
   box-sizing: border-box;
-  padding: 0.75rem 0.95rem;
+  padding: 0.85rem 1rem;
   border: 1px solid var(--line);
   background: var(--surface);
   color: var(--ink);
@@ -139,8 +151,8 @@
 }
 
 .choice-grid--cars {
-  grid-template-columns: repeat(auto-fill, minmax(148px, 1fr));
-  gap: 0.55rem;
+  grid-template-columns: repeat(auto-fill, minmax(168px, 1fr));
+  gap: 0.65rem;
 }
 
 .choice-grid--years {
@@ -157,48 +169,91 @@
   cursor: pointer;
   font: inherit;
   color: inherit;
-  transition: border-color 0.15s ease, transform 0.15s ease, box-shadow 0.15s ease;
+  transition:
+    border-color 0.18s ease,
+    transform 0.18s ease,
+    box-shadow 0.18s ease,
+    background 0.18s ease;
 }
 
 .choice-card:hover {
-  border-color: color-mix(in srgb, var(--ink) 35%, var(--line));
-  transform: translateY(-1px);
-  box-shadow: 0 10px 24px var(--shadow);
+  border-color: color-mix(in srgb, var(--signal) 55%, var(--line));
+  transform: translateY(-2px);
+  box-shadow: 0 12px 32px var(--shadow);
 }
 
 .choice-card--photo {
   padding: 0;
   overflow: hidden;
+  background: var(--stage);
 }
 
 .choice-card--car {
   padding: 0;
   overflow: hidden;
   gap: 0;
+  background: var(--stage);
+  position: relative;
+}
+
+.choice-card--car::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  border: 2px solid transparent;
+  pointer-events: none;
+  transition: border-color 0.18s ease;
+}
+
+.choice-card--car:hover::after {
+  border-color: var(--signal);
 }
 
 .choice-card--car .choice-card__body {
   display: grid;
-  gap: 0.12rem;
-  padding: 0.55rem 0.65rem 0.7rem;
+  gap: 0.1rem;
+  padding: 0.65rem 0.7rem 0.75rem;
+  background: linear-gradient(
+    180deg,
+    transparent,
+    color-mix(in srgb, var(--stage) 92%, transparent)
+  );
+  position: relative;
+  margin-top: -2.5rem;
+  z-index: 1;
+  color: #f2f4f8;
 }
 
 .choice-card--car .choice-card__title {
-  font-size: 0.98rem;
-  line-height: 1.15;
+  font-size: 1rem;
+  line-height: 1.1;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  color: #fff;
 }
 
 .choice-card--car .choice-card__kicker {
-  font-size: 0.65rem;
+  font-size: 0.62rem;
+  color: var(--hud);
 }
 
 .choice-card--car .choice-card__meta {
   font-size: 0.72rem;
   font-weight: 600;
+  color: color-mix(in srgb, #f2f4f8 70%, transparent);
 }
 
 .choice-card--car .choice-card__photo {
-  height: 88px;
+  height: 110px;
+  object-fit: cover;
+  object-position: center 40%;
+  filter: saturate(1.08) contrast(1.04);
+  transition: transform 0.45s ease, filter 0.3s ease;
+}
+
+.choice-card--car:hover .choice-card__photo {
+  transform: scale(1.04);
+  filter: saturate(1.15) contrast(1.06);
 }
 
 .choice-card--photo .choice-card__kicker,
@@ -232,9 +287,9 @@
 }
 
 .choice-card__kicker {
-  font-size: 0.72rem;
+  font-size: 0.68rem;
   font-weight: 700;
-  letter-spacing: 0.07em;
+  letter-spacing: 0.12em;
   text-transform: uppercase;
   color: var(--signal);
 }
@@ -242,8 +297,9 @@
 .choice-card__title {
   font-family: var(--font-display);
   font-size: 1.2rem;
-  font-weight: 700;
-  letter-spacing: -0.02em;
+  font-weight: 600;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
 }
 
 .choice-card__meta {
@@ -261,7 +317,7 @@
 
 .builds__config-grid {
   display: grid;
-  grid-template-columns: minmax(0, 1.1fr) minmax(0, 1fr);
+  grid-template-columns: minmax(0, 1.2fr) minmax(0, 1fr);
   gap: 1.25rem;
   align-items: start;
 }
@@ -294,18 +350,19 @@
   display: flex;
   align-items: center;
   gap: 1rem;
-  padding: 0.5rem;
-  margin-bottom: 1.5rem;
+  padding: 0.45rem;
+  margin-bottom: 1.35rem;
   border: 1px solid var(--line);
-  background: var(--surface);
+  background: var(--stage);
   cursor: pointer;
   text-align: left;
   font: inherit;
-  color: inherit;
+  color: #f2f4f8;
+  transition: border-color 0.18s ease;
 }
 
 .builds__compact:hover {
-  border-color: var(--accent);
+  border-color: var(--signal);
 }
 
 .builds__compact-meta {
@@ -315,19 +372,22 @@
 
 .builds__compact-meta strong {
   font-family: var(--font-display);
-  font-size: 1.05rem;
-  letter-spacing: -0.02em;
+  font-size: 1.1rem;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
 }
 
 .builds__compact-hint {
-  font-size: 0.8rem;
-  font-weight: 600;
+  font-size: 0.72rem;
+  font-weight: 700;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
   color: var(--signal);
 }
 
 .builds__mods-layout {
   display: grid;
-  grid-template-columns: minmax(0, 1.35fr) minmax(280px, 0.8fr);
+  grid-template-columns: minmax(0, 1.35fr) minmax(280px, 0.85fr);
   gap: 1.25rem;
   align-items: start;
 }
@@ -354,7 +414,7 @@
   }
 
   .builds__header h1 {
-    font-size: 1.4rem;
+    font-size: 1.45rem;
   }
 
   .choice-grid {
@@ -380,15 +440,15 @@
   }
 
   .choice-card--car .choice-card__photo {
-    height: 78px;
+    height: 92px;
   }
 
   .choice-card__title {
-    font-size: 1.08rem;
+    font-size: 1.05rem;
   }
 
   .choice-card--car .choice-card__title {
-    font-size: 0.92rem;
+    font-size: 0.88rem;
   }
 
   .builds__options-top {
@@ -412,7 +472,7 @@
 
   .builds__continue .btn {
     width: 100%;
-    box-shadow: 0 8px 24px color-mix(in srgb, #000 18%, transparent);
+    box-shadow: 0 8px 28px color-mix(in srgb, var(--signal) 28%, transparent);
   }
 
   .builds__compact {
@@ -422,24 +482,12 @@
     margin-bottom: 1rem;
   }
 
-  .builds__compact-meta {
-    min-width: 0;
-  }
-
-  .builds__compact-meta strong {
-    font-size: 0.95rem;
-  }
-
-  .builds__compact-meta span {
-    font-size: 0.85rem;
-  }
-
   .wizard {
     gap: 1rem;
   }
 
   .wizard__title {
-    font-size: 1.2rem;
+    font-size: 1.15rem;
   }
 
   .stats-sidebar__sticky {

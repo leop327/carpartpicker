@@ -1,6 +1,7 @@
 import type { Mod, ModCategory, StagePreset } from '../../types/catalog'
 import { extraMods, extraPresets } from './extraMods'
 import { moreMods, morePresets } from './extraModsMore'
+import { waveMods, wavePresets } from './extraModsWave'
 export { resolveProductUrl } from './productUrls'
 
 export const modCategories: ModCategory[] = [
@@ -1585,6 +1586,7 @@ export const mods: Mod[] = [
 
   ...extraMods,
   ...moreMods,
+  ...waveMods,
 ]
 
 /**
@@ -1675,6 +1677,7 @@ export const stagePresets: StagePreset[] = [
 
   ...extraPresets,
   ...morePresets,
+  ...wavePresets,
 ]
 
 export function getModById(id: string): Mod | undefined {

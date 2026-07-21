@@ -1,4 +1,5 @@
 import type { CarModel } from '../../types/catalog'
+import { coloursF8xM } from './colourPresets'
 import {
   f8xAdaptiveStandard,
   f8xBrakes,
@@ -24,14 +25,7 @@ export const bmwM4F82: CarModel = {
   generation: 'F82',
   label: 'M4',
   years: [2014, 2015, 2016, 2017, 2018, 2019, 2020],
-  colours: [
-    { id: 'austin-yellow', name: 'Austin Yellow Metallic', hex: '#C5A000' },
-    { id: 'sakhir-orange', name: 'Sakhir Orange Metallic', hex: '#C45A1A' },
-    { id: 'yas-marina-blue', name: 'Yas Marina Blue Metallic', hex: '#1B4F72' },
-    { id: 'alpine-white', name: 'Alpine White', hex: '#F4F4F2' },
-    { id: 'black-sapphire', name: 'Black Sapphire Metallic', hex: '#0B0B0C' },
-    { id: 'mineral-grey', name: 'Mineral Grey Metallic', hex: '#6B6E73' },
-  ],
+  colours: coloursF8xM,
   basePrice: 57430,
   euBasePrice: 57430,
   baseFigures: {

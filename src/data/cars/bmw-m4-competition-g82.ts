@@ -1,4 +1,5 @@
 import type { CarModel } from '../../types/catalog'
+import { coloursG8xCompetition } from './colourPresets'
 import {
   interiorTrim,
   mDriversPackage,
@@ -14,15 +15,8 @@ export const bmwM4CompetitionG82: CarModel = {
   model: 'M4 Competition',
   generation: 'G82',
   label: 'M4 Competition',
-  years: [2021, 2022, 2023, 2024, 2025],
-  colours: [
-    { id: 'isle-of-man-green', name: 'Isle of Man Green Metallic', hex: '#1A4A3A' },
-    { id: 'sao-paulo-yellow', name: 'Sao Paulo Yellow', hex: '#E8C41A' },
-    { id: 'toronto-red', name: 'Toronto Red Metallic', hex: '#A81C23' },
-    { id: 'brooklyn-grey', name: 'Brooklyn Grey Metallic', hex: '#6B6E73' },
-    { id: 'alpine-white', name: 'Alpine White', hex: '#F4F4F2' },
-    { id: 'black-sapphire', name: 'Black Sapphire Metallic', hex: '#0B0B0C' },
-  ],
+  years: [2021, 2022, 2023, 2024, 2025, 2026],
+  colours: coloursG8xCompetition,
   basePrice: 80905,
   euBasePrice: 80905,
   baseFigures: {
@@ -35,8 +29,13 @@ export const bmwM4CompetitionG82: CarModel = {
     engineCode: 'S58B30T0',
   },
   figuresSource: 'oem',
+  yearFigures: {
+    2024: { hp: 20 },
+    2025: { hp: 20 },
+    2026: { hp: 20 },
+  },
   description:
-    'G82 M4 Competition — twin-turbo S58 (UK: 510 PS / 650 Nm). Coupe counterpart to G80 Competition; xDrive option 3.5s.',
+    'G82 M4 Competition — twin-turbo S58 (UK launch: 510 PS / 650 Nm; later 530 PS). Coupe counterpart to G80 Competition; xDrive ~3.5s.',
   tagline: 'Competition coupe, S58 heart.',
   image: '/cars/bmw-g82-m4.jpg',
   modTags: ['bmw', 'm4', 'g82', 's58', 'rwd', 'turbo', 'petrol'],

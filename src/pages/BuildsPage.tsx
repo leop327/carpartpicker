@@ -314,9 +314,9 @@ export function BuildsPage() {
       <header className="builds__header">
         <div>
           <p className="builds__eyebrow">
-            <Link to="/">Home</Link>
+            <Link to="/">Garage</Link>
             {' · '}
-            <Link to="/saved">Saved builds</Link>
+            <Link to="/saved">My builds</Link>
           </p>
           <h1>
             {viewOnly

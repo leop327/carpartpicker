@@ -1,19 +1,25 @@
-/* Global controls */
+/* Global controls — Forza garage */
 
 .btn {
   display: inline-flex;
   align-items: center;
   justify-content: center;
   gap: 0.4rem;
-  padding: 0.8rem 1.35rem;
+  padding: 0.85rem 1.5rem;
   border: 1px solid transparent;
   font: inherit;
-  font-weight: 700;
-  letter-spacing: -0.01em;
+  font-family: var(--font-display);
+  font-weight: 600;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
   text-decoration: none;
   cursor: pointer;
-  transition: transform 0.15s ease, background 0.15s ease, color 0.15s ease,
-    border-color 0.15s ease;
+  transition:
+    transform 0.18s ease,
+    background 0.18s ease,
+    color 0.18s ease,
+    border-color 0.18s ease,
+    box-shadow 0.18s ease;
 }
 
 .btn:hover {
@@ -21,31 +27,37 @@
 }
 
 .btn--primary {
-  background: var(--accent);
-  color: var(--accent-ink);
+  background: var(--signal);
+  color: #fff;
+  border-color: var(--signal);
+  box-shadow: 0 0 0 0 color-mix(in srgb, var(--signal) 0%, transparent);
 }
 
 .btn--primary:hover {
   filter: brightness(1.08);
+  box-shadow: 0 8px 28px color-mix(in srgb, var(--signal) 35%, transparent);
 }
 
 .btn--ghost {
-  background: var(--surface);
+  background: transparent;
   border-color: var(--line);
   color: var(--ink);
 }
 
 .btn--ghost:hover {
-  border-color: color-mix(in srgb, var(--ink) 28%, var(--line));
+  border-color: var(--signal);
+  color: var(--signal);
+  background: color-mix(in srgb, var(--signal) 8%, transparent);
 }
 
 .btn--small {
-  padding: 0.45rem 0.75rem;
-  font-size: 0.82rem;
+  padding: 0.5rem 0.85rem;
+  font-size: 0.78rem;
+  letter-spacing: 0.1em;
 }
 
 .btn--lg {
-  padding: 1rem 1.7rem;
+  padding: 1.05rem 1.9rem;
   font-size: 1.05rem;
 }
 
@@ -62,6 +74,6 @@
 
   .btn--lg {
     width: 100%;
-    min-height: 3rem;
+    min-height: 3.1rem;
   }
 }

@@ -2,6 +2,16 @@
 
 Car photos are from [Wikimedia Commons](https://commons.wikimedia.org/). Licenses require attribution where noted (CC BY-SA).
 
+## Paint photos (`paint/`)
+
+### F87 M2 colour set
+- `bmw-m2-f87--long-beach-blue.jpg`
+- `bmw-m2-f87--alpine-white.jpg`
+- `bmw-m2-f87--mineral-grey.jpg`
+- `bmw-m2-f87--black-sapphire.jpg`
+- Source: project studio assets (user-supplied)
+- Notes: used for colour preview only; Antigua Blue still falls back to tinted base photo
+
 ## `bmw-135i-e82.jpg`
 - Source: [File:BMW 135i Coupe (E82) front.JPG](https://commons.wikimedia.org/wiki/File%3ABMW_135i_Coupe_%28E82%29_front.JPG)
 - License: [CC0](http://creativecommons.org/publicdomain/zero/1.0/deed.en)
