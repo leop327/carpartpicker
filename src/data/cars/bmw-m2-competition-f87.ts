@@ -18,6 +18,7 @@ import {
 export const bmwM2CompetitionF87: CarModel = {
   id: 'bmw-m2-competition-f87',
   make: 'BMW',
+  series: '2 Series',
   model: 'M2 Competition',
   generation: 'F87',
   label: 'M2 Competition',

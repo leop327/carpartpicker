@@ -2,7 +2,8 @@ import './StepIndicator.css'
 import type { BuildStage } from '../../lib/buildState'
 
 const STEPS: { id: BuildStage; label: string }[] = [
-  { id: 'brand', label: 'Brand' },
+  { id: 'series', label: 'Series' },
+  { id: 'chassis', label: 'Chassis' },
   { id: 'model', label: 'Model' },
   { id: 'year', label: 'Year' },
   { id: 'colour', label: 'Colour' },

@@ -97,19 +97,11 @@
 }
 
 .figures__delta--up {
-  color: #1f7a45;
+  color: var(--ok);
 }
 
 .figures__delta--down {
-  color: #b42318;
-}
-
-:root[data-theme='dark'] .figures__delta--up {
-  color: #4ade80;
-}
-
-:root[data-theme='dark'] .figures__delta--down {
-  color: #f87171;
+  color: var(--danger);
 }
 
 @media (max-width: 520px) {

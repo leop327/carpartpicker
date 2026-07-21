@@ -175,10 +175,12 @@ export function parkingAndCameras(): SpecOptionGroup {
   }
 }
 
-export function interiorTrim(options: {
-  carbonStandard?: boolean
-  merinoStandard?: boolean
-}): SpecOptionGroup {
+export function interiorTrim(
+  options: {
+    carbonStandard?: boolean
+    merinoStandard?: boolean
+  } = {},
+): SpecOptionGroup {
   if (options.carbonStandard) {
     return {
       id: 'interior-trim',

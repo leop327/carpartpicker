@@ -1,4 +1,5 @@
 import { catalog } from '../data/catalog'
+import { modFitsCar } from '../data/mods'
 
 export interface BuildTip {
   id: string
@@ -19,12 +20,7 @@ function firstCompatible(
     if (have.has(id)) continue
     const mod = catalog.getModById(id)
     if (!mod) continue
-    if (
-      mod.compatibleTags.includes('*') ||
-      mod.compatibleTags.some((t) => carTags.includes(t))
-    ) {
-      return id
-    }
+    if (modFitsCar(mod, carTags)) return id
   }
   return undefined
 }
@@ -165,6 +161,14 @@ export function resolveBuildTips(
       message: 'Fueling is covered — good call for this map.',
     })
   }
+  if (carTags.includes('diesel') && mods.some((m) => m!.category === 'ecu')) {
+    tips.push({
+      id: 'diesel-tune',
+      tone: 'info',
+      message:
+        'Diesel tunes are thinner in the catalog — verify map fitment for your ECU.',
+    })
+  }
   if (ids.size === 0) {
     tips.push({
       id: 'start',
@@ -173,5 +177,5 @@ export function resolveBuildTips(
     })
   }
 
-  return tips.slice(0, 3)
+  return tips.slice(0, 4)
 }

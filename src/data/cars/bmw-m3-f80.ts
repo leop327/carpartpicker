@@ -19,6 +19,7 @@ import {
 export const bmwM3F80: CarModel = {
   id: 'bmw-m3-f80',
   make: 'BMW',
+  series: '3 Series',
   model: 'M3',
   generation: 'F80',
   label: 'M3',

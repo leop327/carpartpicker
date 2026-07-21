@@ -11,6 +11,7 @@ import type { CarModel } from '../../types/catalog'
 export const exampleCar: CarModel = {
   id: 'bmw-example',
   make: 'BMW',
+  series: '3 Series',
   model: 'Example',
   generation: 'Exx',
   label: 'Example',

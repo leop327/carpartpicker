@@ -3,7 +3,8 @@ import { getDefaultSpecChoice } from './build'
 import type { BuildSelection } from '../types/catalog'
 
 export type BuildStage =
-  | 'brand'
+  | 'series'
+  | 'chassis'
   | 'model'
   | 'year'
   | 'colour'
@@ -23,7 +24,8 @@ export const BUILD_URL_PARAM = 'b'
 export const VIEW_URL_PARAM = 'view'
 
 const STAGES: BuildStage[] = [
-  'brand',
+  'series',
+  'chassis',
   'model',
   'year',
   'colour',
@@ -32,9 +34,35 @@ const STAGES: BuildStage[] = [
   'checkout',
 ]
 
+/** Older drafts used `brand` instead of `series`. */
+function normalizeStage(stage: string | undefined): BuildStage {
+  if (stage === 'brand') return 'series'
+  if (stage && STAGES.includes(stage as BuildStage)) return stage as BuildStage
+  return 'series'
+}
+
+function hydrateSeriesChassis(selection: BuildSelection): BuildSelection {
+  const next = {
+    ...selection,
+    series: selection.series ?? null,
+    chassis: selection.chassis ?? null,
+  }
+  if (next.carId) {
+    const car = catalog.getCarById(next.carId)
+    if (car) {
+      next.make = car.make
+      next.series = car.series
+      next.chassis = car.generation
+    }
+  }
+  return next
+}
+
 export function emptySelection(): BuildSelection {
   return {
     make: null,
+    series: null,
+    chassis: null,
     carId: null,
     year: null,
     colourId: null,
@@ -63,32 +91,61 @@ export function sanitizeBuild(
   stage: BuildStage,
   selection: BuildSelection,
 ): PersistedBuild {
-  let next = { ...selection, specChoices: { ...selection.specChoices } }
-  let nextStage: BuildStage = STAGES.includes(stage) ? stage : 'brand'
+  let next = hydrateSeriesChassis({
+    ...selection,
+    specChoices: { ...selection.specChoices },
+    modIds: [...(selection.modIds ?? [])],
+  })
+  let nextStage: BuildStage = normalizeStage(stage)
 
-  if (next.make && !catalog.getMakes().includes(next.make)) {
+  if (next.series && !catalog.getSeriesList().includes(next.series)) {
     next = emptySelection()
-    nextStage = 'brand'
+    nextStage = 'series'
+  }
+
+  if (
+    next.series &&
+    next.chassis &&
+    !catalog.getChassisBySeries(next.series).includes(next.chassis)
+  ) {
+    next = {
+      ...emptySelection(),
+      make: next.make,
+      series: next.series,
+    }
+    nextStage = 'chassis'
   }
 
   if (next.carId) {
     const car = catalog.getCarById(next.carId)
-    if (!car || (next.make && car.make !== next.make)) {
+    if (
+      !car ||
+      (next.series && car.series !== next.series) ||
+      (next.chassis && car.generation !== next.chassis)
+    ) {
       next = {
         ...emptySelection(),
         make: next.make,
+        series: next.series,
+        chassis: next.chassis,
       }
-      nextStage = next.make ? 'model' : 'brand'
+      nextStage = next.chassis ? 'model' : next.series ? 'chassis' : 'series'
     } else {
       next.make = car.make
+      next.series = car.series
+      next.chassis = car.generation
       if (next.year && !car.years.includes(next.year)) {
         next.year = null
         next.colourId = null
-        if (['colour', 'options', 'mods'].includes(nextStage)) nextStage = 'year'
+        if (['colour', 'options', 'mods', 'checkout'].includes(nextStage)) {
+          nextStage = 'year'
+        }
       }
       if (next.colourId && !car.colours.some((c) => c.id === next.colourId)) {
         next.colourId = null
-        if (['options', 'mods'].includes(nextStage)) nextStage = 'colour'
+        if (['options', 'mods', 'checkout'].includes(nextStage)) {
+          nextStage = 'colour'
+        }
       }
 
       const specChoices: Record<string, string> = {}
@@ -106,12 +163,26 @@ export function sanitizeBuild(
       )
       next.modIds = next.modIds.filter((id) => available.has(id))
     }
-  } else if (['year', 'colour', 'options', 'mods', 'checkout'].includes(nextStage)) {
-    nextStage = next.make ? 'model' : 'brand'
+  } else if (
+    ['year', 'colour', 'options', 'mods', 'checkout'].includes(nextStage)
+  ) {
+    nextStage = next.chassis ? 'model' : next.series ? 'chassis' : 'series'
   }
 
-  if (!next.make && nextStage !== 'brand') nextStage = 'brand'
-  if (next.make && !next.carId && !['brand', 'model'].includes(nextStage)) {
+  if (!next.series && nextStage !== 'series') nextStage = 'series'
+  if (
+    next.series &&
+    !next.chassis &&
+    !['series', 'chassis'].includes(nextStage)
+  ) {
+    nextStage = 'chassis'
+  }
+  if (
+    next.series &&
+    next.chassis &&
+    !next.carId &&
+    !['series', 'chassis', 'model'].includes(nextStage)
+  ) {
     nextStage = 'model'
   }
   if (
@@ -139,10 +210,11 @@ export function encodeBuildParam(build: PersistedBuild): string {
 
 export function decodeBuildParam(encoded: string): PersistedBuild | null {
   try {
-    const parsed = JSON.parse(fromBase64Url(encoded)) as PersistedBuild
+    const parsed = JSON.parse(fromBase64Url(encoded)) as PersistedBuild & {
+      stage?: string
+    }
     if (parsed?.v !== 2 || !parsed.selection) return null
-    const stage = STAGES.includes(parsed.stage) ? parsed.stage : 'brand'
-    return sanitizeBuild(stage, parsed.selection)
+    return sanitizeBuild(normalizeStage(parsed.stage), parsed.selection)
   } catch {
     return null
   }
@@ -152,10 +224,9 @@ export function readBuildFromStorage(): PersistedBuild | null {
   try {
     const raw = localStorage.getItem(STORAGE_KEY)
     if (!raw) return null
-    const parsed = JSON.parse(raw) as PersistedBuild
+    const parsed = JSON.parse(raw) as PersistedBuild & { stage?: string }
     if (parsed?.v !== 2 || !parsed.selection) return null
-    const stage = STAGES.includes(parsed.stage) ? parsed.stage : 'brand'
-    return sanitizeBuild(stage, parsed.selection)
+    return sanitizeBuild(normalizeStage(parsed.stage), parsed.selection)
   } catch {
     return null
   }
@@ -219,9 +290,9 @@ export function syncBuildToUrl(
 ): void {
   const url = new URL(window.location.href)
   if (
-    !build.selection.make &&
+    !build.selection.series &&
     !build.selection.carId &&
-    build.stage === 'brand'
+    build.stage === 'series'
   ) {
     url.searchParams.delete(BUILD_URL_PARAM)
     url.searchParams.delete(VIEW_URL_PARAM)

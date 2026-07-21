@@ -54,6 +54,10 @@ export const brandStoreUrls: Record<string, string> = {
   'Burger Motorsports': 'https://burgertuning.com/',
   'CBLP Styling': 'https://cblpstyling.com/collections/bmw',
   BOTRAAK: 'https://www.harrismotorsport.co.uk/wheel-spacers',
+  RaceChip: 'https://www.racechip.co.uk/',
+  'Active Autowerke': 'https://www.activeautowerke.com/',
+  'Indie Garage': 'https://indiegarage.co.uk/',
+  Gintani: 'https://www.gintani.com/',
 }
 
 /** Specific product pages for checkout Buy links. */

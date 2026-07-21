@@ -121,7 +121,7 @@ export function SavedBuildsPage() {
     clearBuildStorage()
     writeBuildToStorage({
       v: 2,
-      stage: 'brand',
+      stage: 'series',
       selection: emptySelection(),
     })
     navigate('/builds?new=1')

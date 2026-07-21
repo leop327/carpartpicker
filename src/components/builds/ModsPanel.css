@@ -106,8 +106,8 @@
 }
 
 .mod-row__badge--oem {
-  border-color: color-mix(in srgb, #1f7a45 45%, var(--line));
-  color: #1f7a45;
+  border-color: color-mix(in srgb, var(--ok) 45%, var(--line));
+  color: var(--ok);
 }
 
 .mod-row__claim {
@@ -207,6 +207,19 @@
 .mod-row--active {
   border-color: var(--ink);
   background: color-mix(in srgb, var(--ink) 4%, var(--surface));
+}
+
+.mod-row--warn {
+  border-color: color-mix(in srgb, var(--signal) 45%, var(--line));
+}
+
+.mod-row__gaps {
+  display: block;
+  margin-top: 0.25rem;
+  font-size: 0.72rem;
+  font-weight: 700;
+  color: var(--signal);
+  line-height: 1.35;
 }
 
 .mod-row__main {

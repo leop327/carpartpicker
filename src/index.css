@@ -8,6 +8,9 @@
   --accent-ink: #ffffff;
   --accent-soft: #e8eef3;
   --signal: #c2410c;
+  --ok: #1f7a45;
+  --danger: #b42318;
+  --shadow: rgb(17 20 26 / 0.08);
   --bg-glow-a: #e4ebf0;
   --bg-glow-b: #efe8e2;
   --font-display: 'Space Grotesk', 'Avenir Next', 'Segoe UI', sans-serif;
@@ -25,17 +28,20 @@
 }
 
 :root[data-theme='dark'] {
-  --bg: #0c0e12;
-  --surface: #161a22;
-  --ink: #eef1f6;
-  --ink-muted: #9aa3b2;
-  --line: #2a313d;
-  --accent: #eef1f6;
-  --accent-ink: #0c0e12;
-  --accent-soft: #1e2633;
-  --signal: #ea580c;
-  --bg-glow-a: #141a24;
-  --bg-glow-b: #1a1512;
+  --bg: #0b0d11;
+  --surface: #1c2330;
+  --ink: #f3f6fb;
+  --ink-muted: #c2c9d6;
+  --line: #445064;
+  --accent: #f3f6fb;
+  --accent-ink: #0b0d11;
+  --accent-soft: #2a3344;
+  --signal: #fb923c;
+  --ok: #4ade80;
+  --danger: #f87171;
+  --shadow: rgb(0 0 0 / 0.5);
+  --bg-glow-a: #151c28;
+  --bg-glow-b: #1c1612;
   color-scheme: dark;
 }
 
@@ -43,6 +49,11 @@
 *::before,
 *::after {
   box-sizing: border-box;
+}
+
+html {
+  background: var(--bg);
+  color-scheme: inherit;
 }
 
 html,
@@ -61,6 +72,14 @@ body {
     var(--bg);
   color: var(--ink);
   -webkit-tap-highlight-color: transparent;
+}
+
+input,
+select,
+textarea {
+  color: var(--ink);
+  background: var(--surface);
+  border-color: var(--line);
 }
 
 h1,

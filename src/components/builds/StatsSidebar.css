@@ -196,7 +196,7 @@
 }
 
 .build-tips__item--good {
-  border-left-color: #1f7a45;
+  border-left-color: var(--ok);
 }
 
 .build-tips__item--info {

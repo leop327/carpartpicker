@@ -14,8 +14,9 @@ import {
 export const bmwM140iF20: CarModel = {
   id: 'bmw-m140i-f20',
   make: 'BMW',
+  series: '1 Series',
   model: 'M140i',
-  generation: 'F20',
+  generation: 'F20/F21',
   label: 'M140i',
   years: [2016, 2017, 2018, 2019],
   colours: [

@@ -18,6 +18,7 @@ import {
 export const bmwM2F87: CarModel = {
   id: 'bmw-m2-f87',
   make: 'BMW',
+  series: '2 Series',
   model: 'M2',
   generation: 'F87',
   label: 'M2',
@@ -27,7 +28,7 @@ export const bmwM2F87: CarModel = {
     { id: 'alpine-white', name: 'Alpine White', hex: '#F4F4F2' },
     { id: 'black-sapphire', name: 'Black Sapphire Metallic', hex: '#0B0B0C' },
     { id: 'mineral-grey', name: 'Mineral Grey Metallic', hex: '#6B6E73' },
-    { id: 'antarctica-blue', name: 'Antigua Blue Metallic', hex: '#2C5278' },
+    { id: 'antigua-blue', name: 'Antigua Blue Metallic', hex: '#2C5278' },
   ],
   basePrice: 44525,
   baseFigures: {

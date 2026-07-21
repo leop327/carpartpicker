@@ -54,7 +54,7 @@
   height: 160px;
   object-fit: cover;
   display: block;
-  background: #111;
+  background: var(--accent-soft);
 }
 
 .compare__meta {

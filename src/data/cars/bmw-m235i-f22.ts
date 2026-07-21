@@ -15,6 +15,7 @@ import {
 export const bmwM235iF22: CarModel = {
   id: 'bmw-m235i-f22',
   make: 'BMW',
+  series: '2 Series',
   model: 'M235i',
   generation: 'F22',
   label: 'M235i',

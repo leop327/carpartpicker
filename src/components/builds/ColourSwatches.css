@@ -39,7 +39,7 @@
   transform: translateX(-50%) translateY(4px);
   padding: 0.35rem 0.55rem;
   background: var(--ink);
-  color: #f8fafc;
+  color: var(--bg);
   font-size: 0.75rem;
   font-weight: 600;
   letter-spacing: 0.01em;

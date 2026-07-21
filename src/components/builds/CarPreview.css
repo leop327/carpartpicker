@@ -43,58 +43,12 @@
 
 .car-preview--flash .car-preview__photo {
   transform: scale(1.03);
-  filter: saturate(1.25) contrast(1.08)
+  filter: saturate(1.15) contrast(1.06)
     drop-shadow(0 0 18px color-mix(in srgb, var(--paint) 45%, transparent));
 }
 
 .car-preview--compact .car-preview__photo {
   min-height: 72px;
-}
-
-.car-preview__grade {
-  position: absolute;
-  inset: 0;
-  background: color-mix(in srgb, var(--paint) 28%, transparent);
-  mix-blend-mode: color;
-  opacity: 0.35;
-  pointer-events: none;
-  transition: opacity 0.4s ease, background 0.4s ease;
-}
-
-.car-preview--flash .car-preview__grade {
-  opacity: 0.55;
-}
-
-.car-preview__wash {
-  position: absolute;
-  inset: 0;
-  background:
-    linear-gradient(
-      180deg,
-      color-mix(in srgb, var(--paint) 22%, transparent),
-      transparent 42%,
-      color-mix(in srgb, var(--paint) 28%, transparent)
-    );
-  mix-blend-mode: soft-light;
-  pointer-events: none;
-  transition: opacity 0.35s ease;
-}
-
-.car-preview--flash .car-preview__wash {
-  opacity: 1;
-  animation: paint-bloom 0.55s ease;
-}
-
-@keyframes paint-bloom {
-  0% {
-    opacity: 0.4;
-  }
-  40% {
-    opacity: 1;
-  }
-  100% {
-    opacity: 1;
-  }
 }
 
 .car-preview__paint {
@@ -149,6 +103,44 @@
   letter-spacing: 0.06em;
   text-transform: uppercase;
   color: color-mix(in srgb, #f3efe8 65%, transparent);
+}
+
+.car-preview__hint {
+  font-size: 0.72rem;
+  font-weight: 600;
+  color: color-mix(in srgb, #f3efe8 55%, transparent);
+}
+
+.car-preview--loading .car-preview__photo {
+  filter: saturate(0.9) contrast(1.02) brightness(0.92);
+}
+
+.car-preview--loading .car-preview__stage::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(
+    110deg,
+    transparent 30%,
+    color-mix(in srgb, var(--paint) 18%, transparent) 50%,
+    transparent 70%
+  );
+  animation: paint-shimmer 1.4s ease-in-out infinite;
+  pointer-events: none;
+}
+
+@keyframes paint-shimmer {
+  0% {
+    transform: translateX(-30%);
+    opacity: 0.35;
+  }
+  50% {
+    opacity: 0.7;
+  }
+  100% {
+    transform: translateX(30%);
+    opacity: 0.35;
+  }
 }
 
 @media (max-width: 640px) {

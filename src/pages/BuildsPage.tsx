@@ -36,7 +36,7 @@ function bootState(
   savedId: string | null,
 ): PersistedBuild {
   if (isNew) {
-    return { v: 2, stage: 'brand', selection: emptySelection() }
+    return { v: 2, stage: 'series', selection: emptySelection() }
   }
   if (savedId) {
     const saved = getSavedBuild(savedId)
@@ -45,7 +45,7 @@ function bootState(
   return (
     hydrateBuildFromLocation(search) ?? {
       v: 2,
-      stage: 'brand',
+      stage: 'series',
       selection: emptySelection(),
     }
   )
@@ -83,6 +83,7 @@ export function BuildsPage() {
   )
   const [saveNote, setSaveNote] = useState<string | null>(null)
   const [celebration, setCelebration] = useState<string | null>(null)
+  const [carSearch, setCarSearch] = useState('')
 
   useEffect(() => {
     if (viewOnly) return
@@ -120,8 +121,9 @@ export function BuildsPage() {
   const sourceNote = car ? figuresSourceLabel(car.figuresSource) : undefined
 
   const unlocked: BuildStage[] = useMemo(() => {
-    const list: BuildStage[] = ['brand']
-    if (selection.make) list.push('model')
+    const list: BuildStage[] = ['series']
+    if (selection.series) list.push('chassis')
+    if (selection.series && selection.chassis) list.push('model')
     if (selection.carId) list.push('year')
     if (selection.carId && selection.year != null) list.push('colour')
     if (selection.carId && selection.year != null && selection.colourId) {
@@ -135,12 +137,56 @@ export function BuildsPage() {
     setSelection((prev) => ({ ...prev, ...patch }))
   }
 
-  function pickBrand(make: string) {
+  function pickSeries(series: string) {
     if (viewOnly) return
+    setCarSearch('')
+    const sample = catalog.getCarsBySeries(series)[0]
+    const chassisList = catalog.getChassisBySeries(series)
     setSelection({
       ...emptySelection(),
-      make,
+      make: sample?.make ?? 'BMW',
+      series,
     })
+    if (chassisList.length === 1) {
+      setSelection({
+        ...emptySelection(),
+        make: sample?.make ?? 'BMW',
+        series,
+        chassis: chassisList[0],
+      })
+      setStage('model')
+      return
+    }
+    setStage('chassis')
+  }
+
+  function pickChassis(chassis: string) {
+    if (viewOnly || !selection.series) return
+    setCarSearch('')
+    const variants = catalog.getCarsBySeriesAndChassis(
+      selection.series,
+      chassis,
+    )
+    const base = {
+      ...emptySelection(),
+      make: selection.make,
+      series: selection.series,
+      chassis,
+    }
+    if (variants.length === 1) {
+      const only = variants[0]
+      setSelection({
+        ...base,
+        make: only.make,
+        series: only.series,
+        chassis: only.generation,
+        carId: only.id,
+        specChoices: initSpecChoicesForCar(only.id),
+      })
+      setStage('year')
+      return
+    }
+    setSelection(base)
     setStage('model')
   }
 
@@ -148,8 +194,11 @@ export function BuildsPage() {
     if (viewOnly) return
     const next = catalog.getCarById(carId)
     if (!next) return
+    setCarSearch('')
     setSelection({
       make: next.make,
+      series: next.series,
+      chassis: next.generation,
       carId,
       year: null,
       colourId: null,
@@ -161,13 +210,18 @@ export function BuildsPage() {
 
   function pickYear(year: number) {
     if (viewOnly) return
-    patchSelection({ year, colourId: null })
+    const firstColour = car?.colours[0]?.id ?? null
+    patchSelection({ year, colourId: firstColour })
     setStage('colour')
   }
 
   function pickColour(colourId: string) {
     if (viewOnly) return
     patchSelection({ colourId })
+  }
+
+  function confirmColour() {
+    if (viewOnly || !selection.colourId) return
     setStage('options')
   }
 
@@ -208,7 +262,7 @@ export function BuildsPage() {
     if (viewOnly) return
     requireAccount(() => {
       if (!selection.carId || selection.year == null || !selection.colourId) {
-        setSaveNote('Finish brand, model, year, and colour before saving.')
+        setSaveNote('Finish series, model, year, and colour before saving.')
         window.setTimeout(() => setSaveNote(null), 2000)
         return
       }
@@ -232,7 +286,28 @@ export function BuildsPage() {
     setStage('mods')
   }
 
-  const models = selection.make ? catalog.getCarsByMake(selection.make) : []
+  const variants =
+    selection.series && selection.chassis
+      ? catalog.getCarsBySeriesAndChassis(selection.series, selection.chassis)
+      : []
+  const modelQuery = carSearch.trim().toLowerCase()
+  const filteredVariants = modelQuery
+    ? variants.filter((item) => {
+        const haystack = [
+          item.model,
+          item.label,
+          item.baseFigures.engineCode,
+          item.baseFigures.drivetrain,
+          item.tagline ?? '',
+          String(item.baseFigures.hp),
+          item.modTags.includes('diesel') ? 'diesel' : 'petrol',
+          ...item.modTags,
+        ]
+          .join(' ')
+          .toLowerCase()
+        return haystack.includes(modelQuery)
+      })
+    : variants
 
   return (
     <div className="builds">
@@ -279,60 +354,136 @@ export function BuildsPage() {
         />
       )}
 
-      {stage === 'brand' && (
-        <section className="wizard" aria-labelledby="brand-title">
-          <h2 id="brand-title" className="wizard__title">
-            Choose a brand
+      {stage === 'series' && (
+        <section className="wizard" aria-labelledby="series-title">
+          <h2 id="series-title" className="wizard__title">
+            Choose a series
           </h2>
-          <div className="choice-grid">
-            {catalog.getMakes().map((make) => (
-              <button
-                key={make}
-                type="button"
-                className="choice-card"
-                onClick={() => pickBrand(make)}
-              >
-                <span className="choice-card__title">{make}</span>
-                <span className="choice-card__meta">
-                  {catalog.getCarsByMake(make).length} models
-                </span>
-              </button>
-            ))}
+          <div className="choice-grid choice-grid--cars">
+            {catalog.getSeriesList().map((series) => {
+              const meta = catalog.seriesMeta(series)
+              return (
+                <button
+                  key={series}
+                  type="button"
+                  className="choice-card choice-card--car"
+                  onClick={() => pickSeries(series)}
+                >
+                  {meta.image ? (
+                    <img
+                      className="choice-card__photo"
+                      src={meta.image}
+                      alt=""
+                      loading="lazy"
+                    />
+                  ) : null}
+                  <span className="choice-card__body">
+                    <span className="choice-card__title">{series}</span>
+                    <span className="choice-card__meta">
+                      {meta.chassisCount} chassis · {meta.count} models
+                    </span>
+                  </span>
+                </button>
+              )
+            })}
           </div>
         </section>
       )}
 
-      {stage === 'model' && selection.make && (
-        <section className="wizard" aria-labelledby="model-title">
-          <h2 id="model-title" className="wizard__title">
-            {selection.make} — choose a model
+      {stage === 'chassis' && selection.series && (
+        <section className="wizard" aria-labelledby="chassis-title">
+          <h2 id="chassis-title" className="wizard__title">
+            {selection.series} — chassis
           </h2>
-          <div className="choice-grid">
-            {models.map((item) => (
-              <button
-                key={item.id}
-                type="button"
-                className="choice-card choice-card--photo"
-                onClick={() => pickModel(item.id)}
-              >
-                <img
-                  className="choice-card__photo"
-                  src={item.image}
-                  alt=""
-                  loading="lazy"
-                />
-                <span className="choice-card__kicker">{item.generation}</span>
-                <span className="choice-card__title">{item.label}</span>
-                <span className="choice-card__meta">
-                  {item.baseFigures.hp} hp · {item.baseFigures.engineCode} ·{' '}
-                  {item.baseFigures.drivetrain}
-                </span>
-                <span className="choice-card__desc">
-                  {item.tagline ?? item.description}
-                </span>
-              </button>
-            ))}
+          <div className="choice-grid choice-grid--cars">
+            {catalog.getChassisBySeries(selection.series).map((chassis) => {
+              const meta = catalog.chassisMeta(selection.series!, chassis)
+              return (
+                <button
+                  key={chassis}
+                  type="button"
+                  className="choice-card choice-card--car"
+                  onClick={() => pickChassis(chassis)}
+                >
+                  {meta.image ? (
+                    <img
+                      className="choice-card__photo"
+                      src={meta.image}
+                      alt=""
+                      loading="lazy"
+                    />
+                  ) : null}
+                  <span className="choice-card__body">
+                    <span className="choice-card__kicker">
+                      {meta.yearsLabel}
+                    </span>
+                    <span className="choice-card__title">{chassis}</span>
+                    <span className="choice-card__meta">
+                      {meta.count} {meta.count === 1 ? 'model' : 'models'}
+                    </span>
+                  </span>
+                </button>
+              )
+            })}
           </div>
+        </section>
+      )}
+
+      {stage === 'model' && selection.series && selection.chassis && (
+        <section className="wizard" aria-labelledby="model-title">
+          <div className="wizard__head">
+            <h2 id="model-title" className="wizard__title">
+              {selection.chassis} — model
+            </h2>
+            <p className="wizard__count">
+              {filteredVariants.length} of {variants.length}
+            </p>
+          </div>
+          {variants.length > 4 ? (
+            <label className="car-search">
+              <span className="visually-hidden">Search models</span>
+              <input
+                type="search"
+                className="car-search__input"
+                placeholder="Search 135i, 1M, N54…"
+                value={carSearch}
+                onChange={(e) => setCarSearch(e.target.value)}
+                autoComplete="off"
+              />
+            </label>
+          ) : null}
+          {filteredVariants.length === 0 ? (
+            <p className="wizard__empty">No models match.</p>
+          ) : (
+            <div className="choice-grid choice-grid--cars">
+              {filteredVariants.map((item) => (
+                <button
+                  key={item.id}
+                  type="button"
+                  className="choice-card choice-card--car"
+                  onClick={() => pickModel(item.id)}
+                >
+                  <img
+                    className="choice-card__photo"
+                    src={item.image}
+                    alt=""
+                    loading="lazy"
+                  />
+                  <span className="choice-card__body">
+                    <span className="choice-card__kicker">
+                      {item.baseFigures.engineCode}
+                    </span>
+                    <span className="choice-card__title">{item.label}</span>
+                    <span className="choice-card__meta">
+                      {item.baseFigures.engineSizeL.toFixed(1)}L{' '}
+                      {item.modTags.includes('diesel') ? 'diesel' : 'petrol'} ·{' '}
+                      {item.baseFigures.hp} hp · {item.baseFigures.drivetrain}
+                    </span>
+                  </span>
+                </button>
+              ))}
+            </div>
+          )}
         </section>
       )}
 
@@ -373,6 +524,16 @@ export function BuildsPage() {
                 selectedId={selection.colourId}
                 onSelect={pickColour}
               />
+              {!viewOnly && (
+                <button
+                  type="button"
+                  className="btn btn--primary"
+                  disabled={!selection.colourId}
+                  onClick={confirmColour}
+                >
+                  Continue with {colour?.name ?? 'colour'}
+                </button>
+              )}
               <FiguresGrid
                 title="Factory figures"
                 figures={figures?.base ?? car.baseFigures}

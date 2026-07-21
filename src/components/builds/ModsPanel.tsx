@@ -210,11 +210,20 @@ export function ModsPanel({
               {mods.map((mod) => {
                 const active = selectedModIds.includes(mod.id)
                 const source = mod.figuresSource ?? 'estimated'
+                const gaps = active
+                  ? catalog.getModSupportGaps(selectedModIds, mod)
+                  : []
                 return (
                   <li key={mod.id}>
                     <button
                       type="button"
-                      className={active ? 'mod-row mod-row--active' : 'mod-row'}
+                      className={[
+                        'mod-row',
+                        active ? 'mod-row--active' : '',
+                        gaps.length ? 'mod-row--warn' : '',
+                      ]
+                        .filter(Boolean)
+                        .join(' ')}
                       onClick={() => {
                         if (!readOnly) onToggle(mod.id)
                       }}
@@ -239,6 +248,11 @@ export function ModsPanel({
                         <span className="mod-row__delta">
                           {deltaLabel(mod.figuresDelta)}
                         </span>
+                        {gaps.length > 0 ? (
+                          <span className="mod-row__gaps">
+                            {gaps.join(' · ')}
+                          </span>
+                        ) : null}
                       </span>
                       <span className="mod-row__side">
                         <span className="mod-row__price">

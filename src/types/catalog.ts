@@ -27,6 +27,8 @@ export interface Colour {
   id: string
   name: string
   hex: string
+  /** Optional real photo of this car in this colour, e.g. `/cars/paint/...jpg`. */
+  image?: string
 }
 
 export interface SpecChoice {
@@ -55,6 +57,8 @@ export interface SpecOptionGroup {
 export interface CarModel {
   id: string
   make: string
+  /** Family for picker, e.g. "1 Series", "3 Series", "X3". */
+  series: string
   model: string
   generation: string
   /** Short label for lists, e.g. "135i N54". */
@@ -116,8 +120,12 @@ export interface Mod {
   /**
    * Empty = universal. Otherwise the car must share at least one tag,
    * or include the special `*` tag on the mod for all cars.
+   * If any engine-family tags are listed (n54, s55, b58…), the car must
+   * share at least one of those engine tags (stops S55 parts on S58 cars).
    */
   compatibleTags: string[]
+  /** Hide this mod if the car has any of these tags (e.g. diesel-only blocks). */
+  incompatibleTags?: string[]
   /** Mutually exclusive mod ids. */
   conflictsWith?: string[]
   /**
@@ -125,6 +133,13 @@ export interface Mod {
    * (e.g. all ECU tunes use `ecu-tune`).
    */
   conflictGroup?: string
+  /**
+   * Soft requirements — selecting this mod without these categories
+   * shows a warning (does not block).
+   */
+  requiresCategories?: ModCategoryId[]
+  /** Soft: at least one of these mod ids should also be selected. */
+  requiresAnyOf?: string[]
   /** Product / retailer page opened from checkout. */
   productUrl?: string
 }
@@ -140,6 +155,10 @@ export interface StagePreset {
 /** In-progress / completed build selections (wizard). */
 export interface BuildSelection {
   make: string | null
+  /** e.g. "1 Series" — set before chassis / model. */
+  series: string | null
+  /** Chassis code, e.g. "E82", "F20/F21". */
+  chassis: string | null
   carId: string | null
   year: number | null
   colourId: string | null

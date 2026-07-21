@@ -1,4 +1,6 @@
 import type { Mod, ModCategory, StagePreset } from '../../types/catalog'
+import { extraMods, extraPresets } from './extraMods'
+import { moreMods, morePresets } from './extraModsMore'
 export { resolveProductUrl } from './productUrls'
 
 export const modCategories: ModCategory[] = [
@@ -1580,6 +1582,9 @@ export const mods: Mod[] = [
     figuresDelta: {},
     compatibleTags: ['bmw'],
   },
+
+  ...extraMods,
+  ...moreMods,
 ]
 
 /**
@@ -1667,19 +1672,68 @@ export const stagePresets: StagePreset[] = [
       'vrsf-fmic-b58',
     ],
   },
+
+  ...extraPresets,
+  ...morePresets,
 ]
 
 export function getModById(id: string): Mod | undefined {
   return mods.find((mod) => mod.id === id)
 }
 
+/** Engine families — if a mod lists any of these, the car must share one. */
+export const ENGINE_FAMILY_TAGS = new Set([
+  'n54',
+  'n55',
+  's55',
+  'b58',
+  's58',
+  'n52',
+  'm54',
+  'n62',
+  's54',
+  's50',
+  's62',
+  's65',
+  's63',
+  's68',
+  's38',
+  's70',
+  's85',
+  'n74',
+  'm30',
+  'm60',
+  'm62',
+  'm73',
+  'n63',
+  'm57',
+  'n57',
+  'b57',
+  'diesel',
+])
+
+/** Groups that cannot be stacked together (piggyback vs flash tune, etc.). */
+const CONFLICTING_GROUPS: Record<string, string[]> = {
+  'ecu-tune': ['piggyback'],
+  piggyback: ['ecu-tune'],
+}
+
+export function modFitsCar(mod: Mod, modTags: string[]): boolean {
+  if (mod.incompatibleTags?.some((t) => modTags.includes(t))) {
+    return false
+  }
+  if (mod.compatibleTags.includes('*') || mod.compatibleTags.length === 0) {
+    return true
+  }
+  const modEngines = mod.compatibleTags.filter((t) => ENGINE_FAMILY_TAGS.has(t))
+  if (modEngines.length > 0 && !modEngines.some((t) => modTags.includes(t))) {
+    return false
+  }
+  return mod.compatibleTags.some((tag) => modTags.includes(tag))
+}
+
 export function getModsForCar(modTags: string[]): Mod[] {
-  return mods.filter((mod) => {
-    if (mod.compatibleTags.includes('*') || mod.compatibleTags.length === 0) {
-      return true
-    }
-    return mod.compatibleTags.some((tag) => modTags.includes(tag))
-  })
+  return mods.filter((mod) => modFitsCar(mod, modTags))
 }
 
 export function getPresetsForCar(modTags: string[]): StagePreset[] {
@@ -1688,6 +1742,76 @@ export function getPresetsForCar(modTags: string[]): StagePreset[] {
       (tag) => tag === '*' || modTags.includes(tag),
     ),
   )
+}
+
+/** Human-readable soft requirement gaps for a selected (or about-to-select) mod. */
+export function getModSupportGaps(
+  selectedIds: string[],
+  mod: Mod,
+): string[] {
+  const gaps: string[] = []
+  const selectedMods = selectedIds
+    .map((id) => getModById(id))
+    .filter(Boolean) as Mod[]
+  // Include the mod itself when checking "about to select"
+  if (!selectedIds.includes(mod.id)) {
+    selectedMods.push(mod)
+  }
+  const cats = new Set(selectedMods.map((m) => m.category))
+  const ids = new Set(
+    selectedIds.includes(mod.id) ? selectedIds : [...selectedIds, mod.id],
+  )
+
+  if (mod.requiresCategories?.length) {
+    for (const cat of mod.requiresCategories) {
+      if (cat === mod.category) continue
+      if (!cats.has(cat)) {
+        gaps.push(`Needs ${categoryLabel(cat)}`)
+      }
+    }
+  }
+  if (mod.requiresAnyOf?.length) {
+    if (!mod.requiresAnyOf.some((id) => ids.has(id) && id !== mod.id)) {
+      const names = mod.requiresAnyOf
+        .map((id) => getModById(id))
+        .filter(Boolean)
+        .slice(0, 2)
+        .map((m) => m!.name)
+      gaps.push(
+        names.length
+          ? `Pair with ${names.join(' / ')}`
+          : 'Missing supporting parts',
+      )
+    }
+  }
+
+  const aggressiveEcu =
+    mod.category === 'ecu' &&
+    (mod.id.includes('stage2') ||
+      mod.id.includes('flex') ||
+      mod.id.includes('e85') ||
+      (mod.figuresDelta.hp ?? 0) >= 80)
+
+  if (aggressiveEcu) {
+    if (!cats.has('fueling')) gaps.push('Needs fueling')
+    const hasDp = selectedMods.some(
+      (m) =>
+        m.category === 'exhaust' &&
+        m.name.toLowerCase().includes('downpipe'),
+    )
+    if (!hasDp) gaps.push('Needs a high-flow downpipe')
+  }
+
+  if (mod.conflictGroup === 'turbo-upgrade' && !cats.has('fueling')) {
+    gaps.push('Needs fueling for bigger turbos')
+  }
+
+  return [...new Set(gaps)]
+}
+
+function categoryLabel(cat: string): string {
+  const found = modCategories.find((c) => c.id === cat)
+  return found?.name.toLowerCase() ?? cat
 }
 
 /** Merge a mod into a selection, clearing conflict group / conflictsWith peers. */
@@ -1704,6 +1828,13 @@ export function applyModSelection(
   if (!mod) return currentIds
 
   const conflicts = new Set(mod.conflictsWith ?? [])
+  const blockedGroups = new Set([
+    ...(mod.conflictGroup ? [mod.conflictGroup] : []),
+    ...(mod.conflictGroup
+      ? (CONFLICTING_GROUPS[mod.conflictGroup] ?? [])
+      : []),
+  ])
+
   return [
     ...currentIds.filter((id) => {
       if (id === modId) return false
@@ -1711,10 +1842,22 @@ export function applyModSelection(
       if (!other) return true
       if (conflicts.has(id)) return false
       if (other.conflictsWith?.includes(modId)) return false
+      if (other.conflictGroup && blockedGroups.has(other.conflictGroup)) {
+        return false
+      }
       if (
         mod.conflictGroup &&
         other.conflictGroup &&
         mod.conflictGroup === other.conflictGroup
+      ) {
+        return false
+      }
+      // Reciprocal meta-group block (ecu ↔ piggyback)
+      if (
+        other.conflictGroup &&
+        CONFLICTING_GROUPS[other.conflictGroup]?.includes(
+          mod.conflictGroup ?? '',
+        )
       ) {
         return false
       }

@@ -83,6 +83,8 @@ function seedSelection(
   const car = catalog.getCarById(carId)
   return {
     make: car?.make ?? 'BMW',
+    series: car?.series ?? null,
+    chassis: car?.generation ?? null,
     carId,
     year,
     colourId,

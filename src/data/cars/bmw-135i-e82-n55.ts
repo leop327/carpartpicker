@@ -14,6 +14,7 @@ import {
 export const bmw135iE82N55: CarModel = {
   id: 'bmw-135i-e82-n55',
   make: 'BMW',
+  series: '1 Series',
   model: '135i',
   generation: 'E82',
   label: '135i N55',
