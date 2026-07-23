@@ -1,0 +1,70 @@
+.profile-public {
+  display: grid;
+  gap: 1.5rem;
+  max-width: 52rem;
+}
+
+.profile-public__head h1 {
+  margin: 0.15rem 0;
+  font-family: var(--font-display);
+  font-size: clamp(1.75rem, 4vw, 2.35rem);
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+}
+
+.profile-public__head p {
+  margin: 0;
+  color: var(--ink-muted);
+}
+
+.profile-public__hint {
+  margin-top: 0.5rem !important;
+  font-size: 0.9rem;
+}
+
+.profile-public__empty {
+  color: var(--ink-muted);
+}
+
+.profile-public__grid {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(15rem, 1fr));
+  gap: 1rem;
+}
+
+.profile-public__card {
+  display: grid;
+  gap: 0.65rem;
+  text-decoration: none;
+  color: inherit;
+  border: 1px solid color-mix(in srgb, var(--ink) 12%, transparent);
+  overflow: hidden;
+}
+
+.profile-public__card img,
+.profile-public__ph {
+  aspect-ratio: 16 / 10;
+  width: 100%;
+  object-fit: cover;
+  background: #0a0c10;
+  display: block;
+}
+
+.profile-public__card div {
+  display: grid;
+  gap: 0.2rem;
+  padding: 0 0.85rem 0.9rem;
+}
+
+.profile-public__card strong {
+  font-family: var(--font-display);
+  letter-spacing: 0.03em;
+}
+
+.profile-public__card span {
+  font-size: 0.88rem;
+  color: var(--ink-muted);
+}

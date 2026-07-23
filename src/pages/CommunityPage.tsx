@@ -1,5 +1,5 @@
-import { useState } from 'react'
-import { Link } from 'react-router-dom'
+import { useEffect, useState } from 'react'
+import { Link, useSearchParams } from 'react-router-dom'
 import { catalog } from '../data/catalog'
 import { DragRace } from '../components/builds/DragRace'
 import { formatMoney } from '../lib/build'
@@ -40,16 +40,26 @@ function imageForOwned(build: SavedBuild): string | undefined {
 }
 
 export function CommunityPage() {
+  const [searchParams] = useSearchParams()
   const [builds] = useState(() => listCommunityBuilds())
   const [owned] = useState(() =>
     listSavedBuilds().filter((b) => b.ownership === 'owned'),
   )
-  const [selectedId, setSelectedId] = useState<string | null>(
-    () => builds[0]?.id ?? null,
-  )
+  const [selectedId, setSelectedId] = useState<string | null>(() => {
+    const fromQuery = searchParams.get('build')
+    if (fromQuery && builds.some((b) => b.id === fromQuery)) return fromQuery
+    return builds[0]?.id ?? null
+  })
   const [raceOpponentId, setRaceOpponentId] = useState<string | null>(null)
   const [myRacerId, setMyRacerId] = useState<string | null>(null)
   const [pickingForId, setPickingForId] = useState<string | null>(null)
+
+  useEffect(() => {
+    const fromQuery = searchParams.get('build')
+    if (fromQuery && builds.some((b) => b.id === fromQuery)) {
+      setSelectedId(fromQuery)
+    }
+  }, [searchParams, builds])
 
   const selected = builds.find((b) => b.id === selectedId) ?? builds[0]
   const opponent = raceOpponentId

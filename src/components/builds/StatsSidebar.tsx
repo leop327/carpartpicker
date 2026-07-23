@@ -12,9 +12,12 @@ import { unlockMilestone } from '../../lib/milestones'
 import { requireAccount } from '../../lib/profile'
 import { quarterMileFromFigures } from '../../lib/quarterMile'
 import { openPrintableSummary } from '../../lib/selection'
+import type { ReportTarget } from '../../lib/report'
 import type { BuildSelection, CarModel, Figures, Market } from '../../types/catalog'
 import { DragRace } from './DragRace'
 import { FiguresGrid } from './FiguresGrid'
+import { OwnerStats } from './OwnerStats'
+import { ReportIncorrect } from '../report/ReportIncorrect'
 import './StatsSidebar.css'
 
 interface Props {
@@ -68,6 +71,7 @@ export function StatsSidebar({
   readOnly,
 }: Props) {
   const [copied, setCopied] = useState(false)
+  const [reportTarget, setReportTarget] = useState<ReportTarget | null>(null)
 
   const selectedMods = selection.modIds
     .map((id) => catalog.getModById(id))
@@ -145,6 +149,22 @@ export function StatsSidebar({
         {car.tagline && (
           <p className="stats-sidebar__tagline">{car.tagline}</p>
         )}
+
+        <OwnerStats carId={car.id} carLabel={`${car.make} ${car.label}`} />
+
+        <button
+          type="button"
+          className="stats-sidebar__report"
+          onClick={() =>
+            setReportTarget({
+              kind: 'car',
+              carId: car.id,
+              label: `${year} ${car.make} ${car.label}`,
+            })
+          }
+        >
+          Report incorrect car info
+        </button>
 
         {tips.length > 0 && (
           <div className="build-tips">
@@ -292,6 +312,12 @@ export function StatsSidebar({
           </p>
         )}
       </div>
+      {reportTarget && (
+        <ReportIncorrect
+          target={reportTarget}
+          onClose={() => setReportTarget(null)}
+        />
+      )}
     </aside>
   )
 }

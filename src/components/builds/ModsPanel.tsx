@@ -2,6 +2,9 @@ import { useMemo, useState } from 'react'
 import { catalog } from '../../data/catalog'
 import { formatMoney, applyDelta } from '../../lib/build'
 import type { CarModel, Figures } from '../../types/catalog'
+import { FitmentVotes } from './FitmentVotes'
+import { ReportIncorrect } from '../report/ReportIncorrect'
+import type { ReportTarget } from '../../lib/report'
 import './ModsPanel.css'
 
 interface Props {
@@ -58,6 +61,7 @@ export function ModsPanel({
 }: Props) {
   const [query, setQuery] = useState('')
   const [categoryFilter, setCategoryFilter] = useState<string | 'all'>('all')
+  const [reportTarget, setReportTarget] = useState<ReportTarget | null>(null)
 
   const available = useMemo(
     () => catalog.getModsForCar(car.modTags),
@@ -214,7 +218,7 @@ export function ModsPanel({
                   ? catalog.getModSupportGaps(selectedModIds, mod)
                   : []
                 return (
-                  <li key={mod.id}>
+                  <li key={mod.id} className="mod-item">
                     <button
                       type="button"
                       className={[
@@ -265,12 +269,35 @@ export function ModsPanel({
                         ) : null}
                       </span>
                     </button>
+                    <div className="mod-item__extras">
+                      <FitmentVotes carId={car.id} modId={mod.id} compact />
+                      <button
+                        type="button"
+                        className="mod-item__report"
+                        onClick={() =>
+                          setReportTarget({
+                            kind: 'mod',
+                            modId: mod.id,
+                            label: `${mod.brand} ${mod.name}`,
+                          })
+                        }
+                      >
+                        Report
+                      </button>
+                    </div>
                   </li>
                 )
               })}
             </ul>
           </section>
         ))
+      )}
+
+      {reportTarget && (
+        <ReportIncorrect
+          target={reportTarget}
+          onClose={() => setReportTarget(null)}
+        />
       )}
     </div>
   )

@@ -118,16 +118,13 @@ function makeSeed(
 export function getSeededCommunityBuilds(): CommunityBuild[] {
   const seeds = [
     makeSeed(
-      'seed-m2c-stage2',
+      'seed-m2-maxton',
       'Jess · Manchester',
-      'Weekend M2 Comp',
-      'Stage 2 street setup — still dailyable.',
-      seedSelection('bmw-m2-competition-f87', 2019, 'black-sapphire', [
-        'vrsf-catted-dp-s55',
-        'eventuri-s55',
-        'vrsf-chargepipe-s55',
-        'bootmod3-stage2-s55',
-        'csf-ic-s55',
+      'F87 M2 MHD street',
+      'Super License + Maxton lip — clean daily.',
+      seedSelection('bmw-m2-f87', 2017, 'long-beach-blue', [
+        'mhd-super-n55',
+        'maxton-splitter-v3-f87',
       ]),
       '2026-03-12T10:00:00.000Z',
     ),
@@ -136,7 +133,7 @@ export function getSeededCommunityBuilds(): CommunityBuild[] {
       'Omar · London',
       'E82 N54 Stage 2',
       'Classic twin-turbo chaos. E85 when I can get it.',
-      seedSelection('bmw-135i-e82-n54', 2011, 'crimson-red', [
+      seedSelection('bmw-135i-e82-n54', 2009, 'montego-blue', [
         'vrsf-dp-n54',
         'afe-momentum-n54',
         'vrsf-chargepipe-n54',
@@ -154,35 +151,44 @@ export function getSeededCommunityBuilds(): CommunityBuild[] {
         'vrsf-dp-b58',
         'mst-intake-b58',
         'vrsf-chargepipe-b58',
-        'bootmod3-stage2-b58',
-        'vrsf-fmic-b58',
+        'mhd-stage2-b58',
+        'csf-fmic-b58',
       ]),
       '2026-05-18T09:15:00.000Z',
     ),
     makeSeed(
-      'seed-m3-stage1',
+      'seed-m2c-autoid',
       'Tom · Bristol',
-      'F80 M3 Stage 1',
-      'Eventuri + Stage 1 — OEM+ for the ring days.',
-      seedSelection('bmw-m3-f80', 2017, 'yas-marina-blue', [
-        'eventuri-s55',
-        'bootmod3-stage1-s55',
+      'M2 Comp AutoID aero',
+      'GTS splitter + skirts + TRE diffuser.',
+      seedSelection('bmw-m2-competition-f87', 2019, 'black-sapphire', [
+        'mhd-super-s55',
+        'autoid-gts-splitter-f87c',
+        'autoid-skirts-f87',
+        'tre-comp-diffuser-f87',
       ]),
       '2026-06-01T16:45:00.000Z',
     ),
     makeSeed(
-      'seed-m4-stage2',
+      'seed-m3-stage1',
       'Alex · Leeds',
-      'F82 M4 Stage 2',
-      'Full Stage 2 stack. Drag strip nights only.',
-      seedSelection('bmw-m4-f82', 2016, 'sakhir-orange', [
-        'vrsf-catted-dp-s55',
-        'eventuri-s55',
-        'vrsf-chargepipe-s55',
-        'bootmod3-stage2-s55',
-        'csf-ic-s55',
+      'F80 M3 Stage 1',
+      'MHD Super — OEM+ for the ring days.',
+      seedSelection('bmw-m3-f80', 2017, 'yas-marina-blue', [
+        'mhd-super-s55',
       ]),
       '2026-06-22T11:20:00.000Z',
+    ),
+    makeSeed(
+      'seed-g87-maxton',
+      'Sam · Edinburgh',
+      'G87 M2 MHD + Maxton',
+      'S58 Super License and a clean V.1 lip.',
+      seedSelection('bmw-m2-g87', 2024, 'toronto-red', [
+        'mhd-super-s58',
+        'maxton-splitter-v1-g87',
+      ]),
+      '2026-07-08T12:00:00.000Z',
     ),
   ]
   return seeds.filter((s): s is CommunityBuild => Boolean(s))

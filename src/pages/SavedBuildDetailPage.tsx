@@ -19,11 +19,13 @@ import {
   markSavedBuildAsBuild,
   markSavedBuildOwned,
   selectionLabel,
+  setBuildVisibility,
   updateOwnedVehicleInfo,
   updateSavedBuildNotes,
   type MaintenanceLogEntry,
   type SavedBuild,
 } from '../lib/savedBuilds'
+import { getSession } from '../lib/auth'
 import { RegPromptModal } from '../components/saved/RegPromptModal'
 import './SavedBuildDetailPage.css'
 
@@ -196,6 +198,51 @@ export function SavedBuildDetailPage() {
               onClick={() => onOwnershipToggle(true)}
             >
               Owned
+            </button>
+          </div>
+          <div className="sbd__ownership" role="group" aria-label="Profile visibility">
+            <button
+              type="button"
+              className={
+                entry.visibility !== 'public'
+                  ? 'sbd__own-btn sbd__own-btn--active'
+                  : 'sbd__own-btn'
+              }
+              onClick={() => {
+                const next = setBuildVisibility(entry.id, 'private')
+                if (next) {
+                  setEntry(next)
+                  show('Build is private')
+                }
+              }}
+            >
+              Private
+            </button>
+            <button
+              type="button"
+              className={
+                entry.visibility === 'public'
+                  ? 'sbd__own-btn sbd__own-btn--active'
+                  : 'sbd__own-btn'
+              }
+              onClick={() => {
+                const session = getSession()
+                if (!session) {
+                  show('Sign in from Account to make builds public')
+                  navigate('/account')
+                  return
+                }
+                const next = setBuildVisibility(entry.id, 'public', {
+                  userId: session.id,
+                  username: session.username,
+                })
+                if (next) {
+                  setEntry(next)
+                  show(`Public at /u/${session.username}`)
+                }
+              }}
+            >
+              Public
             </button>
           </div>
           <button

@@ -9,9 +9,11 @@ const PRIMARY_NAV = [
   { to: '/', label: 'Garage', end: true },
   { to: '/saved', label: 'My builds' },
   { to: '/community', label: 'Community' },
+  { to: '/vendors', label: 'Vendors' },
 ] as const
 
 const MORE_NAV = [
+  { to: '/account', label: 'Account' },
   { to: '/developments', label: 'Developments' },
   { to: '/donate', label: 'Donate' },
   { to: '/about', label: 'About' },

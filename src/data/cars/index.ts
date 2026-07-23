@@ -106,7 +106,7 @@ function mergeCars(primary: CarModel[], extra: CarModel[]): CarModel[] {
  * UI reads from this list — no page changes needed for new models.
  * Catalog rule: 3.0L+ petrol and diesel only.
  */
-export const cars: CarModel[] = [
+const allCars: CarModel[] = [
   mergeCars(curated, fleetCars),
   fleetMoreCars,
   fleetDieselCars,
@@ -114,6 +114,34 @@ export const cars: CarModel[] = [
 ]
   .reduce((acc, list) => mergeCars(acc, list), [] as CarModel[])
   .filter((c) => c.baseFigures.engineSizeL >= 3.0)
+
+/**
+ * Temporary focus catalogue — flip to `false` to restore the full fleet.
+ * Keeps 1–4 Series with N54 / N55 / B58 / S55 / S58 only.
+ */
+const CATALOG_FOCUS_ENABLED = true
+const CATALOG_FOCUS_SERIES = new Set([
+  '1 Series',
+  '2 Series',
+  '3 Series',
+  '4 Series',
+])
+const CATALOG_FOCUS_ENGINES = new Set([
+  'n54',
+  'n55',
+  'b58',
+  's55',
+  's58',
+])
+
+function matchesCatalogFocus(car: CarModel): boolean {
+  if (!CATALOG_FOCUS_SERIES.has(car.series)) return false
+  return car.modTags.some((tag) => CATALOG_FOCUS_ENGINES.has(tag))
+}
+
+export const cars: CarModel[] = CATALOG_FOCUS_ENABLED
+  ? allCars.filter(matchesCatalogFocus)
+  : allCars
 
 export function getCarById(id: string): CarModel | undefined {
   return cars.find((car) => car.id === id)

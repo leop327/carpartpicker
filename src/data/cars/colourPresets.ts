@@ -115,6 +115,11 @@ export const C = {
     name: 'Space Grey Metallic',
     hex: '#5C6168',
   },
+  montegoBlue: {
+    id: 'montego-blue',
+    name: 'Montego Blue Metallic',
+    hex: '#1A3A5C',
+  },
   carbonBlack: {
     id: 'carbon-black',
     name: 'Carbon Black Metallic',
@@ -138,6 +143,26 @@ export const coloursM2F87: Colour[] = [
   { ...C.alpineWhite, image: '/cars/paint/bmw-m2-f87--alpine-white.jpg' },
   { ...C.blackSapphire, image: '/cars/paint/bmw-m2-f87--black-sapphire.jpg' },
   { ...C.mineralGrey, image: '/cars/paint/bmw-m2-f87--mineral-grey.jpg' },
+]
+
+/** E82 135i N54 — curated studio paint set (4 colours). */
+export const colours135iE82N54: Colour[] = [
+  {
+    ...C.montegoBlue,
+    image: '/cars/paint/bmw-135i-e82-n54--montego-blue.jpg',
+  },
+  {
+    ...C.alpineWhite,
+    image: '/cars/paint/bmw-135i-e82-n54--alpine-white.jpg',
+  },
+  {
+    ...C.spaceGrey,
+    image: '/cars/paint/bmw-135i-e82-n54--space-grey.jpg',
+  },
+  {
+    ...C.jetBlack,
+    image: '/cars/paint/bmw-135i-e82-n54--jet-black.jpg',
+  },
 ]
 
 /** F87 M2 Competition — UK brochure. */

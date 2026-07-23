@@ -14,6 +14,14 @@ export const paintImages: Record<string, string> = {
   'bmw-m2-f87:alpine-white': '/cars/paint/bmw-m2-f87--alpine-white.jpg',
   'bmw-m2-f87:mineral-grey': '/cars/paint/bmw-m2-f87--mineral-grey.jpg',
   'bmw-m2-f87:black-sapphire': '/cars/paint/bmw-m2-f87--black-sapphire.jpg',
+  'bmw-135i-e82-n54:montego-blue':
+    '/cars/paint/bmw-135i-e82-n54--montego-blue.jpg',
+  'bmw-135i-e82-n54:alpine-white':
+    '/cars/paint/bmw-135i-e82-n54--alpine-white.jpg',
+  'bmw-135i-e82-n54:space-grey':
+    '/cars/paint/bmw-135i-e82-n54--space-grey.jpg',
+  'bmw-135i-e82-n54:jet-black':
+    '/cars/paint/bmw-135i-e82-n54--jet-black.jpg',
 }
 
 export function paintImageKey(carId: string, colourId: string): string {

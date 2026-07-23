@@ -1,4 +1,5 @@
 import type { CarModel } from '../../types/catalog'
+import { colours135iE82N54 } from './colourPresets'
 import {
   e82MSportPackage,
   e82Suspension,
@@ -9,6 +10,7 @@ import {
 
 /**
  * E82 135i N54 — BMW UK / EU DIN figures.
+ * Paint set locked to curated studio photos (4 colours).
  */
 export const bmw135iE82N54: CarModel = {
   id: 'bmw-135i-e82-n54',
@@ -18,14 +20,7 @@ export const bmw135iE82N54: CarModel = {
   generation: 'E82',
   label: '135i N54',
   years: [2008, 2009, 2010],
-  colours: [
-    { id: 'alpine-white', name: 'Alpine White', hex: '#F4F4F2' },
-    { id: 'jet-black', name: 'Jet Black', hex: '#0B0B0C' },
-    { id: 'space-grey', name: 'Space Grey Metallic', hex: '#5C6168' },
-    { id: 'montego-blue', name: 'Montego Blue Metallic', hex: '#1A3A5C' },
-    { id: 'crimson-red', name: 'Crimson Red', hex: '#8B1A1A' },
-    { id: 'titanium-silver', name: 'Titanium Silver Metallic', hex: '#C5C7CA' },
-  ],
+  colours: colours135iE82N54,
   basePrice: 32950,
   baseFigures: {
     hp: 306,
@@ -40,7 +35,7 @@ export const bmw135iE82N54: CarModel = {
   description:
     'E82 1 Series Coupe 135i — twin-turbo N54B30 (UK DIN: 306 PS / 400 Nm).',
   tagline: 'The twin-turbo that started the internet.',
-  image: '/cars/bmw-135i-e82.jpg',
+  image: '/cars/paint/bmw-135i-e82-n54--montego-blue.jpg',
   modTags: ['bmw', 'e82', '135i', 'n54', 'rwd', 'turbo'],
   specOptions: [
     e82Transmission(false),

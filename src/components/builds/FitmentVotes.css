@@ -1,0 +1,81 @@
+.fitment {
+  display: grid;
+  gap: 0.45rem;
+  margin-top: 0.5rem;
+  padding-top: 0.5rem;
+  border-top: 1px solid color-mix(in srgb, var(--ink) 10%, transparent);
+  font-size: 0.82rem;
+  color: var(--ink-muted);
+}
+
+.fitment--compact {
+  margin: 0.35rem 0 0;
+  padding: 0;
+  border: 0;
+}
+
+.fitment__stats {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.55rem;
+}
+
+.fitment__stats strong {
+  color: var(--ink);
+}
+
+.fitment__diff {
+  text-transform: capitalize;
+}
+
+.fitment__empty {
+  margin: 0;
+}
+
+.fitment__also {
+  margin: 0;
+  line-height: 1.35;
+}
+
+.fitment__vote-btn {
+  justify-self: start;
+  border: 0;
+  background: transparent;
+  color: var(--accent);
+  cursor: pointer;
+  padding: 0;
+  font: inherit;
+  font-size: 0.82rem;
+}
+
+.fitment__form {
+  display: grid;
+  gap: 0.45rem;
+}
+
+.fitment__form label {
+  display: grid;
+  gap: 0.2rem;
+}
+
+.fitment__form input,
+.fitment__form select {
+  padding: 0.4rem 0.5rem;
+  border: 1px solid color-mix(in srgb, var(--ink) 16%, transparent);
+  background: var(--bg);
+  color: var(--ink);
+  font: inherit;
+}
+
+.fitment__row {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.65rem;
+  align-items: center;
+}
+
+.fitment__row label {
+  display: flex;
+  align-items: center;
+  gap: 0.35rem;
+}

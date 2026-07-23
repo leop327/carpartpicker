@@ -1,5 +1,6 @@
 import { useMemo, useState } from 'react'
 import { catalog } from '../../data/catalog'
+import { openAffiliateProduct } from '../../lib/affiliates'
 import { formatMoney } from '../../lib/build'
 import { unlockMilestone } from '../../lib/milestones'
 import type { Mod, ModCategoryId } from '../../types/catalog'
@@ -56,6 +57,18 @@ export function CheckoutPanel({
     })
   }
 
+  function buyMod(mod: Mod) {
+    const url = catalog.resolveProductUrl(mod, { affiliate: false })
+    const wrapped = openAffiliateProduct({
+      modId: mod.id,
+      brand: mod.brand,
+      url,
+      source: 'checkout',
+    })
+    markBought(mod.id)
+    window.open(wrapped, '_blank', 'noopener,noreferrer')
+  }
+
   return (
     <div className="checkout">
       <div className="checkout__intro">
@@ -94,7 +107,6 @@ export function CheckoutPanel({
             <h3>{category.name}</h3>
             <ul className="checkout__list">
               {group.map((mod) => {
-                const url = catalog.resolveProductUrl(mod)
                 const isBought = bought.has(mod.id)
                 return (
                   <li
@@ -115,15 +127,13 @@ export function CheckoutPanel({
                       <span className="checkout__price">
                         {formatMoney(mod.price)}
                       </span>
-                      <a
+                      <button
+                        type="button"
                         className="btn btn--primary btn--small"
-                        href={url}
-                        target="_blank"
-                        rel="noopener noreferrer"
-                        onClick={() => markBought(mod.id)}
+                        onClick={() => buyMod(mod)}
                       >
                         Buy
-                      </a>
+                      </button>
                       <button
                         type="button"
                         className="checkout__tick"
@@ -164,12 +174,7 @@ export function CheckoutPanel({
               onClick={() => {
                 unlockMilestone('first-checkout')
                 for (const mod of mods) {
-                  markBought(mod.id)
-                  window.open(
-                    catalog.resolveProductUrl(mod),
-                    '_blank',
-                    'noopener,noreferrer',
-                  )
+                  buyMod(mod)
                 }
               }}
             >

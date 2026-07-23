@@ -1,3 +1,5 @@
+import { wrapAffiliateUrl } from '../../lib/affiliates'
+
 /** Brand storefront fallbacks when a mod has no specific productUrl. */
 export const brandStoreUrls: Record<string, string> = {
   VRSF: 'https://www.vr-speed.com/',
@@ -544,15 +546,19 @@ export const productUrls: Record<string, string> = {
     'https://clubsportgarage.co.uk/products/eventuri-n55-panel-filter-bmw-m2-m135i-m235i-335i-435i',
 }
 
-export function resolveProductUrl(mod: {
-  id: string
-  brand: string
-  productUrl?: string
-}): string {
-  return (
+export function resolveProductUrl(
+  mod: {
+    id: string
+    brand: string
+    productUrl?: string
+  },
+  opts?: { affiliate?: boolean },
+): string {
+  const raw =
     mod.productUrl ??
     productUrls[mod.id] ??
     brandStoreUrls[mod.brand] ??
     'https://www.demon-tweeks.com/'
-  )
+  if (opts?.affiliate === false) return raw
+  return wrapAffiliateUrl(raw, { modId: mod.id, brand: mod.brand })
 }

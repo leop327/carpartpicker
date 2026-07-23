@@ -28,6 +28,8 @@ export interface OwnedVehicleInfo {
   colourNotes?: string
 }
 
+export type BuildVisibility = 'private' | 'public'
+
 export interface SavedBuild {
   id: string
   name: string
@@ -37,6 +39,11 @@ export interface SavedBuild {
   ownedInfo?: OwnedVehicleInfo
   notes: string
   maintenanceLogs: MaintenanceLogEntry[]
+  /** Profile visibility — private by default. */
+  visibility: BuildVisibility
+  /** Linked auth user when signed in. */
+  ownerUserId?: string
+  ownerUsername?: string
 }
 
 const SAVED_KEY = 'carpartpicker:saved:v2'
@@ -104,6 +111,11 @@ function normalizeEntry(raw: Partial<SavedBuild> & { build: PersistedBuild }): S
           createdAt: log.createdAt || new Date().toISOString(),
         }))
       : [],
+    visibility: raw.visibility === 'public' ? 'public' : 'private',
+    ownerUserId:
+      typeof raw.ownerUserId === 'string' ? raw.ownerUserId : undefined,
+    ownerUsername:
+      typeof raw.ownerUsername === 'string' ? raw.ownerUsername : undefined,
   }
 }
 
@@ -176,6 +188,9 @@ export function saveBuild(
     ownedInfo: existing?.ownedInfo,
     notes: existing?.notes ?? '',
     maintenanceLogs: existing?.maintenanceLogs ?? [],
+    visibility: existing?.visibility ?? 'private',
+    ownerUserId: existing?.ownerUserId,
+    ownerUsername: existing?.ownerUsername,
   })
 
   const next = existing
@@ -332,4 +347,21 @@ export function selectionLabel(selection: BuildSelection): string {
 
 export function stageAfterColour(): BuildStage {
   return 'options'
+}
+
+export function setBuildVisibility(
+  id: string,
+  visibility: BuildVisibility,
+  owner?: { userId: string; username: string },
+): SavedBuild | null {
+  return updateById(id, (entry) => ({
+    ...entry,
+    visibility,
+    ownerUserId: owner?.userId ?? entry.ownerUserId,
+    ownerUsername: owner?.username ?? entry.ownerUsername,
+  }))
+}
+
+export function listPublicBuilds(): SavedBuild[] {
+  return listSavedBuilds().filter((b) => b.visibility === 'public')
 }

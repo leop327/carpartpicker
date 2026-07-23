@@ -303,9 +303,9 @@
 .shell--garage .shell__footer {
   position: relative;
   z-index: 2;
-  margin-top: -3.5rem;
-  border-top: none;
-  background: transparent;
+  margin-top: 0;
+  border-top: 1px solid color-mix(in srgb, #fff 12%, transparent);
+  background: #050608;
 }
 
 .shell--garage .shell__footer-nav a {

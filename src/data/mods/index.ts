@@ -2,8 +2,9 @@ import type { Mod, ModCategory, StagePreset } from '../../types/catalog'
 import { extraMods, extraPresets } from './extraMods'
 import { moreMods, morePresets } from './extraModsMore'
 import { waveMods, wavePresets } from './extraModsWave'
-import { m2Mods, m2Presets } from './m2Mods'
+import { m2Mods, m2Presets, M2_ALLOWED_BRANDS } from './m2Mods'
 export { resolveProductUrl } from './productUrls'
+export { M2_ALLOWED_BRANDS } from './m2Mods'
 
 export const modCategories: ModCategory[] = [
   {
@@ -1742,15 +1743,43 @@ export function modFitsCar(mod: Mod, modTags: string[]): boolean {
 }
 
 export function getModsForCar(modTags: string[]): Mod[] {
-  return mods.filter((mod) => modFitsCar(mod, modTags))
+  const isM2Build =
+    modTags.includes('m2') ||
+    modTags.includes('m2c') ||
+    (modTags.includes('g87') && modTags.includes('s58'))
+
+  return mods.filter((mod) => {
+    if (!modFitsCar(mod, modTags)) return false
+    if (isM2Build && !M2_ALLOWED_BRANDS.has(mod.brand)) return false
+    return true
+  })
 }
 
 export function getPresetsForCar(modTags: string[]): StagePreset[] {
-  return stagePresets.filter((preset) =>
-    preset.compatibleTags.some(
-      (tag) => tag === '*' || modTags.includes(tag),
-    ),
-  )
+  const isM2Build =
+    modTags.includes('m2') ||
+    modTags.includes('m2c') ||
+    (modTags.includes('g87') && modTags.includes('s58'))
+
+  return stagePresets.filter((preset) => {
+    if (
+      !preset.compatibleTags.some(
+        (tag) => tag === '*' || modTags.includes(tag),
+      )
+    ) {
+      return false
+    }
+    if (!isM2Build) return true
+    // M2 presets must only use allowed brands that actually fit this car
+    return preset.modIds.every((id) => {
+      const mod = getModById(id)
+      return (
+        mod != null &&
+        M2_ALLOWED_BRANDS.has(mod.brand) &&
+        modFitsCar(mod, modTags)
+      )
+    })
+  })
 }
 
 /** Human-readable soft requirement gaps for a selected (or about-to-select) mod. */

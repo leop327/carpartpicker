@@ -35,6 +35,23 @@
   font-size: 0.9rem;
 }
 
+.stats-sidebar__report {
+  justify-self: start;
+  border: 0;
+  background: transparent;
+  color: var(--ink-muted);
+  cursor: pointer;
+  font: inherit;
+  font-size: 0.8rem;
+  text-decoration: underline;
+  text-underline-offset: 2px;
+  padding: 0;
+}
+
+.stats-sidebar__report:hover {
+  color: var(--accent);
+}
+
 .stats-sidebar__price {
   display: flex;
   justify-content: space-between;

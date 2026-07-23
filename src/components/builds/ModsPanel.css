@@ -186,6 +186,35 @@
   gap: 0.5rem;
 }
 
+.mod-item {
+  display: grid;
+  gap: 0.15rem;
+}
+
+.mod-item__extras {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.5rem;
+  padding: 0 0.15rem 0.35rem;
+}
+
+.mod-item__report {
+  border: 0;
+  background: transparent;
+  color: var(--ink-muted);
+  cursor: pointer;
+  font: inherit;
+  font-size: 0.78rem;
+  text-decoration: underline;
+  text-underline-offset: 2px;
+}
+
+.mod-item__report:hover {
+  color: var(--accent);
+}
+
 .mod-row {
   width: 100%;
   display: flex;

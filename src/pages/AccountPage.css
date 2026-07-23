@@ -1,0 +1,47 @@
+.account__form {
+  display: grid;
+  gap: 0.75rem;
+  max-width: 22rem;
+}
+
+.account__form label {
+  display: grid;
+  gap: 0.3rem;
+  font-size: 0.9rem;
+}
+
+.account__form input {
+  padding: 0.55rem 0.7rem;
+  border: 1px solid color-mix(in srgb, var(--ink) 16%, transparent);
+  background: var(--bg);
+  color: var(--ink);
+  font: inherit;
+}
+
+.account__error {
+  margin: 0;
+  color: #c44;
+  font-size: 0.9rem;
+}
+
+.account__actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.55rem;
+}
+
+.account__note {
+  font-size: 0.9rem;
+  color: var(--ink-muted);
+}
+
+.account__link {
+  border: 0;
+  background: transparent;
+  color: var(--accent);
+  cursor: pointer;
+  font: inherit;
+  padding: 0;
+  text-decoration: underline;
+  text-underline-offset: 2px;
+}
