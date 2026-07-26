@@ -4,6 +4,7 @@ import {
   emptySelection,
   writeBuildToStorage,
 } from '../lib/buildState'
+import { HeroSplit } from '../components/HeroSplit'
 import { getFeaturedBuilds } from '../lib/featuredBuilds'
 import { formatMoney } from '../lib/build'
 import { listSavedBuilds } from '../lib/savedBuilds'
@@ -63,19 +64,21 @@ export function HomePage() {
           <div className="garage__scan" />
         </div>
 
-        <section className="garage__hero">
+        <section className="garage__hero garage__hero--split">
           <p className="garage__kicker hud-label">Enter the garage</p>
           <h1 className="garage__brand">CarPartPicker</h1>
           <p className="garage__tagline">
-            Pick the chassis. Stack the mods. Watch the figures move.
+            Look up a UK reg or pick a platform. Stack the mods. Watch the
+            figures move.
           </p>
-          <div className="garage__cta">
+          <HeroSplit />
+          <div className="garage__cta garage__cta--secondary">
             <button
               type="button"
-              className="btn btn--primary btn--lg"
+              className="btn btn--ghost"
               onClick={startNewBuild}
             >
-              New build
+              Start blank build
             </button>
             <Link to="/saved" className="btn btn--ghost">
               My builds

@@ -13,12 +13,18 @@ import {
 import {
   applyModSelection,
   applyPreset,
+  getKitById,
   getModById,
   getModsForCar,
   getModSupportGaps,
   getPresetsForCar,
+  getStagesForTuner,
+  getTunersForCar,
+  kitAsPreset,
   modCategories,
   mods,
+  resolveKitImage,
+  resolveProductImage,
   resolveProductUrl,
   stagePresets,
 } from './mods'
@@ -45,10 +51,16 @@ export const catalog = {
   getModById,
   getModsForCar,
   getPresetsForCar,
+  getTunersForCar,
+  getStagesForTuner,
+  getKitById,
+  kitAsPreset,
   getModSupportGaps,
   applyModSelection,
   applyPreset,
   resolveProductUrl,
+  resolveProductImage,
+  resolveKitImage,
 }
 
 export type {

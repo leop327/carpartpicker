@@ -83,6 +83,26 @@
   backdrop-filter: blur(10px);
 }
 
+.builds__notice--dvla {
+  border-left-color: var(--hud);
+  display: flex;
+  flex-wrap: wrap;
+  align-items: baseline;
+  gap: 0.35rem 0.65rem;
+}
+
+.builds__notice-dismiss {
+  margin-left: auto;
+  appearance: none;
+  border: 0;
+  background: transparent;
+  color: var(--ink);
+  font: inherit;
+  font-size: 0.8rem;
+  text-decoration: underline;
+  cursor: pointer;
+}
+
 .wizard {
   display: grid;
   gap: 1.15rem;
@@ -405,6 +425,10 @@
     grid-template-columns: 1fr;
     gap: 1rem;
   }
+
+  .builds__mods-stage {
+    padding-bottom: 5.5rem;
+  }
 }
 
 @media (max-width: 640px) {
@@ -488,10 +512,5 @@
 
   .wizard__title {
     font-size: 1.15rem;
-  }
-
-  .stats-sidebar__sticky {
-    position: static;
-    padding: 0.85rem 0.9rem 1rem;
   }
 }

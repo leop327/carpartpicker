@@ -2,6 +2,7 @@ import { BrowserRouter, Route, Routes } from 'react-router-dom'
 import { AppShell } from './components/layout/AppShell'
 import { AboutPage } from './pages/AboutPage'
 import { AccountPage } from './pages/AccountPage'
+import { BrandPlatformPage } from './pages/BrandPlatformPage'
 import { BuildsPage } from './pages/BuildsPage'
 import { CommunityPage } from './pages/CommunityPage'
 import { ComparePage } from './pages/ComparePage'
@@ -9,6 +10,7 @@ import { ContactPage } from './pages/ContactPage'
 import { DevelopmentsPage } from './pages/DevelopmentsPage'
 import { DonatePage } from './pages/DonatePage'
 import { HomePage } from './pages/HomePage'
+import { ProductPage } from './pages/ProductPage'
 import { PublicProfilePage } from './pages/PublicProfilePage'
 import { SavedBuildDetailPage } from './pages/SavedBuildDetailPage'
 import { SavedBuildsPage } from './pages/SavedBuildsPage'
@@ -23,7 +25,9 @@ export default function App() {
       <Routes>
         <Route element={<AppShell />}>
           <Route index element={<HomePage />} />
+          <Route path="cars/:brand" element={<BrandPlatformPage />} />
           <Route path="builds" element={<BuildsPage />} />
+          <Route path="mods/:modId" element={<ProductPage />} />
           <Route path="saved" element={<SavedBuildsPage />} />
           <Route path="saved/:id" element={<SavedBuildDetailPage />} />
           <Route path="community" element={<CommunityPage />} />

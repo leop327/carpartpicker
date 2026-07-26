@@ -11,6 +11,7 @@ import {
   type BuildStage,
   type PersistedBuild,
 } from '../lib/buildState'
+import { clearDvlaSession, readDvlaSession, type DvlaSessionMatch } from '../lib/dvlaSession'
 import { accelLabel, MARKET } from '../lib/market'
 import { unlockMilestone } from '../lib/milestones'
 import { requireAccount } from '../lib/profile'
@@ -84,6 +85,15 @@ export function BuildsPage() {
   const [saveNote, setSaveNote] = useState<string | null>(null)
   const [celebration, setCelebration] = useState<string | null>(null)
   const [carSearch, setCarSearch] = useState('')
+  const [dvlaMatch, setDvlaMatch] = useState<DvlaSessionMatch | null>(() =>
+    typeof window !== 'undefined' ? readDvlaSession() : null,
+  )
+
+  useEffect(() => {
+    if (!dvlaMatch) return
+    // Keep banner for this visit; clear storage so refresh doesn't re-show forever
+    clearDvlaSession()
+  }, [dvlaMatch])
 
   useEffect(() => {
     if (viewOnly) return
@@ -238,6 +248,16 @@ export function BuildsPage() {
 
   function applyPreset(presetId: string) {
     if (viewOnly) return
+    const kit = catalog.getKitById(presetId)
+    if (kit) {
+      const preset = catalog.kitAsPreset(kit, car?.modTags ?? [])
+      if (preset.modIds.length === 0) return
+      setSelection((prev) => ({
+        ...prev,
+        modIds: catalog.applyPreset(prev.modIds, preset),
+      }))
+      return
+    }
     const preset = catalog.stagePresets.find((p) => p.id === presetId)
     if (!preset) return
     setSelection((prev) => ({
@@ -332,6 +352,38 @@ export function BuildsPage() {
           ) : null}
         </div>
       </header>
+
+      {dvlaMatch ? (
+        <p className="builds__notice builds__notice--dvla" role="status">
+          <strong>
+            {dvlaMatch.demo ? 'Demo DVLA match' : 'DVLA match'}
+            {dvlaMatch.registrationNumber
+              ? ` · ${dvlaMatch.registrationNumber}`
+              : ''}
+          </strong>
+          {' — '}
+          {[
+            dvlaMatch.make,
+            dvlaMatch.yearOfManufacture,
+            dvlaMatch.engineCapacity
+              ? `${dvlaMatch.engineCapacity}cc`
+              : null,
+            dvlaMatch.fuelType,
+            dvlaMatch.engineFamily,
+          ]
+            .filter(Boolean)
+            .join(' · ')}
+          {dvlaMatch.engineNote ? `. ${dvlaMatch.engineNote}` : ''}
+          {car ? ` Opened on ${car.label}.` : ' Continue the wizard to pick your chassis.'}
+          <button
+            type="button"
+            className="builds__notice-dismiss"
+            onClick={() => setDvlaMatch(null)}
+          >
+            Dismiss
+          </button>
+        </p>
+      ) : null}
 
       {viewOnly ? (
         <p className="builds__notice" role="status">

@@ -96,6 +96,14 @@
   animation: garage-rise 0.7s cubic-bezier(0.22, 1, 0.36, 1);
 }
 
+.garage__hero--split {
+  width: min(72rem, 100%);
+}
+
+.garage__cta--secondary {
+  margin-top: 0.15rem;
+}
+
 @keyframes garage-rise {
   from {
     opacity: 0;

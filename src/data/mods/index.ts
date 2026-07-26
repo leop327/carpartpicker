@@ -4,6 +4,10 @@ import { moreMods, morePresets } from './extraModsMore'
 import { waveMods, wavePresets } from './extraModsWave'
 import { m2Mods, m2Presets, M2_ALLOWED_BRANDS } from './m2Mods'
 export { resolveProductUrl } from './productUrls'
+export {
+  resolveProductImage,
+  resolveKitImage,
+} from './productImages'
 export { M2_ALLOWED_BRANDS } from './m2Mods'
 
 export const modCategories: ModCategory[] = [
@@ -1914,4 +1918,82 @@ export function applyPreset(
     next = applyModSelection(next, modId, true)
   }
   return next
+}
+
+export {
+  STAGE_KIT_CATEGORIES,
+  STAGE_ORDER,
+  tunerStageKits,
+  type StageLevel,
+  type TunerBrand,
+  type TunerStageKit,
+} from './tunerStages'
+
+import {
+  STAGE_KIT_CATEGORIES,
+  STAGE_ORDER,
+  tunerStageKits,
+  type TunerBrand,
+  type TunerStageKit,
+} from './tunerStages'
+
+function kitFitsCar(kit: TunerStageKit, modTags: string[]): boolean {
+  if (!kit.compatibleTags.some((t) => modTags.includes(t))) return false
+  const available = new Set(getModsForCar(modTags).map((m) => m.id))
+  const maps = kit.modIds
+    .map((id) => getModById(id))
+    .filter((m): m is Mod => m != null && m.category === 'ecu')
+  if (maps.length === 0) return false
+  return maps.some((m) => available.has(m.id) && modFitsCar(m, modTags))
+}
+
+/** Bolt-on + map ids that fit this car (no styling / aero). */
+export function resolveKitModIds(
+  kit: TunerStageKit,
+  modTags: string[],
+): string[] {
+  const available = new Set(getModsForCar(modTags).map((m) => m.id))
+  return kit.modIds.filter((id) => {
+    const mod = getModById(id)
+    if (!mod) return false
+    if (!STAGE_KIT_CATEGORIES.has(mod.category)) return false
+    if (!available.has(id)) return false
+    return modFitsCar(mod, modTags)
+  })
+}
+
+export function getTunersForCar(modTags: string[]): TunerBrand[] {
+  const tuners = new Set<TunerBrand>()
+  for (const kit of tunerStageKits) {
+    if (kitFitsCar(kit, modTags)) tuners.add(kit.tuner)
+  }
+  return (['MHD', 'bootmod3'] as TunerBrand[]).filter((t) => tuners.has(t))
+}
+
+export function getStagesForTuner(
+  modTags: string[],
+  tuner: TunerBrand,
+): TunerStageKit[] {
+  return tunerStageKits
+    .filter((kit) => kit.tuner === tuner && kitFitsCar(kit, modTags))
+    .sort(
+      (a, b) => STAGE_ORDER.indexOf(a.stage) - STAGE_ORDER.indexOf(b.stage),
+    )
+}
+
+export function getKitById(id: string): TunerStageKit | undefined {
+  return tunerStageKits.find((k) => k.id === id)
+}
+
+export function kitAsPreset(
+  kit: TunerStageKit,
+  modTags: string[],
+): StagePreset {
+  return {
+    id: kit.id,
+    name: `${kit.tuner} ${kit.label}`,
+    description: `${kit.tuner} ${kit.label} — maps and bolt-ons only.`,
+    compatibleTags: kit.compatibleTags,
+    modIds: resolveKitModIds(kit, modTags),
+  }
 }
