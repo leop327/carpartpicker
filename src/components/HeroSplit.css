@@ -42,12 +42,12 @@
 
 @media (min-width: 768px) {
   .hero-split--reg .hero-split__panel--reg,
-  .hero-split--brand .hero-split__panel--brand {
+  .hero-split--series .hero-split__panel--brand {
     flex: 2.5 1 0;
   }
 
   .hero-split--reg .hero-split__panel--brand,
-  .hero-split--brand .hero-split__panel--reg {
+  .hero-split--series .hero-split__panel--reg {
     flex: 1 1 0;
   }
 }

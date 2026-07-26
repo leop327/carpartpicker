@@ -1,7 +1,6 @@
 import { catalog } from '../data/catalog'
 import {
   emptySelection,
-  type BuildStage,
   type PersistedBuild,
 } from './buildState'
 import type { CarModel } from '../types/catalog'
@@ -34,6 +33,32 @@ function capacityFits(car: CarModel, cc: number | null): boolean {
   return Math.abs(car.baseFigures.engineSizeL - litres) <= 0.2
 }
 
+/** Snap DVLA year onto the nearest catalogue year so colour step is unlocked. */
+function resolveYear(car: CarModel, year: number | null): number {
+  if (car.years.length === 0) return year ?? new Date().getFullYear()
+  if (year != null && car.years.includes(year)) return year
+  if (year != null) {
+    return car.years.reduce((best, y) =>
+      Math.abs(y - year) < Math.abs(best - year) ? y : best,
+    )
+  }
+  return car.years[Math.floor(car.years.length / 2)] ?? car.years[0]
+}
+
+function matchColourId(car: CarModel, colourName: string | null): string | null {
+  if (!colourName) return null
+  const needle = colourName.trim().toLowerCase()
+  if (!needle) return null
+  const exact = car.colours.find((c) => c.name.toLowerCase() === needle)
+  if (exact) return exact.id
+  const partial = car.colours.find(
+    (c) =>
+      c.name.toLowerCase().includes(needle) ||
+      needle.includes(c.name.toLowerCase().split(/\s+/)[0] ?? ''),
+  )
+  return partial?.id ?? null
+}
+
 function scoreCar(car: CarModel, data: DvlaLookupResult): number {
   let score = 0
   const year = data.yearOfManufacture
@@ -55,8 +80,26 @@ function scoreCar(car: CarModel, data: DvlaLookupResult): number {
   return score
 }
 
+function draftForCar(car: CarModel, data: DvlaLookupResult): PersistedBuild {
+  const year = resolveYear(car, data.yearOfManufacture)
+  return {
+    v: 2,
+    stage: 'colour',
+    selection: {
+      ...emptySelection(),
+      make: car.make,
+      series: car.series,
+      chassis: car.generation,
+      carId: car.id,
+      year,
+      colourId: matchColourId(car, data.colour),
+    },
+  }
+}
+
 /**
  * Turn a DVLA + engine-inference payload into a draft build the wizard can open.
+ * When a car is identified, jump straight to the colour step.
  */
 export function buildFromDvla(data: DvlaLookupResult): PersistedBuild {
   const makeRaw = (data.make || '').trim()
@@ -82,32 +125,23 @@ export function buildFromDvla(data: DvlaLookupResult): PersistedBuild {
     (a, b) => scoreCar(b, data) - scoreCar(a, data),
   )
   const bestScore = ranked[0] ? scoreCar(ranked[0], data) : 0
-  const top = ranked.filter((c) => scoreCar(c, data) === bestScore && bestScore > 0)
 
-  if (top.length === 1) {
-    const car = top[0]
-    const year =
-      data.yearOfManufacture != null && car.years.includes(data.yearOfManufacture)
-        ? data.yearOfManufacture
-        : null
-    const stage: BuildStage = year != null ? 'colour' : 'year'
-    return {
-      v: 2,
-      stage,
-      selection: {
-        ...emptySelection(),
-        make: car.make,
-        series: car.series,
-        chassis: car.generation,
-        carId: car.id,
-        year,
-      },
+  // Best catalogue match → colour (year snapped so the step is valid).
+  if (ranked[0] && bestScore > 0) {
+    const tied = ranked.filter((c) => scoreCar(c, data) === bestScore)
+    // Unique winner, or clear engine-family hit — treat as "known car".
+    if (
+      tied.length === 1 ||
+      data.engineConfidence === 'high' ||
+      data.engineConfidence === 'medium'
+    ) {
+      return draftForCar(ranked[0], data)
     }
   }
 
-  if (top.length > 1) {
-    const series = [...new Set(top.map((c) => c.series))]
-    const chassis = [...new Set(top.map((c) => c.generation))]
+  if (ranked.length > 1 && bestScore > 0) {
+    const series = [...new Set(ranked.map((c) => c.series))]
+    const chassis = [...new Set(ranked.map((c) => c.generation))]
     if (series.length === 1 && chassis.length === 1) {
       return {
         v: 2,

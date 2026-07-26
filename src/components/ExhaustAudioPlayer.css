@@ -1,0 +1,91 @@
+.exhaust-audio {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 0.4rem;
+  margin-top: 0.45rem;
+}
+
+.exhaust-audio--empty {
+  margin-top: 0.4rem;
+}
+
+.exhaust-audio__muted {
+  display: inline-flex;
+  align-items: center;
+  font-size: 0.68rem;
+  font-weight: 600;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  color: var(--ink-muted);
+  opacity: 0.75;
+  padding: 0.2rem 0.5rem;
+  border: 1px dashed var(--line);
+}
+
+.exhaust-audio__btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.35rem;
+  appearance: none;
+  cursor: pointer;
+  font: inherit;
+  font-size: 0.72rem;
+  font-weight: 600;
+  letter-spacing: 0.03em;
+  color: #e4e4e7;
+  background: #27272a;
+  border: 1px solid #3f3f46;
+  border-radius: 999px;
+  padding: 0.28rem 0.65rem;
+  transition:
+    background 0.2s ease,
+    border-color 0.2s ease,
+    box-shadow 0.2s ease,
+    transform 0.15s ease;
+}
+
+.exhaust-audio__btn:hover {
+  background: #3f3f46;
+}
+
+.exhaust-audio__btn--active {
+  border-color: color-mix(in srgb, var(--hud) 70%, #3f3f46);
+  box-shadow: 0 0 0 1px color-mix(in srgb, var(--hud) 45%, transparent);
+  background: color-mix(in srgb, var(--hud) 18%, #27272a);
+}
+
+.exhaust-audio__icon {
+  display: inline-flex;
+  width: 0.9rem;
+  height: 0.9rem;
+  align-items: center;
+  justify-content: center;
+  font-size: 0.75rem;
+  line-height: 1;
+}
+
+.exhaust-audio__wave {
+  display: inline-block;
+  width: 0.85rem;
+  height: 0.75rem;
+  background:
+    linear-gradient(currentColor, currentColor) 0 50% / 2px 40%,
+    linear-gradient(currentColor, currentColor) 33% 50% / 2px 80%,
+    linear-gradient(currentColor, currentColor) 66% 50% / 2px 55%,
+    linear-gradient(currentColor, currentColor) 100% 50% / 2px 70%;
+  background-repeat: no-repeat;
+  color: var(--hud);
+  animation: exhaust-wave 0.7s ease-in-out infinite alternate;
+}
+
+@keyframes exhaust-wave {
+  from {
+    opacity: 0.55;
+    transform: scaleY(0.7);
+  }
+  to {
+    opacity: 1;
+    transform: scaleY(1);
+  }
+}

@@ -20,7 +20,7 @@ export function ComparePage() {
     return (
       <div className="compare">
         <h1>Compare builds</h1>
-        <p>Pick two saved builds from Home to compare.</p>
+        <p>Pick two saved builds from My builds to compare.</p>
         <Link to="/">Back home</Link>
       </div>
     )

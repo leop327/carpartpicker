@@ -68,7 +68,7 @@ export function HomePage() {
           <p className="garage__kicker hud-label">Enter the garage</p>
           <h1 className="garage__brand">CarPartPicker</h1>
           <p className="garage__tagline">
-            Look up a UK reg or pick a platform. Stack the mods. Watch the
+            Look up a UK BMW reg or pick your series. Stack the mods. Watch the
             figures move.
           </p>
           <HeroSplit />
@@ -98,7 +98,7 @@ export function HomePage() {
         <section className="featured-strip" aria-labelledby="featured-heading">
           <div className="featured-strip__head">
             <h2 id="featured-heading">Featured builds</h2>
-            <p>Community seeds from the N54 / N55 / B58 / S55 / S58 garage.</p>
+            <p>Community seeds from the N54 / N55 / B58 / S55 / S58 BMW garage.</p>
             <Link to="/community" className="featured-strip__all">
               Browse community
             </Link>

@@ -3,7 +3,8 @@ import { Link } from 'react-router-dom'
 import { catalog } from '../../data/catalog'
 import { formatMoney, applyDelta } from '../../lib/build'
 import type { TunerBrand } from '../../data/mods/tunerStages'
-import type { CarModel, Figures, Mod } from '../../types/catalog'
+import type { CarModel, Figures, Mod, UkMotStatus } from '../../types/catalog'
+import { ExhaustAudioPlayer } from '../ExhaustAudioPlayer'
 import './ModsPanel.css'
 
 interface Props {
@@ -16,6 +17,22 @@ interface Props {
 }
 
 const TUNER_BRANDS = new Set(['MHD', 'bootmod3'])
+
+function motBadgeLabel(status: UkMotStatus): string {
+  if (status === 'OPF Bypass Required') return 'OPF Bypass (Requires ECU Tune)'
+  return status
+}
+
+function motBadgeClass(status: UkMotStatus): string {
+  if (status === 'MOT Compliant') return 'mod-row__mot mod-row__mot--ok'
+  if (status === 'OPF Bypass Required') return 'mod-row__mot mod-row__mot--warn'
+  return 'mod-row__mot mod-row__mot--track'
+}
+
+function hpGainLabel(hp: number | undefined): string | null {
+  if (!hp) return null
+  return `${hp > 0 ? '+' : ''}${hp} HP`
+}
 
 function deltaLabel(delta: {
   hp?: number
@@ -82,6 +99,11 @@ export function ModsPanel({
     [car.modTags, tuner],
   )
   const showStageKits = tuners.length > 0 && !readOnly
+
+  const ukWarnings = useMemo(
+    () => (readOnly ? [] : catalog.getUkBuildWarnings(selectedModIds)),
+    [readOnly, selectedModIds],
+  )
 
   const filtered = useMemo(() => {
     const q = query.trim().toLowerCase()
@@ -239,6 +261,15 @@ export function ModsPanel({
 
   return (
     <div className="mods-panel">
+      {!readOnly && ukWarnings.length > 0 ? (
+        <div className="mods-uk-warnings" role="status">
+          {ukWarnings.map((msg: string) => (
+            <p key={msg} className="mods-uk-warnings__item">
+              {msg}
+            </p>
+          ))}
+        </div>
+      ) : null}
       {!readOnly && (
         <div className="mods-toolbar">
           <label className="mods-search">
@@ -313,6 +344,7 @@ export function ModsPanel({
                     ? catalog.getModSupportGaps(selectedModIds, mod)
                     : []
                   const image = catalog.resolveProductImage(mod)
+                  const hpGain = hpGainLabel(mod.figuresDelta.hp)
                   return (
                     <li key={mod.id} className="mod-item">
                       <div
@@ -356,9 +388,17 @@ export function ModsPanel({
                                   ? 'Tuner'
                                   : 'Est.'}
                             </span>
+                            {mod.ukMotStatus ? (
+                              <span className={motBadgeClass(mod.ukMotStatus)}>
+                                {motBadgeLabel(mod.ukMotStatus)}
+                              </span>
+                            ) : null}
                           </span>
                           <span className="mod-row__name">{mod.name}</span>
                           <span className="mod-row__claim">{sharpClaim(mod)}</span>
+                          {hpGain ? (
+                            <span className="mod-row__hp">{hpGain}</span>
+                          ) : null}
                           <span className="mod-row__delta">
                             {deltaLabel(mod.figuresDelta)}
                           </span>
@@ -366,6 +406,13 @@ export function ModsPanel({
                             <span className="mod-row__gaps">
                               {gaps.join(' · ')}
                             </span>
+                          ) : null}
+                          {category.id === 'exhaust' ? (
+                            <ExhaustAudioPlayer
+                              revsUrl={mod.audioRevsUrl}
+                              flybyUrl={mod.audioFlybyUrl}
+                              label={`${mod.brand} ${mod.name}`}
+                            />
                           ) : null}
                         </button>
                         <span className="mod-row__side">

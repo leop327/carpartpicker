@@ -1,50 +1,23 @@
+/** BMW-only launch — other marques deferred. */
 export const PLATFORM_BRANDS = [
   {
     id: 'bmw',
     name: 'BMW',
     slug: 'bmw',
-    platforms: 'B58 · S58 · N55 · N54 · S55',
+    platforms: 'N54 · N55 · B58 · S55 · S58',
     available: true,
     accent: true,
     blurb:
-      '1–4 Series focus catalogue — N54 / N55 / B58 / S55 / S58 platforms with UK figures and fitment-aware mods.',
+      'UK BMW garage — 1–4 Series with N54 / N55 / B58 / S55 / S58 platforms, UK figures, and fitment-aware mods.',
   },
-  {
-    id: 'audi',
-    name: 'Audi',
-    slug: 'audi',
-    platforms: 'TFSI · EA888',
-    available: false,
-    accent: false,
-    blurb: 'EA888 / TFSI platforms are on the roadmap after BMW coverage lands.',
-  },
-  {
-    id: 'vw',
-    name: 'VW',
-    slug: 'vw',
-    platforms: 'Golf R · GTI',
-    available: false,
-    accent: false,
-    blurb: 'Golf R / GTI bolt-on catalogues planned once Audi TFSI is in.',
-  },
-  {
-    id: 'mercedes',
-    name: 'Mercedes-AMG',
-    slug: 'mercedes',
-    platforms: 'M139 · M177',
-    available: false,
-    accent: false,
-    blurb: 'AMG hot hatches and V8s are queued after the VAG platforms.',
-  },
-  {
-    id: 'porsche',
-    name: 'Porsche',
-    slug: 'porsche',
-    platforms: '911 · Cayman',
-    available: false,
-    accent: false,
-    blurb: '911 / Cayman platform builds are planned once AMG coverage starts.',
-  },
+] as const
+
+/** Quick-start series chips on the homepage (matches focus catalogue). */
+export const BMW_SERIES_QUICK = [
+  { id: '1', series: '1 Series', hint: 'E82 · F20 · M140i' },
+  { id: '2', series: '2 Series', hint: 'F22 · F87 · G42 · G87' },
+  { id: '3', series: '3 Series', hint: 'E92 · F30 · F80 · G20' },
+  { id: '4', series: '4 Series', hint: 'F32 · F82 · G22' },
 ] as const
 
 export type PlatformBrandId = (typeof PLATFORM_BRANDS)[number]['id']

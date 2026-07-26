@@ -17,6 +17,8 @@ export const waveMods: Mod[] = [
     figuresSource: 'tuner',
     compatibleTags: ['s58'],
     conflictGroup: 'catback',
+    audioRevsUrl: '/audio/s58-remus-revs.mp3',
+    audioFlybyUrl: '/audio/s58-remus-flyby.mp3',
   },
   {
     id: 'akrapovic-evolution-s58',

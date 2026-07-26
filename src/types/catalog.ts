@@ -106,15 +106,26 @@ export interface ModCategory {
   description: string
 }
 
+/** UK road-legality hint for MOT / OPF / track-only parts. */
+export type UkMotStatus =
+  | 'MOT Compliant'
+  | 'OPF Bypass Required'
+  | 'Track / Off-Road Only'
+
 export interface Mod {
   id: string
   name: string
   brand: string
   category: ModCategoryId
+  /** Street price in GBP (£). */
   price: number
   description: string
   /** Short punchy claim shown on mod cards. */
   claim?: string
+  /**
+   * Performance deltas — `hp` is the UK hp_gain shown on cards
+   * (e.g. +45 HP) and summed into Total Horsepower.
+   */
   figuresDelta: FiguresDelta
   figuresSource?: FiguresSource
   /**
@@ -140,6 +151,23 @@ export interface Mod {
   requiresCategories?: ModCategoryId[]
   /** Soft: at least one of these mod ids should also be selected. */
   requiresAnyOf?: string[]
+  /**
+   * Human-readable prerequisite SKU / part label
+   * (e.g. "Catless/Sports Downpipe"). Used in UK compliance warnings.
+   */
+  prerequisiteSku?: string | null
+  /** UK MOT / OPF legality badge for the builder. */
+  ukMotStatus?: UkMotStatus
+  /**
+   * Exhaust sound check — stationary revs clip
+   * (e.g. `/audio/b58-milltek-revs.mp3`).
+   */
+  audioRevsUrl?: string
+  /**
+   * Exhaust sound check — high-speed flyby clip
+   * (e.g. `/audio/b58-milltek-flyby.mp3`).
+   */
+  audioFlybyUrl?: string
   /** Product / retailer page opened from checkout. */
   productUrl?: string
 }

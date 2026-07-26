@@ -1,12 +1,14 @@
 # CarPartPicker
 
-Configure a car exactly as it is — brand, model, year, colour, factory options — then stack real aftermarket mods and watch figures update live.
+UK BMW build configurator — pick chassis, stack real mods, watch figures move (mods-only £ totals).
+
+**Launch focus:** 1–4 Series · N54 / N55 / B58 / S55 / S58.
 
 ## Stack
 
 - React + TypeScript + Vite
 - React Router
-- Local data catalog (no backend yet)
+- Local data catalog (+ optional DVLA / Gemini APIs)
 
 ## Develop
 
@@ -18,10 +20,10 @@ npm run dev
 
 ## Flow
 
-1. Home — **Create new build** or open a **Saved build**
-2. Brand → Model → Year → Colour
+1. Home — UK reg lookup or pick a BMW series
+2. Series → chassis → model → year → colour
 3. Factory options (unpicked = base)
-4. Mods with live figures
+4. Mods with live figures, MOT badges, and checkout links
 
 Drafts persist in `localStorage` + `?b=`. Saved builds use `carpartpicker:saved:v2`.
 
@@ -30,6 +32,4 @@ Drafts persist in `localStorage` + `?b=`. Saved builds use `carpartpicker:saved:
 See **[CATALOG.md](CATALOG.md)**.
 
 1. Copy `src/data/cars/_template.example.ts` → new car file → register in `src/data/cars/index.ts`
-2. Append mods in `src/data/mods/index.ts` with `compatibleTags` matching the car’s `modTags`
-
-Starter catalog: E82 135i N54/N55, F87 M2, F87 M2 Competition, M140i, M235i.
+2. Append mods in `src/data/mods/` (e.g. `ukMarketSeed.ts`) with `compatibleTags` matching the car’s `modTags`

@@ -1,4 +1,6 @@
 import type { IncomingMessage, ServerResponse } from 'node:http'
+import { readFileSync, existsSync } from 'node:fs'
+import { join } from 'node:path'
 import { defineConfig, loadEnv, type Plugin } from 'vite'
 import react from '@vitejs/plugin-react'
 // @ts-expect-error — plain Node ESM helper, no types
@@ -141,6 +143,42 @@ function dvlaApi(): Plugin {
   }
 }
 
+function audioPlaceholderMime(): Plugin {
+  return {
+    name: 'audio-placeholder-mime',
+    configureServer(server) {
+      server.middlewares.use((req, res, next) => {
+        const url = req.url?.split('?')[0] ?? ''
+        if (!url.startsWith('/audio/') || !url.endsWith('.mp3')) {
+          next()
+          return
+        }
+        const filePath = join(process.cwd(), 'public', url)
+        if (!existsSync(filePath)) {
+          next()
+          return
+        }
+        try {
+          const buf = readFileSync(filePath)
+          const isWav =
+            buf.length >= 12 &&
+            buf.toString('ascii', 0, 4) === 'RIFF' &&
+            buf.toString('ascii', 8, 12) === 'WAVE'
+          res.statusCode = 200
+          res.setHeader(
+            'Content-Type',
+            isWav ? 'audio/wav' : 'audio/mpeg',
+          )
+          res.setHeader('Cache-Control', 'public, max-age=3600')
+          res.end(buf)
+        } catch {
+          next()
+        }
+      })
+    },
+  }
+}
+
 export default defineConfig({
-  plugins: [react(), geminiCarImageApi(), dvlaApi()],
+  plugins: [react(), geminiCarImageApi(), dvlaApi(), audioPlaceholderMime()],
 })

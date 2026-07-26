@@ -1,12 +1,20 @@
 import { useState, type FormEvent } from 'react'
 import { useNavigate } from 'react-router-dom'
-import { PLATFORM_BRANDS } from '../lib/brands'
-import { buildFromDvla, formatPlate, type DvlaLookupResult } from '../lib/dvlaMatch'
+import { BMW_SERIES_QUICK } from '../lib/brands'
+import {
+  buildFromDvla,
+  formatPlate,
+  type DvlaLookupResult,
+} from '../lib/dvlaMatch'
 import { writeDvlaSession } from '../lib/dvlaSession'
-import { writeBuildToStorage } from '../lib/buildState'
+import {
+  clearBuildStorage,
+  emptySelection,
+  writeBuildToStorage,
+} from '../lib/buildState'
 import './HeroSplit.css'
 
-type Panel = 'reg' | 'brand' | null
+type Panel = 'reg' | 'series' | null
 
 export function HeroSplit() {
   const navigate = useNavigate()
@@ -38,6 +46,12 @@ export function HeroSplit() {
         throw new Error(data.error || 'Vehicle not found')
       }
 
+      if (data.make && !/bmw/i.test(data.make)) {
+        throw new Error(
+          `${data.make} isn’t supported yet — CarPartPicker is BMW-only for launch.`,
+        )
+      }
+
       const draft = buildFromDvla(data)
       writeBuildToStorage(draft)
       writeDvlaSession({
@@ -54,8 +68,31 @@ export function HeroSplit() {
     }
   }
 
-  function pickBrand(slug: string) {
-    navigate(`/cars/${slug}`)
+  function startSeries(series: string) {
+    clearBuildStorage()
+    writeBuildToStorage({
+      v: 2,
+      stage: 'chassis',
+      selection: {
+        ...emptySelection(),
+        make: 'BMW',
+        series,
+      },
+    })
+    navigate('/builds')
+  }
+
+  function startBmwBrowse() {
+    clearBuildStorage()
+    writeBuildToStorage({
+      v: 2,
+      stage: 'series',
+      selection: {
+        ...emptySelection(),
+        make: 'BMW',
+      },
+    })
+    navigate('/builds')
   }
 
   const plateDisplay = vrm ? formatPlate(vrm) : ''
@@ -75,8 +112,8 @@ export function HeroSplit() {
           Instant Reg Lookup
         </h2>
         <p className="hero-split__copy">
-          Auto-detect engine family, chassis candidates &amp; fitment from the
-          UK Vehicle Enquiry Service.
+          Auto-detect BMW engine family and jump into the builder via the UK
+          Vehicle Enquiry Service.
         </p>
 
         <form className="hero-split__form" onSubmit={handleRegSearch}>
@@ -105,7 +142,7 @@ export function HeroSplit() {
             className="hero-split__submit"
             disabled={loading}
           >
-            {loading ? 'Querying DVLA Database…' : 'Find my car'}
+            {loading ? 'Querying DVLA Database…' : 'Find my BMW'}
           </button>
 
           {error ? (
@@ -115,8 +152,7 @@ export function HeroSplit() {
           ) : (
             <p className="hero-split__hint">
               Try <strong>B58DEMO</strong>, <strong>N55DEMO</strong>, or{' '}
-              <strong>S58DEMO</strong> without an API key — or any plate once{' '}
-              <code>DVLA_API_KEY</code> is set.
+              <strong>S58DEMO</strong> — BMW only for launch.
             </p>
           )}
         </form>
@@ -124,35 +160,40 @@ export function HeroSplit() {
 
       <section
         className="hero-split__panel hero-split__panel--brand"
-        onMouseEnter={() => setExpanded('brand')}
-        aria-labelledby="hero-brand-title"
+        onMouseEnter={() => setExpanded('series')}
+        aria-labelledby="hero-series-title"
       >
-        <p className="hero-split__kicker">Manual pick</p>
-        <h2 id="hero-brand-title" className="hero-split__title">
-          Or Select Your Platform
+        <p className="hero-split__kicker">BMW platforms</p>
+        <h2 id="hero-series-title" className="hero-split__title">
+          Pick Your Series
         </h2>
         <p className="hero-split__copy">
-          Jump to the platform page — BMW opens the series / chassis wizard.
+          1–4 Series · N54 / N55 / B58 / S55 / S58 — jump straight to chassis
+          selection.
         </p>
 
         <div className="hero-split__brands">
-          {PLATFORM_BRANDS.map((brand) => (
+          {BMW_SERIES_QUICK.map((item) => (
             <button
-              key={brand.id}
+              key={item.id}
               type="button"
-              className={
-                brand.accent
-                  ? 'hero-split__brand hero-split__brand--accent'
-                  : 'hero-split__brand'
-              }
-              onClick={() => pickBrand(brand.slug)}
+              className="hero-split__brand"
+              onClick={() => startSeries(item.series)}
             >
-              <span className="hero-split__brand-name">{brand.name}</span>
-              <span className="hero-split__brand-meta">
-                {brand.available ? brand.platforms : `${brand.platforms} · soon`}
-              </span>
+              <span className="hero-split__brand-name">{item.series}</span>
+              <span className="hero-split__brand-meta">{item.hint}</span>
             </button>
           ))}
+          <button
+            type="button"
+            className="hero-split__brand hero-split__brand--accent"
+            onClick={startBmwBrowse}
+          >
+            <span className="hero-split__brand-name">Browse all BMW</span>
+            <span className="hero-split__brand-meta">
+              Full series picker · N54 · N55 · B58 · S55 · S58
+            </span>
+          </button>
         </div>
       </section>
     </div>

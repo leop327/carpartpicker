@@ -719,6 +719,8 @@ export const extraMods: Mod[] = [
     description: 'Milltek race cat-back for B58 F20/F22.',
     figuresDelta: { hp: 8, torqueNm: 10, weightKg: -6 },
     compatibleTags: ['b58', 'm140i'],
+    audioRevsUrl: '/audio/b58-milltek-revs.mp3',
+    audioFlybyUrl: '/audio/b58-milltek-flyby.mp3',
   },
   {
     id: 'milltek-res-catback-s55',
@@ -739,6 +741,8 @@ export const extraMods: Mod[] = [
     description: 'Remus valved cat-back for B58 M140i/M240i.',
     figuresDelta: { hp: 6, torqueNm: 8, weightKg: -4 },
     compatibleTags: ['b58', 'm140i'],
+    audioRevsUrl: '/audio/b58-remus-revs.mp3',
+    audioFlybyUrl: '/audio/b58-remus-flyby.mp3',
   },
   {
     id: 'remus-axleback-s55',
@@ -1317,6 +1321,8 @@ export const extraMods: Mod[] = [
     figuresDelta: { hp: 25, torqueNm: 35, zeroToSixtySec: -0.08 },
     figuresSource: 'tuner',
     compatibleTags: ['s58'],
+    audioRevsUrl: '/audio/s58-vrsf-dp-revs.mp3',
+    audioFlybyUrl: '/audio/s58-vrsf-dp-flyby.mp3',
   },
   {
     id: 'mst-intake-s58',

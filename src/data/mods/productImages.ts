@@ -10,8 +10,6 @@ const productImages: Record<string, string> = {
   'akrapovic-slip-f87c': 'https://clubsportgarage.co.uk/cdn/shop/files/akrapovic-bmw-m2-competition-opfgpf-titanium-slip-on-line-exhaust-f87-7782762.webp?crop=center&height=1200&v=1762961991&width=1200',
   'alphan-roof-f87': 'https://clubsportgarage.co.uk/cdn/shop/files/alpha-n-carbon-fibre-roof-bmw-f87-m2-m2-competition-2944180.png?crop=center&height=1200&v=1762961328&width=1200',
   'alphan-wings-f87': 'https://clubsportgarage.co.uk/cdn/shop/files/alpha-n-carbon-fibre-front-wings-fenders-bmw-f87-m2-m2-competition-4158692.jpg?crop=center&height=1200&v=1762961322&width=1200',
-  'ap-arch-guards-f87': 'https://clubsportgarage.co.uk/cdn/shop/files/automotive-passion-carbon-black-front-arch-guards-for-porsche-911macantaycan-3734384.webp?crop=center&height=1200&v=1762961447&width=1200',
-  'ap-arch-guards-g87': 'https://clubsportgarage.co.uk/cdn/shop/files/automotive-passion-carbon-black-front-arch-guards-for-porsche-911macantaycan-3734384.webp?crop=center&height=1200&v=1762961447&width=1200',
   'arm-fmic-b58': 'https://www.vr-speed.com/wp-content/uploads/2022/09/vrsf_10583010-scaled_2048x2048.webp',
   'autoid-csl-splitter-f87': 'https://clubsportgarage.co.uk/cdn/shop/files/autoid-f87-m2-carbon-fibre-csl-front-splitter-2291740.webp?crop=center&height=1200&v=1762961578&width=1200',
   'autoid-diffuser-f87': 'https://clubsportgarage.co.uk/cdn/shop/files/autoid-carbon-fibre-m-performance-style-rear-diffuser-for-bmw-f87-m2-m2-competition-7503981.webp?crop=center&height=1200&v=1762961447&width=1200',
@@ -21,7 +19,6 @@ const productImages: Record<string, string> = {
   'awe-touring-n55': 'https://www.awe-tuning.com/cdn/shop/files/3010-32024_1.jpg?v=1742940104',
   'awe-track-b58': 'https://www.awe-tuning.com/cdn/shop/files/3010-32032_1.jpg?v=1742939851',
   'bc-br-coilovers': 'https://coilovers.co.uk/cdn/shop/products/brseries_3jezssrqafxvou3x_345e3c7a-11df-4c93-9629-931fac17a319-sw.jpg?v=1653992452',
-  'bmp-dct-s55': 'https://www.xautomotive.com/cdn/shop/files/Mockup-FlashCombo-0-4.png?v=1763975258&width=2048',
   'bmw-cs-bonnet-f87': 'https://clubsportgarage.co.uk/cdn/shop/files/genuine-bmw-f87-m2-cs-carbon-fibre-bonnethood-5933629.jpg?crop=center&height=1200&v=1762961788&width=1200',
   'bmw-mperf-roof-f87': 'https://clubsportgarage.co.uk/cdn/shop/files/genuine-bmw-m-performance-carbon-fibre-roof-8774569.jpg?crop=center&height=1200&v=1762961977&width=1200',
   'bootmod3-stage1-b58': 'https://ctsturbo.com/wp-content/uploads/2021/06/Bootmod.png',
@@ -36,7 +33,6 @@ const productImages: Record<string, string> = {
   'carbon-mirror-caps': 'https://cblpstyling.com/cdn/shop/files/FCB2F758-2287-41C9-A515-36421559AD98.jpg?v=1774358546',
   'cblp-badge-m140i-black': 'https://cblpstyling.com/cdn/shop/files/7B7C6751-B674-4625-9910-7C21CA05D542.jpg?v=1778668336',
   'cblp-badge-m2-black': 'https://cdn.shopify.com/s/files/1/1011/7713/1339/files/CE8BF561-E656-452F-AF8E-E8D30F2870AE.png?v=1778667686',
-  'cblp-badge-m235i-black': 'https://cblpstyling.com/cdn/shop/files/ChatGPTImageFeb1_2026_05_51_40PM.png?v=1769968456',
   'cblp-badge-m3-black': 'https://cdn.shopify.com/s/files/1/1011/7713/1339/files/IMG-5881.jpg?v=1778667906',
   'cblp-badge-m4-black': 'https://cblpstyling.com/cdn/shop/files/IMG-5884.jpg?v=1778667945',
   'cblp-canards-f80': 'https://cdn.shopify.com/s/files/1/1011/7713/1339/files/683C824C-42A0-4EFD-AEA1-3ABD77FBF86D.jpg?v=1774358681',
@@ -45,10 +41,8 @@ const productImages: Record<string, string> = {
   'cblp-diffuser-f22': 'https://cblpstyling.com/cdn/shop/files/9C498CED-38FB-4DA6-9988-D19F2C33FB4A.jpg?v=1774516959',
   'cblp-diffuser-f80': 'https://cblpstyling.com/cdn/shop/files/948B065D-CCF7-4301-9ED0-3E9454B1DD43.jpg?v=1774358584',
   'cblp-diffuser-f87': 'https://cblpstyling.com/cdn/shop/files/main-image-2.jpg?v=1772744707',
-  'cblp-door-lights': 'https://cblpstyling.com/cdn/shop/files/ChatGPTImageFeb5_2026_10_07_21PM.png?v=1770329260',
   'cblp-drl-dual-f80': 'https://cblpstyling.com/cdn/shop/files/IMG_4786.jpg?v=1776009131',
   'cblp-drl-dual-f87': 'https://cblpstyling.com/cdn/shop/files/Hdb94ff0799074243962a44ecfc25b043t.png?v=1776025464',
-  'cblp-drl-yellow-f20': 'https://cblpstyling.com/cdn/shop/files/ChatGPT_Image_Jan_18_2026_05_29_20_PM.png?v=1774989863',
   'cblp-grille-black-f80': 'https://cblpstyling.com/cdn/shop/files/E7634CB6-2595-49FC-B3CC-10DBC5B0DEC2.jpg?v=1778365853',
   'cblp-grille-carbon-f80': 'https://cblpstyling.com/cdn/shop/files/43BFEFEC-30B0-4E08-9755-AECA08A50A9B.jpg?v=1774358945',
   'cblp-gts-tails-f20': 'https://cblpstyling.com/cdn/shop/files/65E0A739-7143-48BD-97FF-A5512763AFCA.jpg?v=1776008649',
@@ -188,7 +182,6 @@ const productImages: Record<string, string> = {
   'wagner-manifold-ic-s58': 'https://clubsportgarage.co.uk/cdn/shop/files/wagner-tuning-s58-intake-manifold-intercooler-for-bmw-g87-m2-g80-g81-m3-g82-m4-4935196.jpg?crop=center&height=1200&v=1766052748&width=1200',
   'wavetrac-lsd': 'https://autotech.com/images/I30499264.jpg',
   'whiteline-sway': 'https://imageapi.partsdb.com.au/contents?urlID=K%2Fh7PItV%2FoR7OkYcfWwLR8Z462Rr2TUl3wRui6lLu9A%3D',
-  'xhp-flash-zf': 'https://www.xautomotive.com/cdn/shop/files/Mockup-FlashCombo-0-4.png?v=1763975258&width=2048',
   'zaero-evo-s-splitter-f87': 'https://clubsportgarage.co.uk/cdn/shop/files/zaero-design-f87-m2-evo-s-gloss-black-front-splitter-1972039.webp?crop=center&height=1200&v=1762961577&width=1200',
   'zaero-evo-s-splitter-f87c': 'https://clubsportgarage.co.uk/cdn/shop/files/zaero-design-f87-m2-competition-evo-s-gloss-black-front-splitter-7695405.webp?crop=center&height=1200&v=1762961573&width=1200',
   'zaero-evo-s-splitter-g87': 'https://clubsportgarage.co.uk/cdn/shop/files/zaero-design-g87-m2-evo-s-gloss-black-front-splitter-6560941.webp?crop=center&height=1200&v=1762961440&width=1200',
@@ -202,7 +195,9 @@ const brandFallback: Record<string, string> = {
 }
 
 export function resolveProductImage(mod: { id: string; brand: string }): string | undefined {
-  return productImages[mod.id] ?? brandFallback[mod.brand]
+  const mapped = productImages[mod.id]
+  if (mapped) return mapped
+  return brandFallback[mod.brand]
 }
 
 export function resolveKitImage(modIds: string[]): string | undefined {

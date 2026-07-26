@@ -3,6 +3,7 @@ import { extraMods, extraPresets } from './extraMods'
 import { moreMods, morePresets } from './extraModsMore'
 import { waveMods, wavePresets } from './extraModsWave'
 import { m2Mods, m2Presets, M2_ALLOWED_BRANDS } from './m2Mods'
+import { UK_STAGE2_ECU_IDS, ukMarketMods } from './ukMarketSeed'
 export { resolveProductUrl } from './productUrls'
 export {
   resolveProductImage,
@@ -449,6 +450,8 @@ export const mods: Mod[] = [
     figuresDelta: { hp: 18, torqueNm: 28, zeroToSixtySec: -0.1 },
     figuresSource: 'tuner',
     compatibleTags: ['b58', 'm140i'],
+    audioRevsUrl: '/audio/b58-vrsf-dp-revs.mp3',
+    audioFlybyUrl: '/audio/b58-vrsf-dp-flyby.mp3',
   },
   {
     id: 'awe-track-b58',
@@ -1597,6 +1600,7 @@ export const mods: Mod[] = [
   ...moreMods,
   ...waveMods,
   ...m2Mods,
+  ...ukMarketMods,
 ]
 
 /**
@@ -1827,6 +1831,43 @@ export function getModSupportGaps(
     }
   }
 
+  if (mod.prerequisiteSku) {
+    const hasDownpipe = selectedMods.some(
+      (m) =>
+        m.id !== mod.id &&
+        m.category === 'exhaust' &&
+        /downpipe|dp\b/i.test(`${m.name} ${m.id}`),
+    )
+    const hasFueling = selectedMods.some(
+      (m) => m.id !== mod.id && m.category === 'fueling',
+    )
+    const hasEcu = selectedMods.some(
+      (m) => m.id !== mod.id && m.category === 'ecu',
+    )
+    const sku = mod.prerequisiteSku.toLowerCase()
+    if (/downpipe/i.test(sku) && !hasDownpipe) {
+      gaps.push(`Needs ${mod.prerequisiteSku}`)
+    }
+    if (/fuel pump|hpfp|fueling/i.test(sku) && !hasFueling) {
+      gaps.push(`Needs ${mod.prerequisiteSku}`)
+    }
+    if (/ecu|tune|stage/i.test(sku) && !hasEcu && mod.category !== 'ecu') {
+      gaps.push(`Needs ${mod.prerequisiteSku}`)
+    }
+  }
+
+  // Stage 2 ECU / big turbo without a high-flow downpipe
+  if (UK_STAGE2_ECU_IDS.has(mod.id) || mod.id.includes('stage2')) {
+    const hasDp = selectedMods.some(
+      (m) =>
+        m.category === 'exhaust' &&
+        /downpipe|dp\b/i.test(`${m.name} ${m.id}`),
+    )
+    if (!hasDp && mod.category === 'ecu') {
+      gaps.push('Stage 2 requires a High-Flow Downpipe for safe fitment')
+    }
+  }
+
   const aggressiveEcu =
     mod.category === 'ecu' &&
     (mod.id.includes('stage2') ||
@@ -1849,6 +1890,60 @@ export function getModSupportGaps(
   }
 
   return [...new Set(gaps)]
+}
+
+/** Build-level UK compliance / prerequisite warnings for the mods panel. */
+export function getUkBuildWarnings(selectedIds: string[]): string[] {
+  const warnings: string[] = []
+  const selected = selectedIds
+    .map((id) => getModById(id))
+    .filter(Boolean) as Mod[]
+  if (selected.length === 0) return warnings
+
+  const hasDp = selected.some(
+    (m) =>
+      m.category === 'exhaust' && /downpipe|dp\b/i.test(`${m.name} ${m.id}`),
+  )
+  const hasFueling = selected.some((m) => m.category === 'fueling')
+  const hasStage2 = selected.some(
+    (m) =>
+      UK_STAGE2_ECU_IDS.has(m.id) ||
+      (m.category === 'ecu' && /stage\s*2|stage2/i.test(m.name + m.id)),
+  )
+  const hasBigTurbo = selected.some(
+    (m) =>
+      m.conflictGroup === 'turbo-upgrade' ||
+      (m.figuresDelta.hp ?? 0) >= 150,
+  )
+
+  if (hasStage2 && !hasDp) {
+    warnings.push(
+      'Stage 2 requires a High-Flow Downpipe for safe fitment.',
+    )
+  }
+  if (hasBigTurbo && (!hasDp || !hasFueling)) {
+    warnings.push(
+      'Big turbo upgrades need an upgraded fuel pump and a high-flow downpipe.',
+    )
+  }
+
+  const trackOnly = selected.filter(
+    (m) => m.ukMotStatus === 'Track / Off-Road Only',
+  )
+  if (trackOnly.length) {
+    warnings.push(
+      `${trackOnly[0].name} is Track / Off-Road Only — not for UK MOT road use.`,
+    )
+  }
+
+  const opf = selected.filter((m) => m.ukMotStatus === 'OPF Bypass Required')
+  if (opf.length) {
+    warnings.push(
+      `${opf[0].name}: OPF Bypass (Requires ECU Tune) — expect MOT scrutiny.`,
+    )
+  }
+
+  return warnings
 }
 
 function categoryLabel(cat: string): string {
