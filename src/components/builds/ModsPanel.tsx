@@ -4,7 +4,6 @@ import { catalog } from '../../data/catalog'
 import { formatMoney, applyDelta } from '../../lib/build'
 import type { TunerBrand } from '../../data/mods/tunerStages'
 import type { CarModel, Figures, Mod, UkMotStatus } from '../../types/catalog'
-import { ExhaustAudioPlayer } from '../ExhaustAudioPlayer'
 import './ModsPanel.css'
 
 interface Props {
@@ -406,13 +405,6 @@ export function ModsPanel({
                             <span className="mod-row__gaps">
                               {gaps.join(' · ')}
                             </span>
-                          ) : null}
-                          {category.id === 'exhaust' ? (
-                            <ExhaustAudioPlayer
-                              revsUrl={mod.audioRevsUrl}
-                              flybyUrl={mod.audioFlybyUrl}
-                              label={`${mod.brand} ${mod.name}`}
-                            />
                           ) : null}
                         </button>
                         <span className="mod-row__side">

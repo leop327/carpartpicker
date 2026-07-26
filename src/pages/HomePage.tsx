@@ -98,7 +98,7 @@ export function HomePage() {
         <section className="featured-strip" aria-labelledby="featured-heading">
           <div className="featured-strip__head">
             <h2 id="featured-heading">Featured builds</h2>
-            <p>Community seeds from the N54 / N55 / B58 / S55 / S58 BMW garage.</p>
+            <p>Builds from the community garage.</p>
             <Link to="/community" className="featured-strip__all">
               Browse community
             </Link>

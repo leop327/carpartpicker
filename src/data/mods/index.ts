@@ -450,8 +450,6 @@ export const mods: Mod[] = [
     figuresDelta: { hp: 18, torqueNm: 28, zeroToSixtySec: -0.1 },
     figuresSource: 'tuner',
     compatibleTags: ['b58', 'm140i'],
-    audioRevsUrl: '/audio/b58-vrsf-dp-revs.mp3',
-    audioFlybyUrl: '/audio/b58-vrsf-dp-flyby.mp3',
   },
   {
     id: 'awe-track-b58',

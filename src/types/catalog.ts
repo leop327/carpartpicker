@@ -158,16 +158,6 @@ export interface Mod {
   prerequisiteSku?: string | null
   /** UK MOT / OPF legality badge for the builder. */
   ukMotStatus?: UkMotStatus
-  /**
-   * Exhaust sound check — stationary revs clip
-   * (e.g. `/audio/b58-milltek-revs.mp3`).
-   */
-  audioRevsUrl?: string
-  /**
-   * Exhaust sound check — high-speed flyby clip
-   * (e.g. `/audio/b58-milltek-flyby.mp3`).
-   */
-  audioFlybyUrl?: string
   /** Product / retailer page opened from checkout. */
   productUrl?: string
 }

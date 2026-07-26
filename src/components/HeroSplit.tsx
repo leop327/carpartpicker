@@ -168,8 +168,7 @@ export function HeroSplit() {
           Pick Your Series
         </h2>
         <p className="hero-split__copy">
-          1–4 Series · N54 / N55 / B58 / S55 / S58 — jump straight to chassis
-          selection.
+          Jump straight into chassis selection for your BMW.
         </p>
 
         <div className="hero-split__brands">
@@ -190,9 +189,7 @@ export function HeroSplit() {
             onClick={startBmwBrowse}
           >
             <span className="hero-split__brand-name">Browse all BMW</span>
-            <span className="hero-split__brand-meta">
-              Full series picker · N54 · N55 · B58 · S55 · S58
-            </span>
+            <span className="hero-split__brand-meta">Full series picker</span>
           </button>
         </div>
       </section>

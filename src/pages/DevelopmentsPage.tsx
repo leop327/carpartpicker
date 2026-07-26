@@ -9,18 +9,17 @@ export function DevelopmentsPage() {
       </p>
       <ul className="static__list">
         <li>
-          <strong>Live now</strong> — UK BMW 1–4 Series builds (N54 / N55 / B58 /
-          S55 / S58), DVLA / demo reg lookup, MOT/OPF badges, exhaust sound
-          check, stage kits, product profiles, community seeds, and checkout buy
-          links.
+          <strong>Live now</strong> — UK BMW builds, DVLA / demo reg lookup,
+          MOT/OPF badges, stage kits, product profiles, community seeds, and
+          checkout buy links.
         </li>
         <li>
           <strong>In progress</strong> — tighter product photos &amp; URLs,
-          richer factory option packs, more chassis paint coverage, and live
-          DVLA keys in production.
+          richer factory option packs, more paint coverage, and live DVLA keys
+          in production.
         </li>
         <li>
-          <strong>Soon</strong> — deeper 5 / X / M fleet coverage, better compare
+          <strong>Soon</strong> — broader chassis coverage, better compare
           tools, and account sync beyond local storage.
         </li>
       </ul>

@@ -224,8 +224,6 @@ export const ukMarketMods: Mod[] = [
     compatibleTags: [...SIX_FOCUS],
     conflictGroup: 'downpipe',
     ukMotStatus: 'Track / Off-Road Only',
-    audioRevsUrl: '/audio/b58-vrsf-dp-revs.mp3',
-    audioFlybyUrl: '/audio/b58-vrsf-dp-flyby.mp3',
   },
   {
     id: 'uk-mad-200cel-sports-dp',
@@ -258,8 +256,6 @@ export const ukMarketMods: Mod[] = [
     compatibleTags: ['s58', 's55'],
     conflictGroup: 'catback',
     ukMotStatus: 'MOT Compliant',
-    audioRevsUrl: '/audio/s58-milltek-revs.mp3',
-    audioFlybyUrl: '/audio/s58-milltek-flyby.mp3',
   },
   {
     id: 'uk-remus-valved-axleback',
@@ -275,8 +271,6 @@ export const ukMarketMods: Mod[] = [
     compatibleTags: [...SIX_FOCUS],
     conflictGroup: 'axleback',
     ukMotStatus: 'MOT Compliant',
-    audioRevsUrl: '/audio/b58-remus-revs.mp3',
-    audioFlybyUrl: '/audio/b58-remus-flyby.mp3',
   },
   {
     id: 'uk-milltek-opfback-b58',
@@ -292,8 +286,6 @@ export const ukMarketMods: Mod[] = [
     compatibleTags: ['b58'],
     conflictGroup: 'catback',
     ukMotStatus: 'MOT Compliant',
-    audioRevsUrl: '/audio/b58-milltek-revs.mp3',
-    audioFlybyUrl: '/audio/b58-milltek-flyby.mp3',
   },
   {
     id: 'uk-aa-equal-length-midpipe',

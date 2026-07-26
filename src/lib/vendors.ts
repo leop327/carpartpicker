@@ -59,7 +59,7 @@ const SEED_COMPANIES: VendorCompany[] = [
     id: 'vendor-maxton',
     slug: 'maxton-design',
     name: 'Maxton Design',
-    about: 'Aero and styling kits for BMW 1–4 Series and M cars.',
+    about: 'Aero and styling kits for BMW M cars and hot hatches.',
     logoUrl: '',
     regions: ['UK', 'EU'],
     website: 'https://maxtondesign.co.uk',

@@ -19,9 +19,7 @@ INSERT INTO parts (
   uk_mot_status,
   prerequisite_sku,
   compatible_tags,
-  conflict_group,
-  audio_revs_url,
-  audio_flyby_url
+  conflict_group
 ) VALUES
 -- ═══════════════════════════════════════════════════════════════
 -- 1. ECU & TCU TUNING
@@ -40,9 +38,7 @@ INSERT INTO parts (
   'MOT Compliant',
   NULL,
   ARRAY['n54', 'n55', 's55', 'b58', 's58'],
-  'ecu-tune',
-  NULL,
-  NULL
+  'ecu-tune'
 ),
 (
   'uk-bm3-stage2-license',
@@ -58,9 +54,7 @@ INSERT INTO parts (
   'MOT Compliant',
   'High-Flow / Sports Downpipe',
   ARRAY['n54', 'n55', 's55', 'b58', 's58'],
-  'ecu-tune',
-  NULL,
-  NULL
+  'ecu-tune'
 ),
 (
   'uk-mhd-super-license',
@@ -76,9 +70,7 @@ INSERT INTO parts (
   'MOT Compliant',
   NULL,
   ARRAY['n54', 'n55', 's55', 'b58', 's58'],
-  'ecu-tune',
-  NULL,
-  NULL
+  'ecu-tune'
 ),
 (
   'uk-mhd-wireless-obd',
@@ -94,9 +86,7 @@ INSERT INTO parts (
   'MOT Compliant',
   NULL,
   ARRAY['n54', 'n55', 's55', 'b58', 's58'],
-  'obd-adapter',
-  NULL,
-  NULL
+  'obd-adapter'
 ),
 (
   'uk-xhp-zf8-flasher',
@@ -112,9 +102,7 @@ INSERT INTO parts (
   'MOT Compliant',
   NULL,
   ARRAY['n54', 'n55', 's55', 'b58', 's58'],
-  'tcu-flash',
-  NULL,
-  NULL
+  'tcu-flash'
 ),
 (
   'uk-femto-dme-unlock-g',
@@ -130,8 +118,6 @@ INSERT INTO parts (
   'MOT Compliant',
   NULL,
   ARRAY['b58', 's58'],
-  NULL,
-  NULL,
   NULL
 ),
 
@@ -152,9 +138,7 @@ INSERT INTO parts (
   'MOT Compliant',
   NULL,
   ARRAY['n54', 'n55', 's55', 'b58', 's58'],
-  'intake-system',
-  NULL,
-  NULL
+  'intake-system'
 ),
 (
   'uk-mst-cai',
@@ -170,9 +154,7 @@ INSERT INTO parts (
   'MOT Compliant',
   NULL,
   ARRAY['n54', 'n55', 's55', 'b58', 's58'],
-  'intake-system',
-  NULL,
-  NULL
+  'intake-system'
 ),
 (
   'uk-forge-induction-kit',
@@ -188,9 +170,7 @@ INSERT INTO parts (
   'MOT Compliant',
   NULL,
   ARRAY['n54', 'n55', 's55', 'b58', 's58'],
-  'intake-system',
-  NULL,
-  NULL
+  'intake-system'
 ),
 (
   'uk-ftp-chargepipe',
@@ -206,9 +186,7 @@ INSERT INTO parts (
   'MOT Compliant',
   NULL,
   ARRAY['n54', 'n55', 's55', 'b58', 's58'],
-  'chargepipe',
-  NULL,
-  NULL
+  'chargepipe'
 ),
 (
   'uk-bms-dual-cone-b58',
@@ -224,9 +202,7 @@ INSERT INTO parts (
   'MOT Compliant',
   NULL,
   ARRAY['b58'],
-  'intake-system',
-  NULL,
-  NULL
+  'intake-system'
 ),
 
 -- ═══════════════════════════════════════════════════════════════
@@ -246,9 +222,7 @@ INSERT INTO parts (
   'Track / Off-Road Only',
   NULL,
   ARRAY['n54', 'n55', 's55', 'b58', 's58'],
-  'downpipe',
-  '/audio/b58-vrsf-dp-revs.mp3',
-  '/audio/b58-vrsf-dp-flyby.mp3'
+  'downpipe'
 ),
 (
   'uk-mad-200cel-sports-dp',
@@ -264,9 +238,7 @@ INSERT INTO parts (
   'MOT Compliant',
   'Stage 1/2 ECU tune',
   ARRAY['n54', 'n55', 's55', 'b58', 's58'],
-  'downpipe',
-  NULL,
-  NULL
+  'downpipe'
 ),
 (
   'uk-milltek-opfback',
@@ -282,9 +254,7 @@ INSERT INTO parts (
   'MOT Compliant',
   NULL,
   ARRAY['b58', 's58', 's55'],
-  'catback',
-  '/audio/b58-milltek-revs.mp3',
-  '/audio/b58-milltek-flyby.mp3'
+  'catback'
 ),
 (
   'uk-remus-valved-axleback',
@@ -300,9 +270,7 @@ INSERT INTO parts (
   'MOT Compliant',
   NULL,
   ARRAY['n54', 'n55', 's55', 'b58', 's58'],
-  'axleback',
-  '/audio/b58-remus-revs.mp3',
-  '/audio/b58-remus-flyby.mp3'
+  'axleback'
 ),
 (
   'uk-aa-equal-length-midpipe',
@@ -318,9 +286,7 @@ INSERT INTO parts (
   'OPF Bypass Required',
   'Stage 1/2 ECU tune',
   ARRAY['s55', 's58', 'b58'],
-  'midpipe',
-  NULL,
-  NULL
+  'midpipe'
 ),
 (
   'uk-cobra-sport-decat',
@@ -336,9 +302,7 @@ INSERT INTO parts (
   'Track / Off-Road Only',
   NULL,
   ARRAY['n54', 'n55', 's55', 'b58', 's58'],
-  'decat-section',
-  NULL,
-  NULL
+  'decat-section'
 ),
 (
   'uk-opf-bypass-midpipe',
@@ -354,9 +318,7 @@ INSERT INTO parts (
   'OPF Bypass Required',
   'Stage 1/2 ECU tune',
   ARRAY['b58', 's58'],
-  'opf-section',
-  NULL,
-  NULL
+  'opf-section'
 ),
 
 -- ═══════════════════════════════════════════════════════════════
@@ -376,9 +338,7 @@ INSERT INTO parts (
   'Track / Off-Road Only',
   'Upgraded Fuel Pump & Downpipe',
   ARRAY['n54', 'n55', 's55', 'b58', 's58'],
-  'turbo-upgrade',
-  NULL,
-  NULL
+  'turbo-upgrade'
 ),
 (
   'uk-pure750-hybrid-b58',
@@ -394,9 +354,7 @@ INSERT INTO parts (
   'Track / Off-Road Only',
   'Upgraded Fuel Pump & Downpipe',
   ARRAY['b58'],
-  'turbo-upgrade',
-  NULL,
-  NULL
+  'turbo-upgrade'
 ),
 (
   'uk-dorch-stage2-hpfp',
@@ -412,9 +370,7 @@ INSERT INTO parts (
   'MOT Compliant',
   'Stage 2 ECU / Flex Fuel',
   ARRAY['n54', 'n55', 's55', 'b58', 's58'],
-  'hpfp',
-  NULL,
-  NULL
+  'hpfp'
 ),
 (
   'uk-spool-fx150-hpfp',
@@ -430,9 +386,7 @@ INSERT INTO parts (
   'MOT Compliant',
   'Stage 2 ECU / Flex Fuel',
   ARRAY['n55', 's55', 'b58', 's58'],
-  'hpfp',
-  NULL,
-  NULL
+  'hpfp'
 ),
 
 -- ═══════════════════════════════════════════════════════════════
@@ -452,9 +406,7 @@ INSERT INTO parts (
   'MOT Compliant',
   NULL,
   ARRAY['n54', 'n55', 's55', 'b58', 's58'],
-  'coilovers',
-  NULL,
-  NULL
+  'coilovers'
 ),
 (
   'uk-eibach-prokit-30',
@@ -470,9 +422,7 @@ INSERT INTO parts (
   'MOT Compliant',
   NULL,
   ARRAY['n54', 'n55', 's55', 'b58', 's58'],
-  'springs',
-  NULL,
-  NULL
+  'springs'
 ),
 (
   'uk-hr-supersport-springs',
@@ -488,9 +438,7 @@ INSERT INTO parts (
   'MOT Compliant',
   NULL,
   ARRAY['n54', 'n55', 's55', 'b58', 's58'],
-  'springs',
-  NULL,
-  NULL
+  'springs'
 ),
 (
   'uk-bimecc-spacers-12-15',
@@ -506,9 +454,7 @@ INSERT INTO parts (
   'MOT Compliant',
   NULL,
   ARRAY['n54', 'n55', 's55', 'b58', 's58'],
-  'spacers',
-  NULL,
-  NULL
+  'spacers'
 ),
 
 -- ═══════════════════════════════════════════════════════════════
@@ -528,9 +474,7 @@ INSERT INTO parts (
   'MOT Compliant',
   NULL,
   ARRAY['b58'],
-  'chargecooler',
-  NULL,
-  NULL
+  'chargecooler'
 ),
 (
   'uk-wagner-comp-ic',
@@ -546,9 +490,7 @@ INSERT INTO parts (
   'MOT Compliant',
   NULL,
   ARRAY['n55', 'b58', 'n54'],
-  'intercooler',
-  NULL,
-  NULL
+  'intercooler'
 ),
 (
   'uk-do88-s55-chargecooler',
@@ -564,9 +506,7 @@ INSERT INTO parts (
   'MOT Compliant',
   NULL,
   ARRAY['s55'],
-  'chargecooler',
-  NULL,
-  NULL
+  'chargecooler'
 ),
 (
   'uk-powerflex-rear-subframe',
@@ -582,9 +522,7 @@ INSERT INTO parts (
   'MOT Compliant',
   NULL,
   ARRAY['n54', 'n55', 's55', 'b58', 's58'],
-  'bushings',
-  NULL,
-  NULL
+  'bushings'
 ),
 (
   'uk-ngk-r7437-6',
@@ -600,9 +538,7 @@ INSERT INTO parts (
   'MOT Compliant',
   NULL,
   ARRAY['n54', 'n55', 's55', 'b58', 's58'],
-  'spark-plugs',
-  NULL,
-  NULL
+  'spark-plugs'
 ),
 (
   'uk-bm3-stage-license',
@@ -618,9 +554,7 @@ INSERT INTO parts (
   'MOT Compliant',
   'High-Flow Downpipe for Stage 2',
   ARRAY['n54', 'n55', 's55', 'b58', 's58'],
-  'ecu-tune',
-  NULL,
-  NULL
+  'ecu-tune'
 )
 ON CONFLICT (id) DO UPDATE SET
   name              = EXCLUDED.name,
@@ -636,5 +570,4 @@ ON CONFLICT (id) DO UPDATE SET
   prerequisite_sku  = EXCLUDED.prerequisite_sku,
   compatible_tags   = EXCLUDED.compatible_tags,
   conflict_group    = EXCLUDED.conflict_group,
-  audio_revs_url    = EXCLUDED.audio_revs_url,
-  audio_flyby_url   = EXCLUDED.audio_flyby_url;
+;

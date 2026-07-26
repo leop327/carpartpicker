@@ -4,20 +4,20 @@ export const PLATFORM_BRANDS = [
     id: 'bmw',
     name: 'BMW',
     slug: 'bmw',
-    platforms: 'N54 · N55 · B58 · S55 · S58',
+    platforms: 'UK BMW platforms',
     available: true,
     accent: true,
     blurb:
-      'UK BMW garage — 1–4 Series with N54 / N55 / B58 / S55 / S58 platforms, UK figures, and fitment-aware mods.',
+      'UK BMW garage — configure your chassis, stack fitment-aware mods, and watch the figures move.',
   },
 ] as const
 
-/** Quick-start series chips on the homepage (matches focus catalogue). */
+/** Quick-start series chips on the homepage. */
 export const BMW_SERIES_QUICK = [
-  { id: '1', series: '1 Series', hint: 'E82 · F20 · M140i' },
-  { id: '2', series: '2 Series', hint: 'F22 · F87 · G42 · G87' },
-  { id: '3', series: '3 Series', hint: 'E92 · F30 · F80 · G20' },
-  { id: '4', series: '4 Series', hint: 'F32 · F82 · G22' },
+  { id: '1', series: '1 Series', hint: 'Hot hatches & coupes' },
+  { id: '2', series: '2 Series', hint: 'Coupes & M2' },
+  { id: '3', series: '3 Series', hint: 'Saloon & M3' },
+  { id: '4', series: '4 Series', hint: 'Coupe & M4' },
 ] as const
 
 export type PlatformBrandId = (typeof PLATFORM_BRANDS)[number]['id']

@@ -24,8 +24,6 @@ CREATE TABLE IF NOT EXISTS parts (
   compatible_tags   TEXT[] NOT NULL DEFAULT '{}',
   conflict_group    TEXT,
   product_url       TEXT,
-  audio_revs_url    TEXT,
-  audio_flyby_url   TEXT,
   created_at        TIMESTAMPTZ NOT NULL DEFAULT NOW()
 );
 
